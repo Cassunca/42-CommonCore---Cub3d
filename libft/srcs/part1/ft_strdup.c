@@ -1,18 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/03 09:02:52 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/04 09:39:41 by cassunca         ###   ########.fr       */
+/*   Created: 2025/07/16 11:36:34 by amyrodri          #+#    #+#             */
+/*   Updated: 2025/07/16 12:03:47 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "libft.h"
 
-int	main(int ac, char **av)
+char	*ft_strdup(const char *s)
 {
-	return (0);
+	char	*copy;
+	int		len;
+
+	len = ft_strlen(s);
+	copy = (char *)malloc(len + 1 * sizeof(char));
+	if (copy == NULL)
+		return (NULL);
+	ft_memcpy(copy, s, len);
+	copy[len] = '\0';
+	return (copy);
 }
