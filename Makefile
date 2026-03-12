@@ -6,7 +6,7 @@
 #    By: kamys <kamys@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/03/12 17:43:04 by kamys            ###   ########.fr        #
+#    Updated: 2026/03/12 17:56:35 by kamys            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,6 +54,7 @@ MLX_LIB		= $(LIBS_DIR)/minilibx-linux/libmlx.a
 
 # ---------- Rules ----------
 all: $(NAME)
+	@printf "$(GREEN)✅ $(NAME) is ready!$(NC)\n"
 
 $(NAME): $(OBJS) $(LIBFT) $(MLX_LIB)
 	@mkdir -p $(BINDIR)
