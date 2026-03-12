@@ -6,7 +6,7 @@
 #    By: kamys <kamys@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/03/12 17:34:41 by kamys            ###   ########.fr        #
+#    Updated: 2026/03/12 17:40:06 by kamys            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ NC			= \033[0m
 
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -g2 -MMD -MP
-INCLUDE		= -I $(LIBS_DIR)/libft/srcs/includes -I include -I $(LIBS_DIR)/minilibx-linux
+INCLUDE		= -I $(LIBS_DIR)/libft/srcs/includes -I includes -I $(LIBS_DIR)/minilibx-linux
 MLX 		= -L$(LIBS_DIR)/minilibx-linux -lmlx -lXext -lX11 -lm -lbsd
 
 RM			= rm -rf
