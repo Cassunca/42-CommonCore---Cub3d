@@ -6,7 +6,7 @@
 #    By: kamys <kamys@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/03/12 17:40:06 by kamys            ###   ########.fr        #
+#    Updated: 2026/03/12 17:43:04 by kamys            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -93,7 +93,7 @@ clean:
 	@printf "$(YELLOW)🧹 Objects cleaned$(NC)\n"
 
 fclean: clean
-	@$(RM) $(NAME)
+	@$(RM) $(BINDIR)
 	@$(MAKE) fclean $(RUNLIB) -s > /dev/null 2>&1
 	@printf "$(YELLOW)🗑️ Executable removed$(NC)\n"
 
