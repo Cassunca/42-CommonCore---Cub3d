@@ -6,7 +6,7 @@
 #    By: kamys <kamys@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/03/12 17:56:35 by kamys            ###   ########.fr        #
+#    Updated: 2026/03/15 00:53:02 by kamys            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,16 +30,28 @@ RUNMLX      = -C $(LIBS_DIR)/minilibx-linux
 
 # Directories
 SRCSDIR		= src
+PARSERDIR	= parsing
+UTILSDIR	= utils
 OBJDIR		= .objs
 BINDIR		= bin
 LIBS_DIR	= libs
 
 # Source files
-SRCS		= main.c
+SRCS		:=	main.c
+
+SRCS_PARSER	:=	parser.c	\
+				read_file.c
+
+SRCS_UTILS	:=	frees.c		\
+				error_msg.c
 
 # Add directory prefix
 
-SRCS		:= $(addprefix $(SRCSDIR)/, $(SRCS))
+SRCS_PARSER	:= $(addprefix $(SRCSDIR)/$(PARSERDIR)/, $(SRCS_PARSER))
+
+SRCS_UTILS	:= $(addprefix $(SRCSDIR)/$(UTILSDIR)/, $(SRCS_UTILS))
+
+SRCS		:= $(addprefix $(SRCSDIR)/, $(SRCS)) $(SRCS_PARSER) $(SRCS_UTILS)
 
 # Object files
 OBJS		= $(SRCS:$(SRCSDIR)/%.c=$(OBJDIR)/%.o)
@@ -59,7 +71,7 @@ all: $(NAME)
 $(NAME): $(OBJS) $(LIBFT) $(MLX_LIB)
 	@mkdir -p $(BINDIR)
 	@$(CC) $(CFLAGS) $(INCLUDE) $(OBJS) $(LIBFT) $(MLX_LIB) $(MLX) -o $(NAME)
-	@printf "$(GREEN)🎉 Executable $(NAME) successfully created!$(NC)\n"
+	@printf "\n$(GREEN)🎉 Executable $(NAME) successfully created!$(NC)\n"
 
 $(OBJDIR)/%.o: $(SRCSDIR)/%.c
 	@mkdir -p $(dir $@)

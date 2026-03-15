@@ -6,19 +6,43 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/12 19:03:24 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/15 00:57:34 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
+/* THE CHESS 🨀
+_________________
+|♜ ♞ ♝ ♚ ♛ ♝ ♞ ♜|
+|♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟|
+|               |
+|               |
+|               |
+|               |
+|♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙|
+|♖ ♘ ♗ ♔ ♕ ♗ ♘ ♖|
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+*/
+
+
+# include "map.h"
+# include "parser.h"
+# include "utils.h"
 # include "libft.h"
 # include "mlx.h"
 
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
+
+
+typedef enum e_bool
+{
+	FALSE,
+	TRUE
+}	t_bool;
 
 typedef struct s_img
 {
@@ -31,20 +55,6 @@ typedef struct s_img
 	int		height;
 }	t_img;
 
-typedef struct s_map
-{
-	char	**grid;
-	char	*no_path;
-	char	*so_path;
-	char	*we_path;
-	char	*ea_path;
-	int		floor_color;
-	int		ceiling_color;
-	int		map_width;
-	int		map_height;
-	t_img	textures[4];
-}	t_map;
-
 typedef struct s_player
 {
 	double	pos_x;
@@ -55,7 +65,7 @@ typedef struct s_player
 	double	plane_y;
 }	t_player;
 
-typedef struct s_ray
+typedef struct s_ray // creio que pode ter um header proprio
 {
 	double	camera_x;
 	double	ray_dir_x;
@@ -78,12 +88,16 @@ typedef struct s_ray
 
 typedef struct s_data
 {
+	t_map		map;
+	t_texpath	tex_path;
+	t_colors	colors;
+	t_tex		tex;
+
+	// t_player	player;
+	// t_img		img;
+	// t_ray		ray;
 	void		*mlx;
 	void		*win;
-	t_map		map;
-	t_player	player;
-	t_img		img;
-	t_ray		ray;
 }	t_data;
 
 #endif

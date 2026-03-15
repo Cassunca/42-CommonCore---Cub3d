@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:02:52 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/12 19:13:47 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/15 13:20:30 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,20 @@
 
 int	main(int ac, char **av)
 {
-	// t_game	game;
+	t_data	game;
 
 	(void)av;
 	if (ac != 2)
-		return (ft_putstr_fd("usage: ./bin/cub3d map.cub", STDERR_FILENO), 1);
-	/*	
-	if (init_game(&game))
-		return (1);
+		return (ft_putstr_fd(USAGE, STDERR_FILENO), EXIT_FAILURE);
 	
-	if (parse_map(av[1], &game))
-		return (free_game(&game), 1);
-		
+	ft_bzero(&game, sizeof(game));
+	// init_game(&game);
+	
+	if (!parser(av[1], &game))
+		return (/* free_game(&game) ,*/ EXIT_FAILURE);
+	/*
+	
+	
 	init_player(&game);
 	init_mlx(&game);
 	
@@ -36,5 +38,5 @@ int	main(int ac, char **av)
 	mlx_loop_hook(game->mlx, game_loop, game);
 	mlx_loop(game->mlx);
 	*/
-	return (0);
+	return (EXIT_SUCCESS);
 }
