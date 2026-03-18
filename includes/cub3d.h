@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/15 00:57:34 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/15 18:52:39 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ _________________
 # include "utils.h"
 # include "libft.h"
 # include "mlx.h"
-
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>

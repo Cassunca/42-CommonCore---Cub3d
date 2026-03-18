@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 00:47:38 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/15 13:10:17 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/15 20:15:54 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	write_erro(char *s)
 		s = "Unknown error";
 	ft_putstr_fd("Error: ", STDERR_FILENO);
 	ft_putstr_fd(s, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
 }
 
 int	erro_int(char *s, int exit_code)

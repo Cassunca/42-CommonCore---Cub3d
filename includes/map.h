@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 23:33:56 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/14 00:09:27 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/15 19:54:08 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ typedef struct s_tex
 
 typedef struct s_colors
 {
-	int		floor_color;
-	int		ceiling_color;
+	int		floor;
+	int		ceiling;
 }	t_colors;
 
 typedef struct s_map
