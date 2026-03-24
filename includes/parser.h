@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 20:50:08 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/15 19:54:56 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/23 23:11:15 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,13 @@ typedef struct s_parser
 	int		config_count;
 }	t_parser;
 
-typedef void (*t_parse_func)(t_parser *, char *);
+typedef struct s_id_config
+{
+	char	*str;
+	t_id	id;
+}	t_id_config;
+
+typedef t_bool (*t_parse_func)(t_parser *, char *);
 
 t_bool	parser(char *file, t_data *game);
 char	**read_file(char *path);

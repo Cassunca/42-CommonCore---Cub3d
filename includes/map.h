@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 23:33:56 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/15 19:54:08 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/23 21:29:35 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ typedef struct s_map
 {
 	char	**grid;
 	char	**visualizer;
-	int		map_width;
-	int		map_height;
+	int		width;
+	int		height;
 }	t_map;
 
 #endif

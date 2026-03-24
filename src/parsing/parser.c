@@ -6,50 +6,66 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 20:45:45 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/16 21:45:51 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/23 23:15:58 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "parser.h"
 
-void	parse_no(t_parser *p, char *line)
+t_bool	parse_no(t_parser *p, char *line)
 {
 	char *path;
 
 	if (p->game->tex_path.no)
-		return (write_erro("duplicate NO"));
+		return (write_erro("duplicate NO"), FALSE);
 	path = line + 3;
-	p->game->tex_path.no = ft_strdup(path);
+	path = ft_strtrim(path, " \t\n");
+	if (!path)
+		return (FALSE);
+	p->game->tex_path.no = path;
+	return (TRUE);
 }
 
-void	parse_so(t_parser *p, char *line)
+t_bool	parse_so(t_parser *p, char *line)
 {
 	char *path;
 	
 	if (p->game->tex_path.so)
-		return (write_erro("duplicate SO"));
+		return (write_erro("duplicate SO"), FALSE);
 	path = line + 3;
-	p->game->tex_path.so = ft_strdup(path);
+	path = ft_strtrim(path, " \t\n");
+	if (!path)
+		return (FALSE);
+	p->game->tex_path.so = path;
+	return (TRUE);
 }
 
-void	parse_we(t_parser *p, char *line)
+t_bool	parse_we(t_parser *p, char *line)
 {
 	char *path;
 
 	if (p->game->tex_path.we)
-		return (write_erro("duplicate we"));
+		return (write_erro("duplicate we"), FALSE);
 	path = line + 3;
-	p->game->tex_path.we = ft_strdup(path);
+	path = ft_strtrim(path, " \t\n");
+	if (!path)
+		return (FALSE);
+	p->game->tex_path.we = path;
+	return (TRUE);
 }
 
-void	parse_ea(t_parser *p, char *line)
+t_bool	parse_ea(t_parser *p, char *line)
 {
 	char *path;
 
 	if (p->game->tex_path.ea)
-		return (write_erro("duplicate EA"));
+		return (write_erro("duplicate EA"), FALSE);
 	path = line + 3;
-	p->game->tex_path.ea = ft_strdup(path);
+	path = ft_strtrim(path, " \t\n");
+	if (!path)
+		return (FALSE);
+	p->game->tex_path.ea = path;
+	return (TRUE);
 }
 
 void	free_split(char **splits)
@@ -62,7 +78,7 @@ void	free_split(char **splits)
 	free(splits);
 }
 
-void	parse_floor(t_parser *p, char *line)
+t_bool	parse_floor(t_parser *p, char *line)
 {
 	char	**rgb;
 	int		r;
@@ -70,11 +86,14 @@ void	parse_floor(t_parser *p, char *line)
 	int		b;
 
 	if (p->game->colors.floor)
-		return (write_erro("duplicate FLOOR (F)"));
+		return (write_erro("duplicate FLOOR (F)"), FALSE);
 	rgb = ft_split(line + 2, ',');
 
 	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2])
+	{
 		perror("invalid floor color");
+		return (FALSE);
+	}
 
 	r = ft_atoi(rgb[0]);
 	g = ft_atoi(rgb[1]);
@@ -83,9 +102,10 @@ void	parse_floor(t_parser *p, char *line)
 	p->game->colors.floor = (r << 16) | (g << 8) | b;
 
 	free_split(rgb);
+	return (TRUE);
 }
 
-void	parse_ceiling(t_parser *p, char *line)
+t_bool	parse_ceiling(t_parser *p, char *line)
 {
 	char	**rgb;
 	int		r;
@@ -93,11 +113,14 @@ void	parse_ceiling(t_parser *p, char *line)
 	int		b;
 
 	if (p->game->colors.ceiling)
-		return (write_erro("duplicate CEILING (C)"));
+		return (write_erro("duplicate CEILING (C)"), FALSE);
 	rgb = ft_split(line + 2, ',');
 
 	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2])
+	{
 		perror("invalid floor color");
+		return (FALSE);
+	}
 
 	r = ft_atoi(rgb[0]);
 	g = ft_atoi(rgb[1]);
@@ -106,22 +129,29 @@ void	parse_ceiling(t_parser *p, char *line)
 	p->game->colors.ceiling = (r << 16) | (g << 8) | b;
 
 	free_split(rgb);
+	return (TRUE);
 }
 
 t_id	get_id(char *line)
 {
-	if (!ft_strncmp(line, "NO ", 3))
-		return (ID_NO);
-	if (!ft_strncmp(line, "SO ", 3))
-		return (ID_SO);
-	if (!ft_strncmp(line, "WE ", 3))
-		return (ID_WE);
-	if (!ft_strncmp(line, "EA ", 3))
-		return (ID_EA);
-	if (!ft_strncmp(line, "F ", 2))
-		return (ID_F);
-	if (!ft_strncmp(line, "C ", 2))
-		return (ID_C);
+	int			i;
+	t_id_config	config[] = {
+		{"NO ", ID_NO},
+		{"SO ", ID_SO},
+		{"WE ", ID_WE},
+		{"EA ", ID_EA},
+		{"F ", ID_F},
+		{"C ", ID_C},
+		{NULL, ID_INVALID}
+	};
+
+	i = 0;
+	while (config[i].str)
+	{
+		if (!ft_strncmp(line, config[i].str, ft_strlen(config[i].str)))
+			return (config[i].id);
+		i++;
+	}
 	return (ID_INVALID);
 }
 
@@ -140,27 +170,42 @@ t_bool	parser_identifier(t_parser *p, char *line)
 	id = get_id(line);
 	if (id == ID_INVALID)
 		return (FALSE);
-	parse[id](p, line);
+	if (!parse[id](p, line))
+		return (FALSE);
 	return (TRUE);
-}
-
-t_bool	is_map(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == '1' || line[i] == '0')
-			return (TRUE);
-		i++;
-	}
-	return (FALSE);
 }
 
 int	ft_isspace(int c)
 {
 	return (c == ' ' || (c >= 9 && c <= 13));
+}
+
+t_bool	is_map(char *line)
+{
+	int	i;
+	int	has_map_char;
+
+	i = 0;
+	has_map_char = 0;
+	if (!line || line[0] == '\0')
+		return (FALSE);
+
+	while (line[i])
+	{
+		if (!ft_isspace(line[i])
+			&& line[i] != '1'
+			&& line[i] != '0'
+			&& line[i] != 'N'
+			&& line[i] != 'S'
+			&& line[i] != 'E'
+			&& line[i] != 'W')
+			return (FALSE);
+		
+		if (line[i] == '1' || line[i] == '0')
+			has_map_char = 1;
+		i++;
+	}
+	return (has_map_char);
 }
 
 int	is_empty_line(char *line)
@@ -191,6 +236,8 @@ t_bool	parser_configs(t_parser *p)
 	while (p->file[p->i])
 	{
 		skip_empty_lines(p);
+		if (!p->file[p->i])
+			break ;
 		line = p->file[p->i];
 		if (is_map(line))
 			break ;
@@ -200,6 +247,33 @@ t_bool	parser_configs(t_parser *p)
 		p->config_count++;
 	}
 	return (p->config_count == 6);
+}
+
+static t_bool	copy_grid(t_map *map, t_parser *p)
+{
+	int		i;
+	int		file_i;
+
+	map->height = 0;
+	file_i = p->i;
+	while (p->file[file_i++])
+		map->height++;
+	map->grid = malloc(sizeof(char *) * (map->height + 1));
+	if (!map->grid)
+		return (erro_int("malloc\n", 0));
+	i = 0;
+	file_i = p->i;
+	while (i < map->height)
+	{
+		map->grid[i] = ft_strdup(p->file[file_i++]);
+		if (!map->grid[i])
+		{
+			free_split(map->grid);
+			return (erro_int("strdup\n", FALSE));
+		}
+		i++;
+	}
+	map->grid[map->height] = NULL;
 	return (TRUE);
 }
 
@@ -212,22 +286,18 @@ t_bool	parser(char *file, t_data *game)
 	p.game = game;
 	if (!p.file)
 		return (FALSE);
-	printf("inicio parser\n");
-	if (parser_configs(&p))
+	if (!parser_configs(&p))
 		return (FALSE);
-	/*
-	if (!parser_map(&p))
+	if (!copy_grid(&p.game->map, &p))
 		return (FALSE);
-	if (!validate_map(&p))
-		return (FALSE);
-	*/
-	printf("%s\n", p.game->tex_path.no);
+	
+	printf("%s\n", p.game->tex_path.no);	
 	printf("%s\n", p.game->tex_path.so);
 	printf("%s\n", p.game->tex_path.we);
 	printf("%s\n", p.game->tex_path.ea);
 	printf("%d\n", p.game->colors.ceiling);
 	printf("%d\n", p.game->colors.floor);
-	for (; p.file[p.i]; p.i++)
-		printf("%s\n", p.file[p.i]);
+	for (int j = 0; p.game->map.grid[j]; j++)
+		printf("%s\n", p.game->map.grid[j]);
 	return (TRUE);
 }
