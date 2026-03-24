@@ -3,14 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 20:45:45 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/23 23:15:58 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/24 18:33:34 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "parser.h"
+
+t_bool	test_tex(char *path)
+{
+	int	fd;
+	
+	fd = open(path, O_RDONLY);
+	if (fd == -1)
+		return (erro_int("dont open texture", FALSE));
+	close(fd);
+	return (TRUE);
+}
 
 t_bool	parse_no(t_parser *p, char *line)
 {
@@ -21,6 +32,8 @@ t_bool	parse_no(t_parser *p, char *line)
 	path = line + 3;
 	path = ft_strtrim(path, " \t\n");
 	if (!path)
+		return (FALSE);
+	if (!test_tex(path))
 		return (FALSE);
 	p->game->tex_path.no = path;
 	return (TRUE);
@@ -36,6 +49,8 @@ t_bool	parse_so(t_parser *p, char *line)
 	path = ft_strtrim(path, " \t\n");
 	if (!path)
 		return (FALSE);
+	if (!test_tex(path))
+		return (FALSE);
 	p->game->tex_path.so = path;
 	return (TRUE);
 }
@@ -49,6 +64,8 @@ t_bool	parse_we(t_parser *p, char *line)
 	path = line + 3;
 	path = ft_strtrim(path, " \t\n");
 	if (!path)
+		return (FALSE);
+	if (!test_tex(path))
 		return (FALSE);
 	p->game->tex_path.we = path;
 	return (TRUE);
@@ -64,11 +81,13 @@ t_bool	parse_ea(t_parser *p, char *line)
 	path = ft_strtrim(path, " \t\n");
 	if (!path)
 		return (FALSE);
+	if (!test_tex(path))
+		return (FALSE);
 	p->game->tex_path.ea = path;
 	return (TRUE);
 }
 
-void	free_split(char **splits)
+void	free_matrix(char **splits)
 {
 	int	k;
 
@@ -101,7 +120,7 @@ t_bool	parse_floor(t_parser *p, char *line)
 
 	p->game->colors.floor = (r << 16) | (g << 8) | b;
 
-	free_split(rgb);
+	free_matrix(rgb);
 	return (TRUE);
 }
 
@@ -128,7 +147,7 @@ t_bool	parse_ceiling(t_parser *p, char *line)
 
 	p->game->colors.ceiling = (r << 16) | (g << 8) | b;
 
-	free_split(rgb);
+	free_matrix(rgb);
 	return (TRUE);
 }
 
@@ -268,7 +287,7 @@ static t_bool	copy_grid(t_map *map, t_parser *p)
 		map->grid[i] = ft_strdup(p->file[file_i++]);
 		if (!map->grid[i])
 		{
-			free_split(map->grid);
+			free_matrix(map->grid);
 			return (erro_int("strdup\n", FALSE));
 		}
 		i++;
@@ -291,13 +310,13 @@ t_bool	parser(char *file, t_data *game)
 	if (!copy_grid(&p.game->map, &p))
 		return (FALSE);
 	
-	printf("%s\n", p.game->tex_path.no);	
-	printf("%s\n", p.game->tex_path.so);
-	printf("%s\n", p.game->tex_path.we);
-	printf("%s\n", p.game->tex_path.ea);
-	printf("%d\n", p.game->colors.ceiling);
-	printf("%d\n", p.game->colors.floor);
-	for (int j = 0; p.game->map.grid[j]; j++)
-		printf("%s\n", p.game->map.grid[j]);
+	// printf("%s\n", p.game->tex_path.no);	
+	// printf("%s\n", p.game->tex_path.so);
+	// printf("%s\n", p.game->tex_path.we);
+	// printf("%s\n", p.game->tex_path.ea);
+	// printf("%d\n", p.game->colors.ceiling);
+	// printf("%d\n", p.game->colors.floor);
+	// for (int j = 0; p.game->map.grid[j]; j++)
+	// 	printf("%s\n", p.game->map.grid[j]);
 	return (TRUE);
 }
