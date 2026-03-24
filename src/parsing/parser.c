@@ -6,7 +6,7 @@
 /*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 20:45:45 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/24 18:33:34 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/03/24 19:39:08 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,57 +97,55 @@ void	free_matrix(char **splits)
 	free(splits);
 }
 
-t_bool	parse_floor(t_parser *p, char *line)
+t_bool	parse_rgb(char *color, int *r, int *g, int *b)
 {
 	char	**rgb;
+	int i;
+	
+	rgb = ft_split(color, ',');
+	if (!rgb)
+		return (FALSE);
+	i = -1;
+	while (rgb[++i]);
+	if (i != 3)
+		return (free_matrix(rgb), FALSE);
+	rgb[0] = ft_strtrim(rgb[0], " ");
+	rgb[1] = ft_strtrim(rgb[1], " ");
+	rgb[2] = ft_strtrim(rgb[2], " ");
+	*r = ft_atoi(rgb[0]);
+	*g = ft_atoi(rgb[1]);
+	*b = ft_atoi(rgb[2]);
+	if (*r < 0 || *r > 255 || *g < 0 || *g > 255 || *b < 0 || *b > 255)
+		return (free_matrix(rgb), FALSE);
+	free_matrix(rgb);
+	return (TRUE);
+}
+
+t_bool	parse_floor(t_parser *p, char *line)
+{
 	int		r;
 	int		g;
 	int		b;
 
 	if (p->game->colors.floor)
 		return (write_erro("duplicate FLOOR (F)"), FALSE);
-	rgb = ft_split(line + 2, ',');
-
-	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2])
-	{
-		perror("invalid floor color");
-		return (FALSE);
-	}
-
-	r = ft_atoi(rgb[0]);
-	g = ft_atoi(rgb[1]);
-	b = ft_atoi(rgb[2]);
-
+	if (!parse_rgb(line + 2, &r, &g, &b))
+		return (write_erro("invalid floor color"), FALSE);
 	p->game->colors.floor = (r << 16) | (g << 8) | b;
-
-	free_matrix(rgb);
 	return (TRUE);
 }
 
 t_bool	parse_ceiling(t_parser *p, char *line)
 {
-	char	**rgb;
 	int		r;
 	int		g;
 	int		b;
 
 	if (p->game->colors.ceiling)
 		return (write_erro("duplicate CEILING (C)"), FALSE);
-	rgb = ft_split(line + 2, ',');
-
-	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2])
-	{
-		perror("invalid floor color");
-		return (FALSE);
-	}
-
-	r = ft_atoi(rgb[0]);
-	g = ft_atoi(rgb[1]);
-	b = ft_atoi(rgb[2]);
-
+	if (!parse_rgb(line + 2, &r, &g, &b))
+		return (write_erro("invalid floor color"), FALSE);
 	p->game->colors.ceiling = (r << 16) | (g << 8) | b;
-
-	free_matrix(rgb);
 	return (TRUE);
 }
 
@@ -314,8 +312,8 @@ t_bool	parser(char *file, t_data *game)
 	// printf("%s\n", p.game->tex_path.so);
 	// printf("%s\n", p.game->tex_path.we);
 	// printf("%s\n", p.game->tex_path.ea);
-	// printf("%d\n", p.game->colors.ceiling);
-	// printf("%d\n", p.game->colors.floor);
+	printf("%d\n", p.game->colors.ceiling);
+	printf("%d\n", p.game->colors.floor);
 	// for (int j = 0; p.game->map.grid[j]; j++)
 	// 	printf("%s\n", p.game->map.grid[j]);
 	return (TRUE);
