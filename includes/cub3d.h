@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/15 18:52:39 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/25 18:24:19 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_player
 	double	dir_y;
 	double	plane_x;
 	double	plane_y;
+	double	fov;
 }	t_player;
 
 typedef struct s_ray // creio que pode ter um header proprio
@@ -92,7 +93,7 @@ typedef struct s_data
 	t_colors	colors;
 	t_tex		tex;
 
-	// t_player	player;
+	t_player	player;
 	// t_img		img;
 	// t_ray		ray;
 	void		*mlx;

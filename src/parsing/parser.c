@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 20:45:45 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/25 11:08:34 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/25 19:00:16 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,12 +278,16 @@ static t_bool	copy_grid(t_map *map, t_parser *p)
 	map->height = file_i - p->i;
 	map->grid = malloc(sizeof(char *) * (map->height + 1));
 	if (!map->grid)
-		return (erro_int("malloc\n", 0));
+		return (erro_int("malloc\n", FALSE));
 	i = 0;
 	file_i = p->i;
+	map->width = 0;
 	while (i < map->height)
 	{
 		map->grid[i] = ft_strdup(p->file[file_i++]);
+		int width = ft_strlen(map->grid[i]);
+		if (map->width < width)
+			map->width = width;
 		if (!map->grid[i])
 		{
 			free_matrix(map->grid);
@@ -292,6 +296,93 @@ static t_bool	copy_grid(t_map *map, t_parser *p)
 		i++;
 	}
 	map->grid[map->height] = NULL;
+	return (TRUE);
+}
+
+t_bool	normalize_map(t_map *map)
+{
+	int		y;
+
+	map->visualizer = malloc(sizeof(char *) * (map->height + 1));
+	if (!map->visualizer)
+		return (erro_int("malloc\n", FALSE));
+	y = 0;
+	while (y < map->height)
+	{
+		map->visualizer[y] = malloc(sizeof(char) * map->width + 1);
+		if (!map->visualizer[y])
+		{
+			while (--y >= 0)
+				free(map->visualizer[y]);
+			free(map->visualizer);
+			return (erro_int("Normalize fail\n", FALSE));
+		}
+		ft_memset(map->visualizer[y], ' ', map->width);
+		ft_memmove(map->visualizer[y], map->grid[y], ft_strlen(map->grid[y]));
+		map->visualizer[y][map->width] = '\0';
+		y++;
+	}
+	map->visualizer[map->height] = NULL;
+	return (TRUE);
+}
+
+t_bool	is_player(char	p)
+{
+	return (p == 'N' || p == 'S' || p == 'E' || p == 'W');
+}
+
+void	set_vec2(double x, double y, double *tx, double *ty)
+{
+	*tx = x;
+	*ty = y;
+}
+
+void	set_player_dir(t_player *player, char dir)
+{
+	if (dir == 'N')
+		set_vec2(0, -1, &player->dir_x, &player->dir_y);
+	else if (dir == 'S')
+		set_vec2(0, 1, &player->dir_x, &player->dir_y);
+	else if (dir == 'E')
+		set_vec2(1, 0, &player->dir_x, &player->dir_y);
+	else if (dir == 'W')
+		set_vec2(-1, 0, &player->dir_x, &player->dir_y);
+	player->plane_x = -player->dir_y * player->fov;
+	player->plane_y = player->dir_x * player->fov;
+}
+
+void	find_to_player(t_map *map, t_player *player, t_point *pt)
+{
+	pt->y = 0;
+	while (pt->y < map->height)
+	{
+		pt->x = 0;
+		while (pt->x < map->width)
+		{
+			if (is_player(map->visualizer[pt->y][pt->x]))
+			{
+				player->pos_x = pt->x + 0.5;
+				player->pos_y = pt->y + 0.5;
+				player->fov = 0.66;
+				set_player_dir(player, map->visualizer[pt->y][pt->x]);
+				return ;
+			}
+			pt->x++;
+		}
+		pt->y++;
+	}
+}
+
+t_bool	parser_map(t_data *game)
+{
+	t_point	player;
+
+	if (!normalize_map(&game->map))
+		return (erro_int("deu ruim ai fia", FALSE));
+	find_to_player(&game->map, &game->player, &player);
+	printf("y: %d - x: %d\n", player.y, player.x);
+	for (int j = 0; game->map.visualizer[j]; j++)
+		printf("%s|\n", game->map.visualizer[j]);
 	return (TRUE);
 }
 
@@ -308,7 +399,8 @@ t_bool	parser(char *file, t_data *game)
 		return (FALSE);
 	if (!copy_grid(&p.game->map, &p))
 		return (FALSE);
-	if (!parser_map(&p.game->map))
+	if (!parser_map(p.game))
+		return (FALSE);
 	
 	// printf("%s\n", p.game->tex_path.no);
 	// printf("%s\n", p.game->tex_path.so);
@@ -316,7 +408,7 @@ t_bool	parser(char *file, t_data *game)
 	// printf("%s\n", p.game->tex_path.ea);
 	// printf("%d\n", p.game->colors.ceiling);
 	// printf("%d\n", p.game->colors.floor);
-	for (int j = 0; p.game->map.grid[j]; j++)
-		printf("%s\n", p.game->map.grid[j]);
+	// for (int j = 0; p.game->map.grid[j]; j++)
+	// 	printf("%s\n", p.game->map.grid[j]);
 	return (TRUE);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 20:50:08 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/23 23:11:15 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/25 18:30:14 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 
 typedef struct s_data	t_data;
 typedef enum e_bool	t_bool;
-
 
 typedef enum e_id
 {
