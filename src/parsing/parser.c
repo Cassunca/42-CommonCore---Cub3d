@@ -6,7 +6,7 @@
 /*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 20:45:45 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/24 19:39:08 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/03/24 20:59:28 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_bool	test_tex(char *path)
 	
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
-		return (erro_int("dont open texture", FALSE));
+		return (erro_int("Failed to open texture file", FALSE));
 	close(fd);
 	return (TRUE);
 }
@@ -28,7 +28,7 @@ t_bool	parse_no(t_parser *p, char *line)
 	char *path;
 
 	if (p->game->tex_path.no)
-		return (write_erro("duplicate NO"), FALSE);
+		return (write_erro("Duplicate NO"), FALSE);
 	path = line + 3;
 	path = ft_strtrim(path, " \t\n");
 	if (!path)
@@ -44,7 +44,7 @@ t_bool	parse_so(t_parser *p, char *line)
 	char *path;
 	
 	if (p->game->tex_path.so)
-		return (write_erro("duplicate SO"), FALSE);
+		return (write_erro("Duplicate SO"), FALSE);
 	path = line + 3;
 	path = ft_strtrim(path, " \t\n");
 	if (!path)
@@ -60,7 +60,7 @@ t_bool	parse_we(t_parser *p, char *line)
 	char *path;
 
 	if (p->game->tex_path.we)
-		return (write_erro("duplicate we"), FALSE);
+		return (write_erro("Duplicate we"), FALSE);
 	path = line + 3;
 	path = ft_strtrim(path, " \t\n");
 	if (!path)
@@ -76,7 +76,7 @@ t_bool	parse_ea(t_parser *p, char *line)
 	char *path;
 
 	if (p->game->tex_path.ea)
-		return (write_erro("duplicate EA"), FALSE);
+		return (write_erro("Duplicate EA"), FALSE);
 	path = line + 3;
 	path = ft_strtrim(path, " \t\n");
 	if (!path)
@@ -108,7 +108,7 @@ t_bool	parse_rgb(char *color, int *r, int *g, int *b)
 	i = -1;
 	while (rgb[++i]);
 	if (i != 3)
-		return (free_matrix(rgb), FALSE);
+		return (free_matrix(rgb), erro_int("Invalid RGB format: expected 3 values (R,G,B)", FALSE));
 	rgb[0] = ft_strtrim(rgb[0], " ");
 	rgb[1] = ft_strtrim(rgb[1], " ");
 	rgb[2] = ft_strtrim(rgb[2], " ");
@@ -116,7 +116,7 @@ t_bool	parse_rgb(char *color, int *r, int *g, int *b)
 	*g = ft_atoi(rgb[1]);
 	*b = ft_atoi(rgb[2]);
 	if (*r < 0 || *r > 255 || *g < 0 || *g > 255 || *b < 0 || *b > 255)
-		return (free_matrix(rgb), FALSE);
+		return (free_matrix(rgb), erro_int("Invalid RGB value: each component must be between 0 and 255", FALSE));
 	free_matrix(rgb);
 	return (TRUE);
 }
@@ -128,9 +128,9 @@ t_bool	parse_floor(t_parser *p, char *line)
 	int		b;
 
 	if (p->game->colors.floor)
-		return (write_erro("duplicate FLOOR (F)"), FALSE);
+		return (write_erro("Duplicate floor color definition (F)"), FALSE);
 	if (!parse_rgb(line + 2, &r, &g, &b))
-		return (write_erro("invalid floor color"), FALSE);
+		return (write_erro("Invalid floor color: expected format 'F R,G,B"), FALSE);
 	p->game->colors.floor = (r << 16) | (g << 8) | b;
 	return (TRUE);
 }
@@ -142,9 +142,9 @@ t_bool	parse_ceiling(t_parser *p, char *line)
 	int		b;
 
 	if (p->game->colors.ceiling)
-		return (write_erro("duplicate CEILING (C)"), FALSE);
+		return (write_erro("Duplicate ceiling color definition (C)"), FALSE);
 	if (!parse_rgb(line + 2, &r, &g, &b))
-		return (write_erro("invalid floor color"), FALSE);
+		return (write_erro("Invalid ceiling color: expected format 'C R,G,B"), FALSE);
 	p->game->colors.ceiling = (r << 16) | (g << 8) | b;
 	return (TRUE);
 }
@@ -308,7 +308,7 @@ t_bool	parser(char *file, t_data *game)
 	if (!copy_grid(&p.game->map, &p))
 		return (FALSE);
 	
-	// printf("%s\n", p.game->tex_path.no);	
+	// printf("%s\n", p.game->tex_path.no);
 	// printf("%s\n", p.game->tex_path.so);
 	// printf("%s\n", p.game->tex_path.we);
 	// printf("%s\n", p.game->tex_path.ea);
