@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 20:45:45 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/24 20:59:28 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/03/25 11:08:34 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ t_bool	parser_identifier(t_parser *p, char *line)
 
 	id = get_id(line);
 	if (id == ID_INVALID)
-		return (FALSE);
+		return (erro_int("Invalid identifier", FALSE));
 	if (!parse[id](p, line))
 		return (FALSE);
 	return (TRUE);
@@ -225,18 +225,14 @@ t_bool	is_map(char *line)
 	return (has_map_char);
 }
 
-int	is_empty_line(char *line)
+static int	is_empty_line(char *line)
 {
 	int	i;
 
 	i = 0;
-	while (line[i])
-	{
-		if (!ft_isspace(line[i]))
-			return (0);
+	while (line[i] && ft_isspace(line[i]))
 		i++;
-	}
-	return (1);
+	return (line[i] == '\0');
 }
 
 void	skip_empty_lines(t_parser *p)
@@ -263,7 +259,9 @@ t_bool	parser_configs(t_parser *p)
 		p->i++;
 		p->config_count++;
 	}
-	return (p->config_count == 6);
+	if (p->config_count != 6)
+		return (erro_int("missing configs", FALSE));
+	return (TRUE);
 }
 
 static t_bool	copy_grid(t_map *map, t_parser *p)
@@ -273,8 +271,11 @@ static t_bool	copy_grid(t_map *map, t_parser *p)
 
 	map->height = 0;
 	file_i = p->i;
-	while (p->file[file_i++])
-		map->height++;
+	while (p->file[file_i])
+		file_i++;
+	while (file_i > p->i && is_empty_line(p->file[file_i - 1]))
+		file_i--;
+	map->height = file_i - p->i;
 	map->grid = malloc(sizeof(char *) * (map->height + 1));
 	if (!map->grid)
 		return (erro_int("malloc\n", 0));
@@ -307,14 +308,15 @@ t_bool	parser(char *file, t_data *game)
 		return (FALSE);
 	if (!copy_grid(&p.game->map, &p))
 		return (FALSE);
+	if (!parser_map(&p.game->map))
 	
 	// printf("%s\n", p.game->tex_path.no);
 	// printf("%s\n", p.game->tex_path.so);
 	// printf("%s\n", p.game->tex_path.we);
 	// printf("%s\n", p.game->tex_path.ea);
-	printf("%d\n", p.game->colors.ceiling);
-	printf("%d\n", p.game->colors.floor);
-	// for (int j = 0; p.game->map.grid[j]; j++)
-	// 	printf("%s\n", p.game->map.grid[j]);
+	// printf("%d\n", p.game->colors.ceiling);
+	// printf("%d\n", p.game->colors.floor);
+	for (int j = 0; p.game->map.grid[j]; j++)
+		printf("%s\n", p.game->map.grid[j]);
 	return (TRUE);
 }
