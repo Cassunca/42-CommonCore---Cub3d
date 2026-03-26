@@ -6,7 +6,7 @@
 /*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 20:45:45 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/25 19:00:16 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/03/26 17:39:14 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,9 +312,7 @@ t_bool	normalize_map(t_map *map)
 		map->visualizer[y] = malloc(sizeof(char) * map->width + 1);
 		if (!map->visualizer[y])
 		{
-			while (--y >= 0)
-				free(map->visualizer[y]);
-			free(map->visualizer);
+			free_matrix(map->visualizer);
 			return (erro_int("Normalize fail\n", FALSE));
 		}
 		ft_memset(map->visualizer[y], ' ', map->width);
@@ -373,16 +371,35 @@ void	find_to_player(t_map *map, t_player *player, t_point *pt)
 	}
 }
 
+t_bool flood_fill(t_map *map, int y, int x)
+{
+	if (x < 0 || y < 0 || map->height <= y || map->width <= x)
+		return (FALSE);
+	if (map->visualizer[y][x] == ' ')
+		return (FALSE);
+	if (map->visualizer[y][x] == '1' || map->visualizer[y][x] == 'F')
+		return (TRUE);
+	map->visualizer[y][x] = 'F';
+	if (!flood_fill(map, y, x + 1))
+		return	(FALSE);
+	if (!flood_fill(map, y, x - 1))
+		return	(FALSE);
+	if (!flood_fill(map, y + 1, x))
+		return	(FALSE);
+	if (!flood_fill(map, y - 1, x))
+		return	(FALSE);
+	return (TRUE);
+}
+
 t_bool	parser_map(t_data *game)
 {
 	t_point	player;
 
 	if (!normalize_map(&game->map))
-		return (erro_int("deu ruim ai fia", FALSE));
+		return (FALSE);
 	find_to_player(&game->map, &game->player, &player);
-	printf("y: %d - x: %d\n", player.y, player.x);
-	for (int j = 0; game->map.visualizer[j]; j++)
-		printf("%s|\n", game->map.visualizer[j]);
+	if (!flood_fill(&game->map, player.y, player.x))
+		return (erro_int("Map open", FALSE));
 	return (TRUE);
 }
 
@@ -401,14 +418,6 @@ t_bool	parser(char *file, t_data *game)
 		return (FALSE);
 	if (!parser_map(p.game))
 		return (FALSE);
-	
-	// printf("%s\n", p.game->tex_path.no);
-	// printf("%s\n", p.game->tex_path.so);
-	// printf("%s\n", p.game->tex_path.we);
-	// printf("%s\n", p.game->tex_path.ea);
-	// printf("%d\n", p.game->colors.ceiling);
-	// printf("%d\n", p.game->colors.floor);
-	// for (int j = 0; p.game->map.grid[j]; j++)
-	// 	printf("%s\n", p.game->map.grid[j]);
+
 	return (TRUE);
 }
