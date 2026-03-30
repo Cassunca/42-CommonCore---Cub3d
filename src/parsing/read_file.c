@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 00:30:35 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/15 13:17:29 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/28 18:04:58 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static int	check_extension(char *path)
 	len = ft_strlen(path);
 	if (len <= len_extension)
 		return (FALSE);
-	return (!ft_strncmp(path + (len - len_extension), EXTENSION, len_extension));
+	return (!ft_strncmp(path + (len - len_extension),
+			EXTENSION, len_extension));
 }
 
 static int	count_lines(char *path)

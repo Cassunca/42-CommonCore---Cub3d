@@ -3,291 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 20:45:45 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/26 17:39:14 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/03/28 17:48:57 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "parser.h"
+#include "parser.h"
 
-t_bool	test_tex(char *path)
-{
-	int	fd;
-	
-	fd = open(path, O_RDONLY);
-	if (fd == -1)
-		return (erro_int("Failed to open texture file", FALSE));
-	close(fd);
-	return (TRUE);
-}
-
-t_bool	parse_no(t_parser *p, char *line)
-{
-	char *path;
-
-	if (p->game->tex_path.no)
-		return (write_erro("Duplicate NO"), FALSE);
-	path = line + 3;
-	path = ft_strtrim(path, " \t\n");
-	if (!path)
-		return (FALSE);
-	if (!test_tex(path))
-		return (FALSE);
-	p->game->tex_path.no = path;
-	return (TRUE);
-}
-
-t_bool	parse_so(t_parser *p, char *line)
-{
-	char *path;
-	
-	if (p->game->tex_path.so)
-		return (write_erro("Duplicate SO"), FALSE);
-	path = line + 3;
-	path = ft_strtrim(path, " \t\n");
-	if (!path)
-		return (FALSE);
-	if (!test_tex(path))
-		return (FALSE);
-	p->game->tex_path.so = path;
-	return (TRUE);
-}
-
-t_bool	parse_we(t_parser *p, char *line)
-{
-	char *path;
-
-	if (p->game->tex_path.we)
-		return (write_erro("Duplicate we"), FALSE);
-	path = line + 3;
-	path = ft_strtrim(path, " \t\n");
-	if (!path)
-		return (FALSE);
-	if (!test_tex(path))
-		return (FALSE);
-	p->game->tex_path.we = path;
-	return (TRUE);
-}
-
-t_bool	parse_ea(t_parser *p, char *line)
-{
-	char *path;
-
-	if (p->game->tex_path.ea)
-		return (write_erro("Duplicate EA"), FALSE);
-	path = line + 3;
-	path = ft_strtrim(path, " \t\n");
-	if (!path)
-		return (FALSE);
-	if (!test_tex(path))
-		return (FALSE);
-	p->game->tex_path.ea = path;
-	return (TRUE);
-}
-
-void	free_matrix(char **splits)
-{
-	int	k;
-
-	k = -1;
-	while (splits[++k])
-		free(splits[k]);
-	free(splits);
-}
-
-t_bool	parse_rgb(char *color, int *r, int *g, int *b)
-{
-	char	**rgb;
-	int i;
-	
-	rgb = ft_split(color, ',');
-	if (!rgb)
-		return (FALSE);
-	i = -1;
-	while (rgb[++i]);
-	if (i != 3)
-		return (free_matrix(rgb), erro_int("Invalid RGB format: expected 3 values (R,G,B)", FALSE));
-	rgb[0] = ft_strtrim(rgb[0], " ");
-	rgb[1] = ft_strtrim(rgb[1], " ");
-	rgb[2] = ft_strtrim(rgb[2], " ");
-	*r = ft_atoi(rgb[0]);
-	*g = ft_atoi(rgb[1]);
-	*b = ft_atoi(rgb[2]);
-	if (*r < 0 || *r > 255 || *g < 0 || *g > 255 || *b < 0 || *b > 255)
-		return (free_matrix(rgb), erro_int("Invalid RGB value: each component must be between 0 and 255", FALSE));
-	free_matrix(rgb);
-	return (TRUE);
-}
-
-t_bool	parse_floor(t_parser *p, char *line)
-{
-	int		r;
-	int		g;
-	int		b;
-
-	if (p->game->colors.floor)
-		return (write_erro("Duplicate floor color definition (F)"), FALSE);
-	if (!parse_rgb(line + 2, &r, &g, &b))
-		return (write_erro("Invalid floor color: expected format 'F R,G,B"), FALSE);
-	p->game->colors.floor = (r << 16) | (g << 8) | b;
-	return (TRUE);
-}
-
-t_bool	parse_ceiling(t_parser *p, char *line)
-{
-	int		r;
-	int		g;
-	int		b;
-
-	if (p->game->colors.ceiling)
-		return (write_erro("Duplicate ceiling color definition (C)"), FALSE);
-	if (!parse_rgb(line + 2, &r, &g, &b))
-		return (write_erro("Invalid ceiling color: expected format 'C R,G,B"), FALSE);
-	p->game->colors.ceiling = (r << 16) | (g << 8) | b;
-	return (TRUE);
-}
-
-t_id	get_id(char *line)
-{
-	int			i;
-	t_id_config	config[] = {
-		{"NO ", ID_NO},
-		{"SO ", ID_SO},
-		{"WE ", ID_WE},
-		{"EA ", ID_EA},
-		{"F ", ID_F},
-		{"C ", ID_C},
-		{NULL, ID_INVALID}
-	};
-
-	i = 0;
-	while (config[i].str)
-	{
-		if (!ft_strncmp(line, config[i].str, ft_strlen(config[i].str)))
-			return (config[i].id);
-		i++;
-	}
-	return (ID_INVALID);
-}
-
-t_bool	parser_identifier(t_parser *p, char *line)
-{
-	t_id	id;
-	t_parse_func parse[] = {
-		parse_no,
-		parse_so,
-		parse_we,
-		parse_ea,
-		parse_floor,
-		parse_ceiling
-	};
-
-	id = get_id(line);
-	if (id == ID_INVALID)
-		return (erro_int("Invalid identifier", FALSE));
-	if (!parse[id](p, line))
-		return (FALSE);
-	return (TRUE);
-}
-
-int	ft_isspace(int c)
-{
-	return (c == ' ' || (c >= 9 && c <= 13));
-}
-
-t_bool	is_map(char *line)
+static t_bool	copy_lines(t_map *map, t_parser *p)
 {
 	int	i;
-	int	has_map_char;
+	int	file_i;
 
-	i = 0;
-	has_map_char = 0;
-	if (!line || line[0] == '\0')
-		return (FALSE);
-
-	while (line[i])
-	{
-		if (!ft_isspace(line[i])
-			&& line[i] != '1'
-			&& line[i] != '0'
-			&& line[i] != 'N'
-			&& line[i] != 'S'
-			&& line[i] != 'E'
-			&& line[i] != 'W')
-			return (FALSE);
-		
-		if (line[i] == '1' || line[i] == '0')
-			has_map_char = 1;
-		i++;
-	}
-	return (has_map_char);
-}
-
-static int	is_empty_line(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i] && ft_isspace(line[i]))
-		i++;
-	return (line[i] == '\0');
-}
-
-void	skip_empty_lines(t_parser *p)
-{
-	while (p->file[p->i] && is_empty_line(p->file[p->i]))
-		p->i++;
-}
-
-t_bool	parser_configs(t_parser *p)
-{
-	if (!p->file)
-		return (FALSE);
-	char	*line;
-	while (p->file[p->i])
-	{
-		skip_empty_lines(p);
-		if (!p->file[p->i])
-			break ;
-		line = p->file[p->i];
-		if (is_map(line))
-			break ;
-		if (!parser_identifier(p, line))
-			return (FALSE);
-		p->i++;
-		p->config_count++;
-	}
-	if (p->config_count != 6)
-		return (erro_int("missing configs", FALSE));
-	return (TRUE);
-}
-
-static t_bool	copy_grid(t_map *map, t_parser *p)
-{
-	int		i;
-	int		file_i;
-
-	map->height = 0;
-	file_i = p->i;
-	while (p->file[file_i])
-		file_i++;
-	while (file_i > p->i && is_empty_line(p->file[file_i - 1]))
-		file_i--;
-	map->height = file_i - p->i;
-	map->grid = malloc(sizeof(char *) * (map->height + 1));
-	if (!map->grid)
-		return (erro_int("malloc\n", FALSE));
 	i = 0;
 	file_i = p->i;
-	map->width = 0;
 	while (i < map->height)
 	{
 		map->grid[i] = ft_strdup(p->file[file_i++]);
-		int width = ft_strlen(map->grid[i]);
-		if (map->width < width)
-			map->width = width;
 		if (!map->grid[i])
 		{
 			free_matrix(map->grid);
@@ -299,107 +33,48 @@ static t_bool	copy_grid(t_map *map, t_parser *p)
 	return (TRUE);
 }
 
-t_bool	normalize_map(t_map *map)
+static int	get_effective_end(t_parser *p)
 {
-	int		y;
+	int	file_i;
 
-	map->visualizer = malloc(sizeof(char *) * (map->height + 1));
-	if (!map->visualizer)
+	file_i = p->i;
+	while (p->file[file_i])
+		file_i++;
+	while (file_i > p->i && is_empty_line(p->file[file_i - 1]))
+		file_i--;
+	return (file_i);
+}
+
+static int	get_max_width(char **grid, int height)
+{
+	int	i;
+	int	max;
+	int	width;
+
+	i = 0;
+	max = 0;
+	while (i < height)
+	{
+		width = ft_strlen(grid[i]);
+		if (width > max)
+			max = width;
+		i++;
+	}
+	return (max);
+}
+
+static t_bool	copy_grid(t_map *map, t_parser *p)
+{
+	int	end;
+
+	end = get_effective_end(p);
+	map->height = end - p->i;
+	map->grid = malloc(sizeof(char *) * (map->height + 1));
+	if (!map->grid)
 		return (erro_int("malloc\n", FALSE));
-	y = 0;
-	while (y < map->height)
-	{
-		map->visualizer[y] = malloc(sizeof(char) * map->width + 1);
-		if (!map->visualizer[y])
-		{
-			free_matrix(map->visualizer);
-			return (erro_int("Normalize fail\n", FALSE));
-		}
-		ft_memset(map->visualizer[y], ' ', map->width);
-		ft_memmove(map->visualizer[y], map->grid[y], ft_strlen(map->grid[y]));
-		map->visualizer[y][map->width] = '\0';
-		y++;
-	}
-	map->visualizer[map->height] = NULL;
-	return (TRUE);
-}
-
-t_bool	is_player(char	p)
-{
-	return (p == 'N' || p == 'S' || p == 'E' || p == 'W');
-}
-
-void	set_vec2(double x, double y, double *tx, double *ty)
-{
-	*tx = x;
-	*ty = y;
-}
-
-void	set_player_dir(t_player *player, char dir)
-{
-	if (dir == 'N')
-		set_vec2(0, -1, &player->dir_x, &player->dir_y);
-	else if (dir == 'S')
-		set_vec2(0, 1, &player->dir_x, &player->dir_y);
-	else if (dir == 'E')
-		set_vec2(1, 0, &player->dir_x, &player->dir_y);
-	else if (dir == 'W')
-		set_vec2(-1, 0, &player->dir_x, &player->dir_y);
-	player->plane_x = -player->dir_y * player->fov;
-	player->plane_y = player->dir_x * player->fov;
-}
-
-void	find_to_player(t_map *map, t_player *player, t_point *pt)
-{
-	pt->y = 0;
-	while (pt->y < map->height)
-	{
-		pt->x = 0;
-		while (pt->x < map->width)
-		{
-			if (is_player(map->visualizer[pt->y][pt->x]))
-			{
-				player->pos_x = pt->x + 0.5;
-				player->pos_y = pt->y + 0.5;
-				player->fov = 0.66;
-				set_player_dir(player, map->visualizer[pt->y][pt->x]);
-				return ;
-			}
-			pt->x++;
-		}
-		pt->y++;
-	}
-}
-
-t_bool flood_fill(t_map *map, int y, int x)
-{
-	if (x < 0 || y < 0 || map->height <= y || map->width <= x)
+	if (!copy_lines(map, p))
 		return (FALSE);
-	if (map->visualizer[y][x] == ' ')
-		return (FALSE);
-	if (map->visualizer[y][x] == '1' || map->visualizer[y][x] == 'F')
-		return (TRUE);
-	map->visualizer[y][x] = 'F';
-	if (!flood_fill(map, y, x + 1))
-		return	(FALSE);
-	if (!flood_fill(map, y, x - 1))
-		return	(FALSE);
-	if (!flood_fill(map, y + 1, x))
-		return	(FALSE);
-	if (!flood_fill(map, y - 1, x))
-		return	(FALSE);
-	return (TRUE);
-}
-
-t_bool	parser_map(t_data *game)
-{
-	t_point	player;
-
-	if (!normalize_map(&game->map))
-		return (FALSE);
-	find_to_player(&game->map, &game->player, &player);
-	if (!flood_fill(&game->map, player.y, player.x))
-		return (erro_int("Map open", FALSE));
+	map->width = get_max_width(map->grid, map->height);
 	return (TRUE);
 }
 
@@ -408,16 +83,18 @@ t_bool	parser(char *file, t_data *game)
 	t_parser	p;
 
 	p.file = read_file(file);
-	p.i	= 0;
+	p.i = 0;
+	p.config_count = 0;
 	p.game = game;
 	if (!p.file)
-		return (FALSE);
+		return (destroy_game(game, &p), FALSE);
 	if (!parser_configs(&p))
-		return (FALSE);
+		return (destroy_game(game, &p), FALSE);
 	if (!copy_grid(&p.game->map, &p))
-		return (FALSE);
+		return (destroy_game(game, &p), FALSE);
 	if (!parser_map(p.game))
-		return (FALSE);
-
+		return (destroy_game(game, &p), FALSE);
+	free_matrix(p.file);
+	free_matrix(p.game->map.visualizer);
 	return (TRUE);
 }
