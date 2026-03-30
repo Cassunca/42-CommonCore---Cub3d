@@ -3,15 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:02:52 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/26 17:53:19 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/03/30 17:46:01 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+void	free_game(t_data *game)
+{
+	if (!game)
+		return ;
+	// destroy_game(game, NULL);
+	free(game);
+}
+
+void	closer(t_data *game)
+{
+	// mlx_destroy_image(game->mlx, game->frame.ptr);
+	mlx_destroy_window(game->mlx, game->win);
+	mlx_destroy_display(game->mlx);
+	free(game->mlx);
+	free(game->tex_path.no);
+	free(game->tex_path.so);
+	free(game->tex_path.we);
+	free(game->tex_path.ea);
+	if (game->map.grid)
+		free_matrix(game->map.grid);
+}
 
 int	handle_key(int keycode, t_data *game)
 {
@@ -20,7 +41,7 @@ int	handle_key(int keycode, t_data *game)
 	{
 		// print_exit();
 		printf("flw fia\n");
-		// closer(game);
+		closer(game);
 		exit(0);
 	}
 	// if (keycode == KEY_D || keycode == KEY_RIGHT)
@@ -48,9 +69,8 @@ int	handle_key_release(int keycode, t_data *game)
 int	close_window(void *param)
 {
 	// print_exit();
-	(void)param;
 	printf("flw fia\n");
-	// closer((t_data *)param);
+	closer((t_data *)param);
 	exit(0);
 	return (0);
 }
@@ -62,20 +82,15 @@ int	main(int ac, char **av)
 	(void)av;
 	if (ac != 2)
 		return (ft_putstr_fd(USAGE, STDERR_FILENO), EXIT_FAILURE);
-	
 	ft_bzero(&game, sizeof(game));
-	// init_game(&game);
-	
 	if (!parser(av[1], &game))
-		return (/* free_game(&game) ,*/ EXIT_FAILURE);
-
+		return (EXIT_FAILURE);
 	game.mlx = mlx_init();
 	game.win = mlx_new_window(game.mlx, 800, 600, "CUBO");
 	mlx_hook(game.win, 2, 1L << 0, handle_key, &game);
 	mlx_hook(game.win, 3, 1L << 1, handle_key_release, &game);
 	mlx_hook(game.win, 17, 0l, close_window, &game);
-	
-	// mlx_loop_hook(game.mlx, game_loop, game);
+	// mlx_loop_hook(game.mlx, game_loop, &game);
 	mlx_loop(game.mlx);
 	return (EXIT_SUCCESS);
 }
