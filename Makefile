@@ -6,7 +6,7 @@
 #    By: kamys <kamys@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/03/15 00:53:02 by kamys            ###   ########.fr        #
+#    Updated: 2026/03/28 18:09:08 by kamys            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,10 +39,15 @@ LIBS_DIR	= libs
 # Source files
 SRCS		:=	main.c
 
-SRCS_PARSER	:=	parser.c	\
+SRCS_PARSER	:=	parser.c			\
+				parser_color.c		\
+				parser_configs.c	\
+				parser_tex.c		\
+				parser_map.c		\
 				read_file.c
 
-SRCS_UTILS	:=	frees.c		\
+SRCS_UTILS	:=	frees.c				\
+				utils.c				\
 				error_msg.c
 
 # Add directory prefix
@@ -110,10 +115,10 @@ fclean: clean
 	@$(MAKE) fclean $(RUNLIB) -s > /dev/null 2>&1
 	@printf "$(YELLOW)🗑️ Executable removed$(NC)\n"
 
-valgrind:
-	valgrind -q --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes ./minishell
-
 re: fclean all
+
+valgrind:
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) $(ARGS)
 
 -include $(DEPS)
 
