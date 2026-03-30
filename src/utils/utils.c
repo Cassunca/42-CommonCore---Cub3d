@@ -1,37 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   frees.c                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/13 23:59:29 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/28 18:03:39 by kamys            ###   ########.fr       */
+/*   Created: 2026/03/28 16:56:02 by kamys             #+#    #+#             */
+/*   Updated: 2026/03/28 17:49:34 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 
-void	destroy_game(t_data *game, t_parser *p)
+t_bool	is_player(char p)
 {
-	if (p && p->file)
-		free_matrix(p->file);
-	free(game->tex_path.no);
-	free(game->tex_path.so);
-	free(game->tex_path.we);
-	free(game->tex_path.ea);
-	if (game->map.grid)
-		free_matrix(game->map.grid);
-	if (game->map.visualizer)
-		free_matrix(game->map.visualizer);
+	return (p == 'N' || p == 'S' || p == 'E' || p == 'W');
 }
 
-void	free_matrix(char **splits)
+void	set_vec2(double x, double y, double *tx, double *ty)
 {
-	int	k;
+	*tx = x;
+	*ty = y;
+}
 
-	k = -1;
-	while (splits[++k])
-		free(splits[k]);
-	free(splits);
+int	is_empty_line(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] && ft_isspace(line[i]))
+		i++;
+	return (line[i] == '\0');
+}
+
+int	ft_isspace(int c)
+{
+	return (c == ' ' || (c >= 9 && c <= 13));
 }
