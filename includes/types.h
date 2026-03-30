@@ -1,50 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map.h                                              :+:      :+:    :+:   */
+/*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/13 23:33:56 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/30 12:08:14 by kamys            ###   ########.fr       */
+/*   Created: 2026/03/30 12:05:52 by kamys             #+#    #+#             */
+/*   Updated: 2026/03/30 12:08:06 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAP_H
-# define MAP_H
+#ifndef TYPES_H
+# define TYPES_H
 
-# include "types.h"
-
-typedef struct s_texpath
+typedef enum e_bool
 {
-	char	*no;
-	char	*so;
-	char	*we;
-	char	*ea;
-}	t_texpath;
+	FALSE,
+	TRUE
+}	t_bool;
 
-typedef struct s_tex
+typedef struct s_point
 {
-	t_img	*no;
-	t_img	*so;
-	t_img	*we;
-	t_img	*ea;
-}	t_tex;
+	int	x;
+	int	y;
+}	t_point;
 
-typedef struct s_colors
+typedef struct s_img
 {
-	int		floor;
-	int		ceiling;
-	t_bool	floor_set;
-	t_bool	ceiling_set;
-}	t_colors;
-
-typedef struct s_map
-{
-	char	**grid;
-	char	**visualizer;
+	void	*img_ptr;
+	char	*addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
 	int		width;
 	int		height;
-}	t_map;
+}	t_img;
 
 #endif

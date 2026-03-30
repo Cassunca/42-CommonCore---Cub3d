@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/26 17:52:30 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/03/30 12:23:16 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,30 +37,8 @@ _________________
 
 # include "map.h"
 # include "parser.h"
-# include "utils.h"
 # include "libft.h"
 # include "mlx.h"
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-
-
-typedef enum e_bool
-{
-	FALSE,
-	TRUE
-}	t_bool;
-
-typedef struct s_img
-{
-	void	*img_ptr;
-	char	*addr;
-	int		bpp;
-	int		line_len;
-	int		endian;
-	int		width;
-	int		height;
-}	t_img;
 
 typedef struct s_player
 {
