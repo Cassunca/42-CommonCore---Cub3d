@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:02:52 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/30 17:46:01 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/30 21:45:14 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	free_game(t_data *game)
 
 void	closer(t_data *game)
 {
-	// mlx_destroy_image(game->mlx, game->frame.ptr);
+	mlx_destroy_image(game->mlx, game->frame.ptr);
 	mlx_destroy_window(game->mlx, game->win);
 	mlx_destroy_display(game->mlx);
 	free(game->mlx);
@@ -85,8 +85,8 @@ int	main(int ac, char **av)
 	ft_bzero(&game, sizeof(game));
 	if (!parser(av[1], &game))
 		return (EXIT_FAILURE);
-	game.mlx = mlx_init();
-	game.win = mlx_new_window(game.mlx, 800, 600, "CUBO");
+	if (!init_game(&game))
+		return (EXIT_FAILURE);
 	mlx_hook(game.win, 2, 1L << 0, handle_key, &game);
 	mlx_hook(game.win, 3, 1L << 1, handle_key_release, &game);
 	mlx_hook(game.win, 17, 0l, close_window, &game);

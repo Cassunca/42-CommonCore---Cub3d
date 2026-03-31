@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 00:47:58 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/30 12:14:27 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/30 21:40:43 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,7 @@ int		is_empty_line(char *line);
 
 t_bool	is_player(char p);
 void	set_vec2(double x, double y, double *tx, double *ty);
+
+t_bool	init_game(t_data *game);
 
 #endif

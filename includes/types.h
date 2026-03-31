@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 12:05:52 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/30 12:08:06 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/30 21:30:11 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_point
 
 typedef struct s_img
 {
-	void	*img_ptr;
+	void	*ptr;
 	char	*addr;
 	int		bpp;
 	int		line_len;

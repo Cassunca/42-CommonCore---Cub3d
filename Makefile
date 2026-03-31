@@ -6,7 +6,7 @@
 #    By: kamys <kamys@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/03/28 18:09:08 by kamys            ###   ########.fr        #
+#    Updated: 2026/03/30 21:41:04 by kamys            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,7 @@ SRCS_PARSER	:=	parser.c			\
 				read_file.c
 
 SRCS_UTILS	:=	frees.c				\
+				inits.c				\
 				utils.c				\
 				error_msg.c
 

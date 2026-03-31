@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/30 12:23:16 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/30 21:29:53 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ _________________
 # define KEY_UP 65362
 # define KEY_ESC 65307
 
+# define WIN_HEIGHT 600
+# define WIN_WIDTH 800
+
 # include "map.h"
 # include "parser.h"
 # include "libft.h"
@@ -51,7 +54,7 @@ typedef struct s_player
 	double	fov;
 }	t_player;
 
-typedef struct s_ray // creio que pode ter um header proprio
+typedef struct s_ray
 {
 	double	camera_x;
 	double	ray_dir_x;
@@ -80,7 +83,7 @@ typedef struct s_data
 	t_tex		tex;
 
 	t_player	player;
-	// t_img		img;
+	t_img		frame;
 	// t_ray		ray;
 	void		*mlx;
 	void		*win;
