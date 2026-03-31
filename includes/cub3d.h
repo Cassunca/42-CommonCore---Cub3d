@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/30 21:29:53 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/31 16:11:31 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,9 @@ typedef struct s_data
 	void		*mlx;
 	void		*win;
 }	t_data;
+
+int	close_window(void *param);
+int	handle_key(int keycode, t_data *game);
+int	handle_key_release(int keycode, t_data *game);
 
 #endif
