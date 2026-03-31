@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kamys <kamys@student.42.fr>                +#+  +:+       +#+         #
+#    By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/03/12 17:56:35 by kamys            ###   ########.fr        #
+#    Updated: 2026/03/31 16:15:34 by amyrodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,16 +30,43 @@ RUNMLX      = -C $(LIBS_DIR)/minilibx-linux
 
 # Directories
 SRCSDIR		= src
+PARSERDIR	= parsing
+UTILSDIR	= utils
+ENGINEDIR	= engine
 OBJDIR		= .objs
 BINDIR		= bin
 LIBS_DIR	= libs
 
 # Source files
-SRCS		= main.c
+SRCS		:=	main.c
+
+SRCS_ENGINE	:=	hooks.c				\
+				math_utils.c		\
+				movement.c			\
+				raycast.c			\
+				render.c			
+
+SRCS_PARSER	:=	parser.c			\
+				parser_color.c		\
+				parser_configs.c	\
+				parser_tex.c		\
+				parser_map.c		\
+				read_file.c
+
+SRCS_UTILS	:=	frees.c				\
+				inits.c				\
+				utils.c				\
+				error_msg.c
 
 # Add directory prefix
 
-SRCS		:= $(addprefix $(SRCSDIR)/, $(SRCS))
+SRCS_ENGINE	:= $(addprefix $(SRCSDIR)/$(ENGINEDIR)/, $(SRCS_ENGINE))
+
+SRCS_PARSER	:= $(addprefix $(SRCSDIR)/$(PARSERDIR)/, $(SRCS_PARSER))
+
+SRCS_UTILS	:= $(addprefix $(SRCSDIR)/$(UTILSDIR)/, $(SRCS_UTILS))
+
+SRCS		:= $(addprefix $(SRCSDIR)/, $(SRCS)) $(SRCS_PARSER) $(SRCS_UTILS) $(SRCS_ENGINE)
 
 # Object files
 OBJS		= $(SRCS:$(SRCSDIR)/%.c=$(OBJDIR)/%.o)
@@ -59,7 +86,7 @@ all: $(NAME)
 $(NAME): $(OBJS) $(LIBFT) $(MLX_LIB)
 	@mkdir -p $(BINDIR)
 	@$(CC) $(CFLAGS) $(INCLUDE) $(OBJS) $(LIBFT) $(MLX_LIB) $(MLX) -o $(NAME)
-	@printf "$(GREEN)🎉 Executable $(NAME) successfully created!$(NC)\n"
+	@printf "\n$(GREEN)🎉 Executable $(NAME) successfully created!$(NC)\n"
 
 $(OBJDIR)/%.o: $(SRCSDIR)/%.c
 	@mkdir -p $(dir $@)
@@ -98,10 +125,10 @@ fclean: clean
 	@$(MAKE) fclean $(RUNLIB) -s > /dev/null 2>&1
 	@printf "$(YELLOW)🗑️ Executable removed$(NC)\n"
 
-valgrind:
-	valgrind -q --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes ./minishell
-
 re: fclean all
+
+valgrind:
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) $(ARGS)
 
 -include $(DEPS)
 

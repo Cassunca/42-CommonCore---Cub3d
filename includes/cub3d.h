@@ -3,47 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/12 19:03:24 by kamys            ###   ########.fr       */
+/*   Updated: 2026/03/31 16:11:31 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
+/* THE CHESS 🨀
+_________________
+|♜ ♞ ♝ ♚ ♛ ♝ ♞ ♜|
+|♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟|
+|               |
+|               |
+|               |
+|               |
+|♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙|
+|♖ ♘ ♗ ♔ ♕ ♗ ♘ ♖|
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+*/
+
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115
+# define KEY_D 100
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
+# define KEY_UP 65362
+# define KEY_ESC 65307
+
+# define WIN_HEIGHT 600
+# define WIN_WIDTH 800
+
+# include "map.h"
+# include "parser.h"
 # include "libft.h"
 # include "mlx.h"
-
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-
-typedef struct s_img
-{
-	void	*img_ptr;
-	char	*addr;
-	int		bpp;
-	int		line_len;
-	int		endian;
-	int		width;
-	int		height;
-}	t_img;
-
-typedef struct s_map
-{
-	char	**grid;
-	char	*no_path;
-	char	*so_path;
-	char	*we_path;
-	char	*ea_path;
-	int		floor_color;
-	int		ceiling_color;
-	int		map_width;
-	int		map_height;
-	t_img	textures[4];
-}	t_map;
 
 typedef struct s_player
 {
@@ -53,6 +51,7 @@ typedef struct s_player
 	double	dir_y;
 	double	plane_x;
 	double	plane_y;
+	double	fov;
 }	t_player;
 
 typedef struct s_ray
@@ -78,12 +77,20 @@ typedef struct s_ray
 
 typedef struct s_data
 {
+	t_map		map;
+	t_texpath	tex_path;
+	t_colors	colors;
+	t_tex		tex;
+
+	t_player	player;
+	t_img		frame;
+	// t_ray		ray;
 	void		*mlx;
 	void		*win;
-	t_map		map;
-	t_player	player;
-	t_img		img;
-	t_ray		ray;
 }	t_data;
+
+int	close_window(void *param);
+int	handle_key(int keycode, t_data *game);
+int	handle_key_release(int keycode, t_data *game);
 
 #endif
