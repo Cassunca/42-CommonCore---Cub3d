@@ -6,7 +6,7 @@
 #    By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/03/31 16:15:34 by amyrodri         ###   ########.fr        #
+#    Updated: 2026/03/31 17:43:19 by amyrodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,7 @@ SRCS_PARSER	:=	parser.c			\
 SRCS_UTILS	:=	frees.c				\
 				inits.c				\
 				utils.c				\
+				game_loop.c			\
 				error_msg.c
 
 # Add directory prefix

@@ -6,7 +6,7 @@
 /*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 00:47:58 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/31 16:12:13 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/03/31 17:41:18 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,7 @@ void	set_vec2(double x, double y, double *tx, double *ty);
 
 t_bool	init_game(t_data *game);
 void	closer(t_data *game);
+
+double	lerp(double prev, double x, double alpha);
 
 #endif

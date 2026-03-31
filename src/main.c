@@ -6,7 +6,7 @@
 /*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:02:52 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/31 16:11:38 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/03/31 17:42:25 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int ac, char **av)
 	mlx_hook(game.win, 2, 1L << 0, handle_key, &game);
 	mlx_hook(game.win, 3, 1L << 1, handle_key_release, &game);
 	mlx_hook(game.win, 17, 0l, close_window, &game);
-	// mlx_loop_hook(game.mlx, game_loop, &game);
+	mlx_loop_hook(game.mlx, game_loop, &game);
 	mlx_loop(game.mlx);
 	return (EXIT_SUCCESS);
 }

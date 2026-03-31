@@ -6,7 +6,7 @@
 /*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/31 16:11:31 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/03/31 17:51:54 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,14 @@ _________________
 # define KEY_UP 65362
 # define KEY_ESC 65307
 
-# define WIN_HEIGHT 600
 # define WIN_WIDTH 800
+# define WIN_HEIGHT 600
 
 # include "map.h"
 # include "parser.h"
 # include "libft.h"
 # include "mlx.h"
+# include <sys/time.h>
 
 typedef struct s_player
 {
@@ -84,7 +85,7 @@ typedef struct s_data
 
 	t_player	player;
 	t_img		frame;
-	// t_ray		ray;
+	t_ray		ray;
 	void		*mlx;
 	void		*win;
 }	t_data;
@@ -92,5 +93,6 @@ typedef struct s_data
 int	close_window(void *param);
 int	handle_key(int keycode, t_data *game);
 int	handle_key_release(int keycode, t_data *game);
+int	game_loop(t_data *game);
 
 #endif
