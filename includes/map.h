@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 23:33:56 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/30 12:08:14 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/01 16:47:34 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ typedef struct s_texpath
 
 typedef struct s_tex
 {
-	t_img	*no;
-	t_img	*so;
-	t_img	*we;
-	t_img	*ea;
+	t_img	no;
+	t_img	so;
+	t_img	we;
+	t_img	ea;
 }	t_tex;
 
 typedef struct s_colors
