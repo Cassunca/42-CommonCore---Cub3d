@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/06 16:36:34 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/06 16:40:03 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@ _________________
 # define KEY_RIGHT 65363
 # define KEY_UP 65362
 # define KEY_ESC 65307
+
+# define MOVE_SPEED 0.009
+# define ROT_SPEED 0.005
+
+# define MOVE_SPEED 0.009
+# define ROT_SPEED 0.005
 
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 600
@@ -71,6 +77,12 @@ typedef struct s_player
 	double	plane_x;
 	double	plane_y;
 	double	fov;
+	int		move_f;
+	int		move_b;
+	int		move_l;
+	int		move_r;
+	int		rot_l;
+	int		rot_r;
 }	t_player;
 
 typedef struct s_ray
@@ -139,6 +151,18 @@ typedef struct s_data
 int	close_window(void *param);
 int	handle_key(int keycode, t_data *game);
 int	handle_key_release(int keycode, t_data *game);
+/* ========== RENDER ========== */
+
+void	render_background(t_data *data);
+void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+
+/* ========== RAYCAST ========== */
+
+void	execute_raycast(t_data *data);
+
+/* ========== MOVEMENT ========== */
+
+void	move_player(t_data *data);
 int	game_loop(t_data *game);
 
 #endif
