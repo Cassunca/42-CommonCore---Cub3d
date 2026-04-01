@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inits.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 21:34:36 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/04 21:12:10 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/06 16:38:01 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ static t_bool	init_framebuffer(t_data *game)
 	int	w;
 	int	h;
 
-	w = WIN_WIDTH;
-	h = WIN_HEIGHT;
+	w = WIDTH;
+	h = HEIGHT;
 	game->frame.ptr = mlx_new_image(game->mlx, w, h);
 	if (!game->frame.ptr)
 		return (FALSE);

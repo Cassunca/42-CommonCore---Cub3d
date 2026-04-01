@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:01:45 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/31 14:07:17 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/03/31 18:13:43 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,12 @@ void	render_background(t_data *data)
 		while (x < WIDTH)
 		{
 			if (y < HEIGHT / 2)
-				my_mlx_pixel_put(&data->img, x, y, 0x87CEEB);
+				my_mlx_pixel_put(&data->frame, x, y, 0x87CEEB);
 			else
-				my_mlx_pixel_put(&data->img, x, y, 0x8B4513);
+				my_mlx_pixel_put(&data->frame, x, y, 0x8B4513);
 			x++;
 		}
 		y++;
 	}
+	mlx_put_image_to_window(data->mlx, data->win, data->frame.ptr, 0, 0);
 }
