@@ -6,30 +6,11 @@
 /*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 17:41:58 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/03/31 17:42:48 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/01 18:59:54 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-static double	get_time(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec + (tv.tv_usec / 1000000.0));
-}
-
-static void	my_usleep(double seconds)
-{
-	double	start;
-	double	end;
-
-	start = get_time();
-	end = get_time();
-	while (end - start < seconds)
-		end = get_time();
-}
 
 static void	fps_limiter(double current, double fps)
 {
@@ -46,12 +27,22 @@ static void	fps_limiter(double current, double fps)
 		my_usleep(target_frame_time - frame_duration);
 }
 
-// alpha para interpolação, salvar onde estava e onde esta agora
-// , e quanto já andamos
 void	render(t_data *game, double alpha)
 {
 	(void)alpha;
+	// render_background(game, game->colors.ceiling, game->colors.floor);
 	mlx_put_image_to_window(game->mlx, game->win, game->frame.ptr, 0, 0);
+}
+
+void	render_title(t_data *game)
+{
+	// render_background(game, 0x87CEEB, 0x8B4513);
+	mlx_put_image_to_window(game->mlx, game->win, game->frame.ptr, 0, 0);
+	game->btn.x = 400;
+	game->btn.y = 300;
+	game->btn.width = 200;
+	game->btn.height = 80;
+	mlx_string_put(game->mlx, game->win, 450, 340, 0xFFFFFF, "PLAY");
 }
 
 int	game_loop(t_data *game)
@@ -75,7 +66,10 @@ int	game_loop(t_data *game)
 		accumulator -= tick_rate;
 	}
 	mlx_clear_window(game->mlx, game->win);
-	render(game, (accumulator / tick_rate));
+	if (game->screen == TITLE)
+		render_title(game);
+	else if (game->screen == GAME)
+		render(game, (accumulator / tick_rate));
 	fps_limiter(current, 244.0);
 	return (0);
 }

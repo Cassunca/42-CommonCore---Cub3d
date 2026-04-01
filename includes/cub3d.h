@@ -6,7 +6,7 @@
 /*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/31 17:51:54 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/01 18:24:34 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,20 @@ _________________
 # include "libft.h"
 # include "mlx.h"
 # include <sys/time.h>
+
+typedef struct s_button
+{
+	int	x;
+	int	y;
+	int	width;
+	int	height;
+}	t_button;
+
+typedef enum e_screen
+{
+	TITLE,
+	GAME
+}	t_screen;
 
 typedef struct s_player
 {
@@ -83,6 +97,9 @@ typedef struct s_data
 	t_colors	colors;
 	t_tex		tex;
 
+	t_button	btn;
+	
+	t_screen	screen;
 	t_player	player;
 	t_img		frame;
 	t_ray		ray;

@@ -6,7 +6,7 @@
 /*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 00:47:58 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/31 17:41:18 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/01 19:00:42 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,8 @@ t_bool	init_game(t_data *game);
 void	closer(t_data *game);
 
 double	lerp(double prev, double x, double alpha);
+
+double	get_time(void);
+void	my_usleep(double seconds);
 
 #endif

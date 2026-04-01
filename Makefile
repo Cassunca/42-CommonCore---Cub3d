@@ -6,7 +6,7 @@
 #    By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/03/31 17:43:19 by amyrodri         ###   ########.fr        #
+#    Updated: 2026/04/01 19:00:54 by amyrodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,7 @@ SRCS_PARSER	:=	parser.c			\
 SRCS_UTILS	:=	frees.c				\
 				inits.c				\
 				utils.c				\
+				utils2.c			\
 				game_loop.c			\
 				error_msg.c
 
