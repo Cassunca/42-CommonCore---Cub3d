@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/01 18:24:34 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/02 22:13:46 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,22 @@ _________________
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 600
 
+# define MAX_BTNS 2
+
 # include "map.h"
 # include "parser.h"
 # include "libft.h"
 # include "mlx.h"
 # include <sys/time.h>
+# include <math.h>
 
 typedef struct s_button
 {
 	int	x;
 	int	y;
-	int	width;
-	int	height;
+	int		is_hover;
+	t_img	*img;
+	void	(*on_click)(void *param);
 }	t_button;
 
 typedef enum e_screen
@@ -90,6 +94,9 @@ typedef struct s_ray
 	int		draw_end;
 }	t_ray;
 
+# define MAX_LEAVES 25
+# define MAX_LEAVES_SPRITES 5
+
 typedef struct s_data
 {
 	t_map		map;
@@ -97,9 +104,15 @@ typedef struct s_data
 	t_colors	colors;
 	t_tex		tex;
 
-	t_button	btn;
-	
+	t_button	btn[MAX_BTNS];
+	t_img		imagem_start;
+	t_img		imagem_quit;
+	t_img		logo_42;
+	t_img		logo;
+	t_leaf		leaves[MAX_LEAVES];
+	t_img		leaf_frames[MAX_LEAVES_SPRITES];
 	t_screen	screen;
+	
 	t_player	player;
 	t_img		frame;
 	t_ray		ray;
