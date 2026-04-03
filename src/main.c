@@ -3,27 +3,87 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:02:52 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/01 18:34:45 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/02 21:08:27 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+int	get_pixel(t_img *img, int x, int y)
+{
+	char	*dst;
+
+	dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
+	return (*(unsigned int *)dst);
+}
+
+void	handle_button_click(t_data *game, t_button *btn, int mouse_x, int mouse_y)
+{
+	int	px;
+	int	py;
+	int	color;
+
+	if (mouse_x >= btn->x && mouse_x < btn->x + btn->img->width
+	 && mouse_y >= btn->y && mouse_y < btn->y + btn->img->height)
+	{
+		px = mouse_x - btn->x;
+		py = mouse_y - btn->y;
+		color = get_pixel(btn->img, px, py);
+
+		if ((color & 0x00FFFFFF) != 0xFF00FF)
+			btn->on_click(game);
+	}
+}
+
 int	mouse_hook(int button, int x, int y, void *param)
 {
-	t_data *game = (t_data *)param;
+	t_data	*game;
+	int		i;
 
-	if (game->screen == TITLE && button == 1)
+	game = (t_data *)param;
+
+	if (game->screen != TITLE || button != 1)
+		return (0);
+
+	i = 0;
+	while (i < MAX_BTNS)
 	{
-		if (x >= game->btn.x && x <= game->btn.x + game->btn.width
-		 && y >= game->btn.y && y <= game->btn.y + game->btn.height)
+		handle_button_click(game, &game->btn[i], x, y);
+		i++;
+	}
+	return (0);
+}
+
+int	mouse_move(int x, int y, void *param)
+{
+	t_data		*game;
+	t_button	*btn;
+	int			i;
+	int			px;
+	int			py;
+	int			color;
+
+	game = (t_data *)param;
+
+	i = 0;
+	while (i < MAX_BTNS)
+	{
+		btn = &game->btn[i];
+		btn->is_hover = FALSE;
+
+		if (x >= btn->x && x < btn->x + btn->img->width
+		 && y >= btn->y && y < btn->y + btn->img->height)
 		{
-			printf("PLAY!\n");
-			game->screen = GAME;
+			px = x - btn->x;
+			py = y - btn->y;
+			color = get_pixel(btn->img, px, py);
+			if ((color & 0x00FFFFFF) != 0xFF00FF)
+				btn->is_hover = TRUE;
 		}
+		i++;
 	}
 	return (0);
 }
@@ -43,6 +103,7 @@ int	main(int ac, char **av)
 	mlx_hook(game.win, 2, 1L << 0, handle_key, &game);
 	mlx_hook(game.win, 3, 1L << 1, handle_key_release, &game);
 	mlx_hook(game.win, 17, 0l, close_window, &game);
+	mlx_hook(game.win, 6, 1L<<6, mouse_move, &game);
 	mlx_mouse_hook(game.win, mouse_hook, &game);
 	mlx_loop_hook(game.mlx, game_loop, &game);
 	mlx_loop(game.mlx);
