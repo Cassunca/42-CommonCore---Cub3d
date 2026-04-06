@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/02 22:13:46 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/04 21:11:24 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,20 @@ typedef struct s_ray
 
 # define MAX_LEAVES 25
 # define MAX_LEAVES_SPRITES 5
+# define MAX_MATRIX 100
+# define TRAIL_SIZE 4
+
+typedef struct s_matrix
+{
+	int     x;        // posição horizontal
+	float   y;        // posição vertical (float pra suavizar)
+	float   speed;    // velocidade da queda
+	char    c;        // caractere atual
+	char    trail[TRAIL_SIZE];
+	float char_timer;
+	float char_delay;
+	float last_y;
+} t_matrix;
 
 typedef struct s_data
 {
@@ -103,6 +117,8 @@ typedef struct s_data
 	t_texpath	tex_path;
 	t_colors	colors;
 	t_tex		tex;
+
+	t_matrix	matrix[MAX_MATRIX];
 
 	t_button	btn[MAX_BTNS];
 	t_img		imagem_start;

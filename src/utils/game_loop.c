@@ -6,11 +6,14 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 17:41:58 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/02 22:18:28 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/04 22:30:13 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+#define PANEL_COLOR 0x121826
+#define PANEL_BORDER 0x2A3142
 
 static void	fps_limiter(double current, double fps)
 {
@@ -39,18 +42,22 @@ static void	put_pixel(t_img *img, int x, int y, int color)
 
 int brighten(int color, float factor)
 {
-	int r = (color >> 16) & 0xFF;
-	int g = (color >> 8) & 0xFF;
-	int b = color & 0xFF;
+	int r;
+	int g;
+	int b;
 
+	r = (color >> 16) & 0xFF;
+	g = (color >> 8) & 0xFF;
+	b = color & 0xFF;
 	r *= factor;
 	g *= factor;
 	b *= factor;
-
-	if (r > 255) r = 255;
-	if (g > 255) g = 255;
-	if (b > 255) b = 255;
-
+	if (r > 255)
+		r = 255;
+	if (g > 255)
+		g = 255;
+	if (b > 255)
+		b = 255;
 	return ((r << 16) | (g << 8) | b);
 }
 
@@ -99,7 +106,6 @@ static void	draw_sprite_to_frame(t_data *game, t_img *sprite, int x, int y, int 
 
 void	draw_button(t_data *game, t_button *btn)
 {
-	// printf("%d\n", btn->is_hover);
 	draw_sprite_to_frame(game, btn->img, btn->x, btn->y, btn->is_hover);
 }
 
@@ -145,7 +151,6 @@ void	draw_sky(t_data *game, int top_color, int bottom_color)
 void	render(t_data *game, double alpha)
 {
 	(void)alpha;
-	// render_background(game, game->colors.ceiling, game->colors.floor);
 	draw_sky(game, game->colors.ceiling, game->colors.floor);
 	mlx_put_image_to_window(game->mlx, game->win, game->frame.ptr, 0, 0);
 }
@@ -155,79 +160,199 @@ void	draw_leaf_sprite(t_data *game, int frame, int x, int y)
 	t_img *img = &game->leaf_frames[frame];
 
 	draw_sprite_to_frame(game, img, x, y, 0);
-	// mlx_put_image_to_window(game->mlx, game->win, img->ptr, x, y);
 }
 
 void	render_leaves(t_data *game, double alpha)
 {
-	for (int i = 0; i < MAX_LEAVES; i++)
+	int		i;
+	double	render_x;
+	double	render_y;
+	t_leaf	*l;
+
+	i = 0;
+	while (i < MAX_LEAVES)
 	{
-		t_leaf *l = &game->leaves[i];
-
-		double	render_x = lerp(l->prev_x, l->x, alpha);
-		double	render_y = lerp(l->prev_y, l->y, alpha);
-
+		l = &game->leaves[i];
+		render_x = lerp(l->prev_x, l->x, alpha);
+		render_y = lerp(l->prev_y, l->y, alpha);
 		draw_leaf_sprite(game, l->frame, render_x, render_y);
+		i++;
+	}
+}
+
+void draw_rect(t_img *img, int x, int y, int w, int h, int color)
+{
+	for (int i = y; i < y + h; i++)
+		for (int j = x; j < x + w; j++)
+			put_pixel(img, j, i, color);
+}
+
+void draw_border(t_img *img, int x, int y, int w, int h, int color)
+{
+	for (int i = 0; i < w; i++)
+	{
+		put_pixel(img, x + i, y, color);
+		put_pixel(img, x + i, y + h, color);
+	}
+	for (int i = 0; i < h; i++)
+	{
+		put_pixel(img, x, y + i, color);
+		put_pixel(img, x + w, y + i, color);
+	}
+}
+
+void	draw_line_fancy(t_img *img, int x, int y, int w)
+{
+	for (int i = 0; i < w; i++)
+	{
+		int color;
+
+		if (i < 20)
+			color = 0x222a38;
+		else if (i > w - 20)
+			color = 0x222a38;
+		else
+			color = 0x445566;
+
+		put_pixel(img, x + i, y, color);
+	}
+}
+
+void draw_matrix(t_matrix *matrix, void *mlx, void *win)
+{
+	for (int i = 0; i < MAX_MATRIX; i++)
+	{
+		for (int j = 0; j < TRAIL_SIZE; j++)
+		{
+			if (matrix[i].x > 200 && matrix[i].x < WIN_WIDTH - 200)
+				continue ;
+			int y = (int)matrix[i].y - (j * 12);
+
+			if (y < 0)
+				continue;
+
+			char str[2];
+			str[0] = matrix[i].trail[j];
+			str[1] = '\0';
+
+			int color;
+
+			if (j == 0)
+				color = 0x8899AA;
+			else if (j < 3)
+				color = 0x445566;
+			else
+				color = 0x223344;
+
+			mlx_string_put(mlx, win, matrix[i].x, y, color, str);
+		}
+	}
+}
+
+
+void	draw_panel(t_img *img)
+{
+	int w = 400;
+	int h = 400;
+	int start_x = (img->width - w) / 2;
+	int start_y = (img->height - h) / 2;
+
+	for (int y = 0; y < h; y++)
+	{
+		for (int x = 0; x < w; x++)
+		{
+			int px = start_x + x;
+			int py = start_y + y;
+
+			// fundo semi escuro
+			put_pixel(img, px, py, 0x080812);
+
+			// borda
+			if (x == 0 || x == w - 1 || y == 0 || y == h - 1)
+				put_pixel(img, px, py, 0x2A2A3A);
+
+			// linha superior vermelha
+			if (y == 0)
+				put_pixel(img, px, py, 0x801E1E);
+		}
 	}
 }
 
 void render_title(t_data *game, double alpha)
 {
-	// render_background(game, 0x87CEEB, 0x8B4513);
-	int y = (game->frame.height / 2);
-	int x = (game->frame.width / 2);
-
-	draw_sky(game, 0x001a66, 0x87CEEB);
-
-	// for (int x = 0; x < game->frame.width; x++)
-	// {
-	// 	for (int y = 0; y < game->frame.height; y++)
-	// 	{
-	// 		if (x == game->frame.width / 2)
-	// 			put_pixel(&game->frame, x, y, 0xFFFFFF);
-	// 		if (y == game->frame.height / 2)			
-	// 			put_pixel(&game->frame, x, y, 0xFFFFFF);
-	// 	}
-	// }
+	int	y;
+	int	x;
 	
-	render_leaves(game, alpha);
+	(void)alpha;
+	y = (game->frame.height / 2);
+	x = (game->frame.width / 2);
+	draw_sky(game, 0x0A0A12, 0x0A0A1A);
+	// render_leaves(game, alpha);
 
+	int panel_w = 400;
+	int panel_h = 400;
+
+	int panel_x = (game->frame.width - panel_w) / 2;
+	int panel_y = (game->frame.height - panel_h) / 2;
+
+	draw_panel(&game->frame);
+
+	// draw_rect(&game->frame, panel_x, panel_y, panel_w, panel_h, PANEL_COLOR);
+	// draw_border(&game->frame, panel_x, panel_y, panel_w, panel_h, PANEL_BORDER);
+	// draw_rect(&game->frame, panel_x + 2, panel_y + 2, panel_w - 4, panel_h - 4, 0x0f141f);
+
+	int line_w = 370;
+	int line_x = (game->frame.width - line_w) / 2;
+
+	draw_line_fancy(&game->frame, line_x, panel_y + 135, line_w);
+	draw_line_fancy(&game->frame, line_x, panel_y + 350, line_w);
+
+	draw_sprite_to_frame(game, &game->logo, x - (game->logo.width / 2), y - 50, 0);
 	
-	draw_sprite_to_frame(game, &game->logo, x - (game->logo.width / 2), y - 100, 0);
-
-	draw_button(game, &game->btn[0]);
-	draw_button(game, &game->btn[1]);
+	// draw_button(game, &game->btn[0]);
+	// draw_button(game, &game->btn[1]);
 
 	draw_sprite_to_frame(game, &game->logo_42, 770, 570, 0);
-	mlx_put_image_to_window(game->mlx, game->win, game->frame.ptr, 0, 0);
-	mlx_string_put(game->mlx, game->win, 10, 590, 0x000000, "By: Amyrodri and Cassunca");
 
-	// mlx_string_put(game->mlx, game->win, 450, 340, 0xFFFFFF, "PLAY");
+	mlx_put_image_to_window(game->mlx, game->win, game->frame.ptr, 0, 0);
+	
+	draw_matrix(game->matrix, game->mlx, game->win);
+	
+	mlx_set_font(game->mlx, game->win, "12x24");
+	int text_width = 9 * 9; // 9 chars * ~9px
+	int x2 = (800 / 2) - (text_width / 2);
+	mlx_string_put(game->mlx, game->win, x2 - 10, panel_y + 180, 0xFFFFFF, "C U B 3 D");
+	mlx_set_font(game->mlx, game->win, "fixed");
+
+	
+	mlx_string_put(game->mlx, game->win, panel_x + 25, panel_y + 40, 0xFF5555, "[ CONFIDENTIAL FILE ]");
+	mlx_string_put(game->mlx, game->win, panel_x + 20, panel_y + 80, 0xAAAAAA, "Project: #######");
+	mlx_string_put(game->mlx, game->win, panel_x + 20, panel_y + 100, 0xAAAAAA, "Status:");
+	mlx_string_put(game->mlx, game->win, panel_x + 70, panel_y + 100, 0x00FF88, "ACTIVE");
+	mlx_string_put(game->mlx, game->win, panel_x + 20, panel_y + 120, 0xAAAAAA, "Clearance:");
+	mlx_string_put(game->mlx, game->win, panel_x + 90, panel_y + 120, 0xFF4444, "DENIED");
+	
+	mlx_string_put(game->mlx, game->win, 10, 590, 0xffffff, "By: Amyrodri and Cassunca");
 }
 
 void	update_leaves(t_data *game, double dt)
 {
-	for (int i = 0; i < MAX_LEAVES; i++)
-	{
-		t_leaf *l = &game->leaves[i];
+	int		i;
+	t_leaf	*l;
 
+	i = 0;
+	while (i< MAX_LEAVES)
+	{
+		l = &game->leaves[i];
 		l->prev_x = l->x;
 		l->prev_y = l->y;
-
 		l->time += dt;
-
-		// cair
 		l->y += l->speed_y * dt;
-
-		// vento (movimento em S)
 		l->x += sin(l->time * l->frequency) * l->amplitude * dt;
-
-		// animação sprite
 		l->anim_time += dt;
 		if (l->anim_time > l->anim_speed)
 		{
 			l->frame += l->frame_dir;
-
 			if (l->frame >= 4)
 			{
 				l->frame = 4;
@@ -238,13 +363,38 @@ void	update_leaves(t_data *game, double dt)
 				l->frame = 0;
 				l->frame_dir = 1;
 			}
-
 			l->anim_time -= l->anim_speed;
 		}
-
-		// reset
 		if (l->y > WIN_HEIGHT)
 			init_leaf(l);
+		i++;
+	}
+}
+
+void update_matrix(t_matrix *matrix, float dt)
+{
+	for (int i = 0; i < MAX_MATRIX; i++)
+	{
+		matrix[i].y += matrix[i].speed * dt;
+
+		// só atualiza quando andou 12 pixels (altura da letra)
+		if ((int)(matrix[i].y / 12) != (int)(matrix[i].last_y / 12))
+		{
+			// shift do rastro
+			for (int j = TRAIL_SIZE - 1; j > 0; j--)
+				matrix[i].trail[j] = matrix[i].trail[j - 1];
+
+			// nova letra entra aqui
+			matrix[i].trail[0] = rand() % 94 + 33;
+		}
+
+		matrix[i].last_y = matrix[i].y;
+
+		if (matrix[i].y > WIN_HEIGHT)
+		{
+			matrix[i].y = 0;
+			matrix[i].x = rand() % WIN_WIDTH;
+		}
 	}
 }
 
@@ -266,6 +416,7 @@ int game_loop(t_data *game)
 	accumulator += frame_time;
 	while (accumulator >= tick_rate)
 	{
+		update_matrix(game->matrix, tick_rate);
 		update_leaves(game, tick_rate);
 		accumulator -= tick_rate;
 	}

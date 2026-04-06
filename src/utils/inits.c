@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 21:34:36 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/02 22:14:09 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/04 21:12:10 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,18 @@ t_button	create_button(int x, int y, t_img *img,
 	return (btn);
 }
 
+void init_matrix(t_matrix *matrix)
+{
+	for (int i = 0; i < MAX_MATRIX; i++)
+	{
+		matrix[i].x = rand() % WIN_WIDTH;
+		matrix[i].y = rand() % WIN_HEIGHT;
+		matrix[i].speed = 50 + rand() % 100;
+		matrix[i].c = rand() % 94 + 33; // ASCII visível
+		matrix[i].char_delay = 0.1 + (rand() % 100) / 1000.0;
+	}
+}
+
 t_bool	init_game(t_data *game)
 {
 	game->mlx = mlx_init();
@@ -153,7 +165,7 @@ t_bool	init_game(t_data *game)
 		return (FALSE);
 	for (int i = 0; i < MAX_LEAVES; i++)
 		init_leaf(&game->leaves[i]);
-
+	init_matrix(game->matrix);
 	int y = (game->frame.height / 2);
 	int x = (game->frame.width / 2);
 	game->btn[0] = create_button(x - (game->imagem_start.width / 2), y + 100,
