@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 17:41:58 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/04 22:30:13 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/06 16:46:44 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,8 +309,8 @@ void render_title(t_data *game, double alpha)
 
 	draw_sprite_to_frame(game, &game->logo, x - (game->logo.width / 2), y - 50, 0);
 	
-	// draw_button(game, &game->btn[0]);
-	// draw_button(game, &game->btn[1]);
+	draw_button(game, &game->btn[0]);
+	draw_button(game, &game->btn[1]);
 
 	draw_sprite_to_frame(game, &game->logo_42, 770, 570, 0);
 
@@ -424,7 +424,11 @@ int game_loop(t_data *game)
 	if (game->screen == TITLE)
 		render_title(game, (accumulator / tick_rate));
 	else if (game->screen == GAME)
-		render(game, (accumulator / tick_rate));
+	{
+		move_player(game);
+		execute_raycast(game);
+	}
+		// render(game, (accumulator / tick_rate));
 	fps_limiter(current, 244.0);
 	return (0);
 }

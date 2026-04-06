@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 21:34:36 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/06 16:38:01 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/06 16:42:16 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ static t_bool	init_framebuffer(t_data *game)
 	int	w;
 	int	h;
 
-	w = WIDTH;
-	h = HEIGHT;
+	w = WIN_WIDTH;
+	h = WIN_HEIGHT;
 	game->frame.ptr = mlx_new_image(game->mlx, w, h);
 	if (!game->frame.ptr)
 		return (FALSE);
