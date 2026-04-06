@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:02:08 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/01 18:44:55 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/06 14:50:57 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	handle_key(int keycode, t_data *game)
 		exit(0);
 	}
 	if (keycode == KEY_D)
-		game->player.move_r= 1;
+		game->player.move_r = 1;
 	if (keycode == KEY_A)
 		game->player.move_l = 1;
 	if (keycode == KEY_W)

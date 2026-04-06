@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:01:45 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/31 18:13:43 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/06 14:53:44 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 {
 	char	*dst;
-	
+
 	if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
 		return ;
 	dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
