@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:01:56 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/06 14:50:15 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/07 14:23:13 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	apply_translation(t_data *data, t_player *p)
 		apply_side_translation(data, &data->player);
 }
 
-static void	apply_rotation(t_player *p, double speed)
+void	apply_rotation(t_player *p, double speed)
 {
 	double	old_dir_x;
 	double	old_plane_x;

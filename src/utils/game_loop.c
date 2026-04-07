@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 17:41:58 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/06 16:46:44 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/07 15:11:24 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void	draw_pixel_safe(t_data *game, t_img *sprite, t_point frame_pt,
 	}
 }
 
-static void	draw_sprite_to_frame(t_data *game, t_img *sprite, int x, int y, int is_hover)
+void	draw_sprite_to_frame(t_data *game, t_img *sprite, int x, int y, int is_hover)
 {
 	t_point	frame_pt;
 	t_point	sprite_pt;
@@ -405,6 +405,7 @@ int game_loop(t_data *game)
 	double			current;
 	double			frame_time;
 	const double	tick_rate = 1.0 / 240.0;
+	static int		mouse_hidden = 0;
 
 	if (previos == 0)
 		previos = get_time();
@@ -420,13 +421,23 @@ int game_loop(t_data *game)
 		update_leaves(game, tick_rate);
 		accumulator -= tick_rate;
 	}
-	mlx_clear_window(game->mlx, game->win);
 	if (game->screen == TITLE)
+	{
+		mlx_clear_window(game->mlx, game->win);
 		render_title(game, (accumulator / tick_rate));
+	}
 	else if (game->screen == GAME)
 	{
+		if (!mouse_hidden)
+		{
+			mlx_mouse_hide(game->mlx, game->win);
+			mouse_hidden = 1;
+		}
+		handle_mouse(game);
 		move_player(game);
+		render_background(game);
 		execute_raycast(game);
+		mlx_put_image_to_window(game->mlx, game->win, game->frame.ptr, 0, 0);
 	}
 		// render(game, (accumulator / tick_rate));
 	fps_limiter(current, 244.0);

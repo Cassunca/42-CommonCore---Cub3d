@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/06 16:40:03 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/07 16:27:15 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,15 @@ _________________
 # define KEY_UP 65362
 # define KEY_ESC 65307
 
-# define MOVE_SPEED 0.009
-# define ROT_SPEED 0.005
-
-# define MOVE_SPEED 0.009
-# define ROT_SPEED 0.005
+# define MOVE_SPEED 0.01
+# define ROT_SPEED 0.007
 
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 600
 
 # define MAX_BTNS 2
 
+# include "types.h"
 # include "map.h"
 # include "parser.h"
 # include "libft.h"
@@ -141,6 +139,8 @@ typedef struct s_data
 	t_img		leaf_frames[MAX_LEAVES_SPRITES];
 	t_screen	screen;
 	
+	t_img		tex_test;
+	
 	t_player	player;
 	t_img		frame;
 	t_ray		ray;
@@ -148,9 +148,13 @@ typedef struct s_data
 	void		*win;
 }	t_data;
 
+/* ========== HOOKS ========== */
+
 int	close_window(void *param);
 int	handle_key(int keycode, t_data *game);
 int	handle_key_release(int keycode, t_data *game);
+int	handle_mouse(t_data *data);
+
 /* ========== RENDER ========== */
 
 void	render_background(t_data *data);
@@ -162,7 +166,18 @@ void	execute_raycast(t_data *data);
 
 /* ========== MOVEMENT ========== */
 
+void	apply_rotation(t_player *p, double speed);
 void	move_player(t_data *data);
-int	game_loop(t_data *game);
+
+/* ========== TEXTURES ========== */
+
+void    draw_wall_column(t_data *data, int x);
+t_img	*get_wall_tex(t_data *data);
+int		get_tex_pixel(t_img *tex, int x, int y);
+int		get_tex_x(t_data *data, t_img *tex);
+
+int		game_loop(t_data *game);
+
+void	draw_sprite_to_frame(t_data *game, t_img *sprite, int x, int y, int is_hover);
 
 #endif

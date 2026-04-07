@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:01:24 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/06 16:45:42 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/07 16:30:51 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,31 +96,54 @@ static void	init_ray_info(t_data *data, int x)
 		data->ray.delta_dist_y = fabs(1 / data->ray.ray_dir_y);
 }	
 
+static double	fps(void)
+{
+	static double	last_time = 0;
+	static double	fps = 0;
+	static int		frames = 0;
+	double			current_time;
+
+	current_time = get_time();
+	frames++;
+	if (last_time == 0)
+		last_time = current_time;
+	if (current_time - last_time >= 1.0)
+	{
+		fps = frames / (current_time - last_time);
+		last_time = current_time;
+		frames = 0;
+	}
+	return (fps);
+}
+
+static void	str_num(t_data *game, int num, char *str, int x)
+{
+	char	*moves;
+	char	*frase;
+
+	moves = ft_itoa(num);
+	frase = ft_strjoin(str, moves);
+	mlx_string_put(game->mlx, game->win, x, 10, 0xFFFFFF, frase);
+	free(moves);
+	free(frase);
+}
+
 void	execute_raycast(t_data *data)
 {
 	int	x;
-	int	y;
-	int	color;
 
 	x = 0;
 	render_background(data);
 	while (x < WIN_WIDTH)
 	{
-		color = 0xFF0000;
 		init_ray_info(data, x);
 		data->ray.map_x = (int)data->player.pos_x;
 		data->ray.map_y = (int)data->player.pos_y;
 		set_dda_step(data);
 		perform_dda(data);
 		calculate_line_height(data);
-		y = data->ray.draw_start;
-		if (data->ray.side == 1)
-			color = 0xCC0000;
-		while (y <= data->ray.draw_end)
-		{
-			my_mlx_pixel_put(&data->frame, x, y, color);
-			y++;
-		}
+		draw_wall_column(data, x);
 		x++;
 	}
+	str_num(data, (int)fps(), "fps: ", 200);
 }

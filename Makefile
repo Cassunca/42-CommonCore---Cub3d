@@ -6,7 +6,7 @@
 #    By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/04/06 16:31:50 by cassunca         ###   ########.fr        #
+#    Updated: 2026/04/07 16:52:08 by cassunca         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,46 +29,52 @@ RUNLIB		= -C $(LIBS_DIR)/libft
 RUNMLX      = -C $(LIBS_DIR)/minilibx-linux
 
 # Directories
-SRCSDIR		= src
-PARSERDIR	= parsing
-UTILSDIR	= utils
-ENGINEDIR	= engine
-OBJDIR		= .objs
-BINDIR		= bin
-LIBS_DIR	= libs
+SRCSDIR			= src
+PARSERDIR		= parsing
+UTILSDIR		= utils
+ENGINEDIR		= engine
+TEXTURESDIR		= textures
+OBJDIR			= .objs
+BINDIR			= bin
+LIBS_DIR		= libs
 
 # Source files
-SRCS		:=	main.c
+SRCS			:=	main.c
 
-SRCS_ENGINE	:=	hooks.c				\
-				math_utils.c		\
-				movement.c			\
-				raycast.c			\
-				render.c			
+SRCS_ENGINE		:=	hooks.c				\
+					math_utils.c		\
+					movement.c			\
+					raycast.c			\
+					render.c			
 
-SRCS_PARSER	:=	parser.c			\
-				parser_color.c		\
-				parser_configs.c	\
-				parser_tex.c		\
-				parser_map.c		\
-				read_file.c
+SRCS_PARSER		:=	parser.c			\
+					parser_color.c		\
+					parser_configs.c	\
+					parser_tex.c		\
+					parser_map.c		\
+					read_file.c
 
-SRCS_UTILS	:=	frees.c				\
-				inits.c				\
-				utils.c				\
-				utils2.c			\
-				game_loop.c			\
-				error_msg.c
+SRCS_UTILS		:=	frees.c				\
+					inits.c				\
+					utils.c				\
+					utils2.c			\
+					game_loop.c			\
+					error_msg.c
+
+SRCS_TEXTURES	:=	texture_utils.c		\
+					draw_wall.c
 
 # Add directory prefix
 
-SRCS_ENGINE	:= $(addprefix $(SRCSDIR)/$(ENGINEDIR)/, $(SRCS_ENGINE))
+SRCS_ENGINE		:= $(addprefix $(SRCSDIR)/$(ENGINEDIR)/, $(SRCS_ENGINE))
 
-SRCS_PARSER	:= $(addprefix $(SRCSDIR)/$(PARSERDIR)/, $(SRCS_PARSER))
+SRCS_PARSER		:= $(addprefix $(SRCSDIR)/$(PARSERDIR)/, $(SRCS_PARSER))
 
-SRCS_UTILS	:= $(addprefix $(SRCSDIR)/$(UTILSDIR)/, $(SRCS_UTILS))
+SRCS_UTILS		:= $(addprefix $(SRCSDIR)/$(UTILSDIR)/, $(SRCS_UTILS))
 
-SRCS		:= $(addprefix $(SRCSDIR)/, $(SRCS)) $(SRCS_PARSER) $(SRCS_UTILS) $(SRCS_ENGINE)
+SRCS_TEXTURES	:= $(addprefix $(SRCSDIR)/$(TEXTURESDIR)/, $(SRCS_TEXTURES))
+
+SRCS			:= $(addprefix $(SRCSDIR)/, $(SRCS)) $(SRCS_PARSER) $(SRCS_UTILS) $(SRCS_ENGINE) $(SRCS_TEXTURES)
 
 # Object files
 OBJS		= $(SRCS:$(SRCSDIR)/%.c=$(OBJDIR)/%.o)

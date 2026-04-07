@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:02:52 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/06 16:40:28 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/07 14:38:04 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,11 @@ int	mouse_move(int x, int y, void *param)
 
 	game = (t_data *)param;
 
+	if (game->screen == GAME)
+	{
+		
+	}
+	
 	i = 0;
 	while (i < MAX_BTNS)
 	{
@@ -101,8 +106,6 @@ int	main(int ac, char **av)
 		return (EXIT_FAILURE);
 	if (!init_game(&game))
 		return (EXIT_FAILURE);
-	render_background(&game);
-	execute_raycast(&game);
 	mlx_hook(game.win, 2, 1L << 0, handle_key, &game);
 	mlx_hook(game.win, 3, 1L << 1, handle_key_release, &game);
 	mlx_hook(game.win, 17, 0l, close_window, &game);

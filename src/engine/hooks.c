@@ -6,18 +6,34 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:02:08 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/06 14:50:57 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/07 14:48:16 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+int	handle_mouse(t_data *data)
+{
+	int		x;
+	int		y;
+	double	delta_x;
+	double	sensitivity;
+
+	sensitivity = 0.002;
+	mlx_mouse_get_pos(data->mlx, data->win, &x, &y);
+	delta_x = x - (WIN_WIDTH / 2);
+	if (delta_x != 0)
+	{
+		apply_rotation(&data->player, delta_x * sensitivity);
+		mlx_mouse_move(data->mlx, data->win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
+	}
+	return (0);
+}
+
 int	handle_key(int keycode, t_data *game)
 {
 	if (keycode == KEY_ESC)
 	{
-		// print_exit();
-		printf("flw fia\n");
 		closer(game);
 		exit(0);
 	}
@@ -55,8 +71,6 @@ int	handle_key_release(int keycode, t_data *game)
 
 int	close_window(void *param)
 {
-	// print_exit();
-	printf("flw fia\n");
 	closer((t_data *)param);
 	exit(0);
 	return (0);
