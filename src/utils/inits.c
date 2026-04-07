@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inits.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 21:34:36 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/08 18:23:38 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/09 13:16:16 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,29 +89,7 @@ static t_bool	load_sprites(t_data *game)
 	game->imagem_quit = load_image(game->mlx, "assets/quit.xpm");
 	game->logo = load_image(game->mlx, "assets/cub3d_logo.xpm");
 	game->logo_42 = load_image(game->mlx, "assets/42_logo.xpm");
-	load_array(game, "assets/leaves/leaf_", game->leaf_frames, MAX_LEAVES_SPRITES);
 	return (TRUE);
-}
-
-void	init_leaf(t_leaf *l)
-{
-	l->x = rand() % WIN_WIDTH;
-	l->y = -(rand() % WIN_HEIGHT);
-
-	l->prev_x = l->x;
-	l->prev_y = l->y;
-
-	l->speed_y = 30 + rand() % 40;
-
-	l->amplitude = 20 + rand() % 30;
-	l->frequency = 1 + (rand() % 100) / 50.0;
-
-	l->time = rand() % 100;
-
-	l->frame = rand() % 5;
-	l->frame_dir = (rand() % 2) ? 1 : -1;
-	l->anim_speed = 0.2;
-	l->anim_time = 0;
 }
 
 void	play_action(void *param)
@@ -128,16 +106,27 @@ void	quit_action(void *param)
 	exit(0);
 }
 
-t_button	create_button(int x, int y, t_img *img,
+t_button	create_button(int x, int y, int w, int h, char *text,
 	void (*on_click)(void *))
 {
 	t_button	btn;
 
 	btn.x = x;
 	btn.y = y;
-	btn.img = img;
+	btn.w = w;
+	btn.h = h;
+
+	btn.text = text;
+
 	btn.on_click = on_click;
+
 	btn.is_hover = FALSE;
+	btn.glitching = 0;
+	btn.glitch_timer = 0;
+
+	// começa com texto normal
+	ft_strlcpy(btn.render_text, text, sizeof(btn.render_text));
+
 	return (btn);
 }
 
@@ -164,17 +153,25 @@ t_bool	init_game(t_data *game)
 		return (FALSE);
 	game->win = mlx_new_window(game->mlx, WIN_WIDTH, WIN_HEIGHT, "CUBO");
 	if (!game->win)
-		return (FALSE);
-	for (int i = 0; i < MAX_LEAVES; i++)
-		init_leaf(&game->leaves[i]);
+		return (FALSE);;
 	init_matrix(game->matrix);
-	int y = (game->frame.height / 2);
-	int x = (game->frame.width / 2);
-	game->btn[0] = create_button(x - (game->imagem_start.width / 2), y + 100,
-	&game->imagem_start, play_action);
+	
+	game->btn[0] = create_button(
+	WIN_WIDTH / 2 - 190,
+	WIN_HEIGHT / 2,
+	380,
+	40,
+	"START",
+	play_action);
 
-	game->btn[1] = create_button(x - (game->imagem_quit.width / 2), y + 150,
-		&game->imagem_quit, quit_action);
+	game->btn[1] = create_button(
+	WIN_WIDTH / 2 - 190,
+	WIN_HEIGHT / 2 + 60,
+	380,
+	40,
+	"EXIT",
+	quit_action);
+	
 	game->screen = TITLE;
 	init_doors(game);
 	return (TRUE);

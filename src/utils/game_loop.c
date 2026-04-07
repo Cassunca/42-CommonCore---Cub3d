@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 17:41:58 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/08 16:19:59 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/09 13:16:21 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,27 @@ void	draw_sprite_to_frame(t_data *game, t_img *sprite, int x, int y, int is_hove
 	}
 }
 
+void draw_rect(t_img *img, int x, int y, int w, int h, int color)
+{
+	for (int i = y; i < y + h; i++)
+		for (int j = x; j < x + w; j++)
+			put_pixel(img, j, i, color);
+}
+
 void	draw_button(t_data *game, t_button *btn)
 {
-	draw_sprite_to_frame(game, btn->img, btn->x, btn->y, btn->is_hover);
+	int color;
+
+	if (btn->is_hover)
+		color = 0xFF4444;
+	else
+		color = 0x2A2A3A;
+	draw_rect(&game->frame, btn->x, btn->y, btn->w, btn->h, color);
+	mlx_string_put(game->mlx, game->win,
+		btn->x + 20,
+		btn->y + btn->h / 2,
+		0x000000,
+		btn->render_text);
 }
 
 static int	get_gradient_color(int top, int bottom, float t)
@@ -153,38 +171,6 @@ void	render(t_data *game, double alpha)
 	(void)alpha;
 	draw_sky(game, game->colors.ceiling, game->colors.floor);
 	mlx_put_image_to_window(game->mlx, game->win, game->frame.ptr, 0, 0);
-}
-
-void	draw_leaf_sprite(t_data *game, int frame, int x, int y)
-{
-	t_img *img = &game->leaf_frames[frame];
-
-	draw_sprite_to_frame(game, img, x, y, 0);
-}
-
-void	render_leaves(t_data *game, double alpha)
-{
-	int		i;
-	double	render_x;
-	double	render_y;
-	t_leaf	*l;
-
-	i = 0;
-	while (i < MAX_LEAVES)
-	{
-		l = &game->leaves[i];
-		render_x = lerp(l->prev_x, l->x, alpha);
-		render_y = lerp(l->prev_y, l->y, alpha);
-		draw_leaf_sprite(game, l->frame, render_x, render_y);
-		i++;
-	}
-}
-
-void draw_rect(t_img *img, int x, int y, int w, int h, int color)
-{
-	for (int i = y; i < y + h; i++)
-		for (int j = x; j < x + w; j++)
-			put_pixel(img, j, i, color);
 }
 
 void draw_border(t_img *img, int x, int y, int w, int h, int color)
@@ -249,7 +235,6 @@ void draw_matrix(t_matrix *matrix, void *mlx, void *win)
 	}
 }
 
-
 void	draw_panel(t_img *img)
 {
 	int w = 400;
@@ -307,7 +292,7 @@ void render_title(t_data *game, double alpha)
 	draw_line_fancy(&game->frame, line_x, panel_y + 135, line_w);
 	draw_line_fancy(&game->frame, line_x, panel_y + 350, line_w);
 
-	draw_sprite_to_frame(game, &game->logo, x - (game->logo.width / 2), y - 50, 0);
+	// draw_sprite_to_frame(game, &game->logo, x - (game->logo.width / 2), y - 50, 0);
 	
 	draw_button(game, &game->btn[0]);
 	draw_button(game, &game->btn[1]);
@@ -316,6 +301,12 @@ void render_title(t_data *game, double alpha)
 
 	mlx_put_image_to_window(game->mlx, game->win, game->frame.ptr, 0, 0);
 	
+	mlx_string_put(game->mlx, game->win,
+		game->btn->x + 20,
+		game->btn->y + game->btn->h / 2,
+		0x000000,
+		game->btn->render_text);
+
 	draw_matrix(game->matrix, game->mlx, game->win);
 	
 	mlx_set_font(game->mlx, game->win, "12x24");
@@ -333,42 +324,6 @@ void render_title(t_data *game, double alpha)
 	mlx_string_put(game->mlx, game->win, panel_x + 90, panel_y + 120, 0xFF4444, "DENIED");
 	
 	mlx_string_put(game->mlx, game->win, 10, 590, 0xffffff, "By: Amyrodri and Cassunca");
-}
-
-void	update_leaves(t_data *game, double dt)
-{
-	int		i;
-	t_leaf	*l;
-
-	i = 0;
-	while (i< MAX_LEAVES)
-	{
-		l = &game->leaves[i];
-		l->prev_x = l->x;
-		l->prev_y = l->y;
-		l->time += dt;
-		l->y += l->speed_y * dt;
-		l->x += sin(l->time * l->frequency) * l->amplitude * dt;
-		l->anim_time += dt;
-		if (l->anim_time > l->anim_speed)
-		{
-			l->frame += l->frame_dir;
-			if (l->frame >= 4)
-			{
-				l->frame = 4;
-				l->frame_dir = -1;
-			}
-			else if (l->frame <= 0)
-			{
-				l->frame = 0;
-				l->frame_dir = 1;
-			}
-			l->anim_time -= l->anim_speed;
-		}
-		if (l->y > WIN_HEIGHT)
-			init_leaf(l);
-		i++;
-	}
 }
 
 void update_matrix(t_matrix *matrix, float dt)
@@ -418,7 +373,6 @@ int game_loop(t_data *game)
 	while (accumulator >= tick_rate)
 	{
 		update_matrix(game->matrix, tick_rate);
-		update_leaves(game, tick_rate);
 		accumulator -= tick_rate;
 	}
 	if (game->screen == TITLE)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:02:52 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/07 14:38:04 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/09 13:16:09 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,10 @@ int	get_pixel(t_img *img, int x, int y)
 
 void	handle_button_click(t_data *game, t_button *btn, int mouse_x, int mouse_y)
 {
-	int	px;
-	int	py;
-	int	color;
-
-	if (mouse_x >= btn->x && mouse_x < btn->x + btn->img->width
-	 && mouse_y >= btn->y && mouse_y < btn->y + btn->img->height)
+	if (mouse_x >= btn->x && mouse_x <= btn->x + btn->w
+	 && mouse_y >= btn->y && mouse_y <= btn->y + btn->h)
 	{
-		px = mouse_x - btn->x;
-		py = mouse_y - btn->y;
-		color = get_pixel(btn->img, px, py);
-
-		if ((color & 0x00FFFFFF) != 0xFF00FF)
-			btn->on_click(game);
+		btn->on_click(game);
 	}
 }
 
@@ -64,9 +55,6 @@ int	mouse_move(int x, int y, void *param)
 	t_data		*game;
 	t_button	*btn;
 	int			i;
-	int			px;
-	int			py;
-	int			color;
 
 	game = (t_data *)param;
 
@@ -79,17 +67,16 @@ int	mouse_move(int x, int y, void *param)
 	while (i < MAX_BTNS)
 	{
 		btn = &game->btn[i];
-		btn->is_hover = FALSE;
 
-		if (x >= btn->x && x < btn->x + btn->img->width
-		 && y >= btn->y && y < btn->y + btn->img->height)
-		{
-			px = x - btn->x;
-			py = y - btn->y;
-			color = get_pixel(btn->img, px, py);
-			if ((color & 0x00FFFFFF) != 0xFF00FF)
-				btn->is_hover = TRUE;
-		}
+		btn->is_hover = (
+			x >= btn->x && x <= btn->x + btn->w &&
+			y >= btn->y && y <= btn->y + btn->h
+		);
+
+		// ativa glitch só quando entra no hover
+		if (btn->is_hover && !btn->glitching)
+			btn->glitching = 1;
+
 		i++;
 	}
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/08 18:19:09 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/09 13:15:59 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,15 @@ _________________
 
 typedef struct s_button
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
+	int		w;
+	int		h;
 	int		is_hover;
-	t_img	*img;
+	int		glitching;
+	char	*text;
+	char	render_text[32];
+	int		glitch_timer;
 	void	(*on_click)(void *param);
 }	t_button;
 
@@ -107,8 +112,6 @@ typedef struct s_ray
 	int		draw_end;
 }	t_ray;
 
-# define MAX_LEAVES 25
-# define MAX_LEAVES_SPRITES 5
 # define MAX_MATRIX 100
 # define TRAIL_SIZE 4
 
@@ -138,8 +141,6 @@ typedef struct s_data
 	t_img		imagem_quit;
 	t_img		logo_42;
 	t_img		logo;
-	t_leaf		leaves[MAX_LEAVES];
-	t_img		leaf_frames[MAX_LEAVES_SPRITES];
 	t_screen	screen;
 	
 	t_door		doors[100];

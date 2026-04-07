@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 00:47:58 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/02 21:09:31 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/07 18:07:54 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,5 @@ double	lerp(double prev, double x, double alpha);
 
 double	get_time(void);
 void	my_usleep(double seconds);
-
-void	init_leaf(t_leaf *l);
 
 #endif
