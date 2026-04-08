@@ -6,7 +6,7 @@
 #    By: kamys <kamys@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/04/09 13:19:57 by kamys            ###   ########.fr        #
+#    Updated: 2026/04/09 13:20:23 by kamys            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,6 +70,8 @@ SRCS_UTILS	:=	frees.c				\
 				render_ui.c			\
 				update_button.c		\
 				utils_time.c		\
+				create_button.c		\
+				load_sprite.c		\
 				error_msg.c
 
 SRCS_TEXTURES	:=	texture_utils.c		\

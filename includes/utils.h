@@ -6,7 +6,7 @@
 /*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 00:47:58 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/07 18:07:54 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/08 20:18:46 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 typedef struct s_data	t_data;
 typedef struct s_parser	t_parser;
+typedef struct s_button	t_button;
 
 void	write_erro(char *s);
 int		erro_int(char *s, int exit_code);
@@ -39,5 +40,12 @@ double	lerp(double prev, double x, double alpha);
 
 double	get_time(void);
 void	my_usleep(double seconds);
+
+t_bool	load_sprites(t_data *game);
+t_button	create_button(int x, int y, int w, int h, char *text,
+	void (*on_click)(void *));
+void	quit_action(void *param);
+void	play_action(void *param);
+
 
 #endif
