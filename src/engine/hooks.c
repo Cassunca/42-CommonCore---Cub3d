@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:02:08 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/07 14:48:16 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/08 15:18:50 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ int	handle_key(int keycode, t_data *game)
 		game->player.rot_l = 1;
 	if (keycode == KEY_RIGHT)
 		game->player.rot_r = 1;
+	if (keycode == KEY_SPACE)
+		open_door(game);
 	return (0);
 }
 

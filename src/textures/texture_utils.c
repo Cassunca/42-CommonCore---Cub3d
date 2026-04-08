@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 15:28:41 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/07 16:22:45 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/08 18:19:20 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 
 t_img	*get_wall_tex(t_data *data)
 {
+	char	tile;
+
+	tile = data->map.grid[data->ray.map_y][data->ray.map_x];
+	if (tile == 'D')
+		return (&data->door_tex);
+	if (tile == 'S')
+		return (&data->secret_door);
 	if (data->ray.side == 0 && data->ray.ray_dir_x > 0)
 		return (&data->tex.ea);
 	if (data->ray.side == 0 && data->ray.ray_dir_x < 0)

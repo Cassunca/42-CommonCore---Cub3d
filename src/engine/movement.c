@@ -6,56 +6,85 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:01:56 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/07 14:23:13 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/08 18:20:17 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+static int	can_move_to(t_data *data, int x, int y)
+{
+	char	tile;
+	t_door	*door;
+
+	tile = data->map.grid[y][x];
+	if (tile == '1')
+		return (0);
+	if (tile == 'D' || tile == 'S')
+	{
+		door = find_door(data, x, y);
+		if (door && door->open < 0.8)
+			return (0);
+	}
+	return (1);
+}
+
 static void	apply_side_translation(t_data *data, t_player *p)
 {
+	int	new_x;
+	int	new_y;
+
 	if (p->move_l)
 	{
-		if (data->map.grid[(int)p->pos_y]
-			[(int)(p->pos_x + p->dir_y * MOVE_SPEED)] != '1')
+		new_x = (int)(p->pos_x + p->dir_y * MOVE_SPEED);
+		new_y = (int)(p->pos_y);
+		if (can_move_to(data, new_x, new_y))
 			p->pos_x += p->dir_y * MOVE_SPEED;
-		if (data->map.grid[(int)(p->pos_y - p->dir_x * MOVE_SPEED)]
-			[(int)p->pos_x] != '1')
+		new_x = (int)(p->pos_x);
+		new_y = (int)(p->pos_y - p->dir_x * MOVE_SPEED);
+		if (can_move_to(data, new_x, new_y))
 			p->pos_y -= p->dir_x * MOVE_SPEED;
 	}
 	if (p->move_r)
 	{
-		if (data->map.grid[(int)p->pos_y]
-			[(int)(p->pos_x - p->dir_y * MOVE_SPEED)] != '1')
+		new_x = (int)(p->pos_x - p->dir_y * MOVE_SPEED);
+		new_y = (int)(p->pos_y);
+		if (can_move_to(data, new_x, new_y))
 			p->pos_x -= p->dir_y * MOVE_SPEED;
-		if (data->map.grid[(int)(p->pos_y + p->dir_x * MOVE_SPEED)]
-			[(int)p->pos_x] != '1')
+		new_x = (int)(p->pos_x);
+		new_y = (int)(p->pos_y + p->dir_x * MOVE_SPEED);
+		if (can_move_to(data, new_x, new_y))
 			p->pos_y += p->dir_x * MOVE_SPEED;
 	}
 }
 
 static void	apply_translation(t_data *data, t_player *p)
 {
+	int	new_x;
+	int	new_y;
+
 	if (p->move_f)
 	{
-		if (data->map.grid[(int)p->pos_y]
-			[(int)(p->pos_x + p->dir_x * MOVE_SPEED)] != '1')
+		new_x = (int)(p->pos_x + p->dir_x * MOVE_SPEED);
+		new_y = (int)(p->pos_y);
+		if (can_move_to(data, new_x, new_y))
 			p->pos_x += p->dir_x * MOVE_SPEED;
-		if (data->map.grid[(int)(p->pos_y + p->dir_y * MOVE_SPEED)]
-			[(int)p->pos_x] != '1')
+		new_x = (int)(p->pos_x);
+		new_y = (int)(p->pos_y + p->dir_y * MOVE_SPEED);
+		if (can_move_to(data, new_x, new_y))
 			p->pos_y += p->dir_y * MOVE_SPEED;
 	}
 	if (p->move_b)
 	{
-		if (data->map.grid[(int)p->pos_y]
-			[(int)(p->pos_x - p->dir_x * MOVE_SPEED)] != '1')
+		new_x = (int)(p->pos_x - p->dir_x * MOVE_SPEED);
+		new_y = (int)(p->pos_y);
+		if (can_move_to(data, new_x, new_y))
 			p->pos_x -= p->dir_x * MOVE_SPEED;
-		if (data->map.grid[(int)(p->pos_y - p->dir_y * MOVE_SPEED)]
-			[(int)p->pos_x] != '1')
+		new_x = (int)(p->pos_x);
+		new_y = (int)(p->pos_y - p->dir_y * MOVE_SPEED);
+		if (can_move_to(data, new_x, new_y))
 			p->pos_y -= p->dir_y * MOVE_SPEED;
 	}
-	if (p->move_l || p->move_r)
-		apply_side_translation(data, &data->player);
 }
 
 void	apply_rotation(t_player *p, double speed)
@@ -74,6 +103,7 @@ void	apply_rotation(t_player *p, double speed)
 void	move_player(t_data *data)
 {
 	apply_translation(data, &data->player);
+	apply_side_translation(data, &data->player);
 	if (data->player.rot_l)
 		apply_rotation(&data->player, -ROT_SPEED);
 	if (data->player.rot_r)

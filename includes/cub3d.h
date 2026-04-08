@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/07 16:27:15 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/08 18:19:09 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ _________________
 # define KEY_A 97
 # define KEY_S 115
 # define KEY_D 100
+# define KEY_SPACE 32
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
 # define KEY_UP 65362
@@ -43,10 +44,12 @@ _________________
 
 # define MAX_BTNS 2
 
+# include "door.h"
 # include "types.h"
 # include "map.h"
 # include "parser.h"
 # include "libft.h"
+# include "minimap.h"
 # include "mlx.h"
 # include <sys/time.h>
 # include <math.h>
@@ -116,9 +119,9 @@ typedef struct s_matrix
 	float   speed;    // velocidade da queda
 	char    c;        // caractere atual
 	char    trail[TRAIL_SIZE];
-	float char_timer;
-	float char_delay;
-	float last_y;
+	float 	char_timer;
+	float 	char_delay;
+	float 	last_y;
 } t_matrix;
 
 typedef struct s_data
@@ -139,7 +142,10 @@ typedef struct s_data
 	t_img		leaf_frames[MAX_LEAVES_SPRITES];
 	t_screen	screen;
 	
-	t_img		tex_test;
+	t_door		doors[100];
+	int			door_count;
+	t_img		door_tex;
+	t_img		secret_door;
 	
 	t_player	player;
 	t_img		frame;
@@ -162,7 +168,11 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
 
 /* ========== RAYCAST ========== */
 
+void	draw_minimap(t_data *data);
 void	execute_raycast(t_data *data);
+int		handle_door_hit(t_data *data);
+double	fps(void);
+void	str_num(t_data *game, int num, char *str, int x);
 
 /* ========== MOVEMENT ========== */
 

@@ -6,7 +6,7 @@
 #    By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/04/07 16:52:08 by cassunca         ###   ########.fr        #
+#    Updated: 2026/04/08 17:32:06 by cassunca         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,10 @@ SRCS_ENGINE		:=	hooks.c				\
 					math_utils.c		\
 					movement.c			\
 					raycast.c			\
-					render.c			
+					raycast_utils.c		\
+					render.c			\
+					minimap.c			\
+					door.c				
 
 SRCS_PARSER		:=	parser.c			\
 					parser_color.c		\

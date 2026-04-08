@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 15:43:54 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/07 16:53:34 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/08 14:21:50 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ double	get_tex_step(t_data *data, t_img *tex)
 {
 	double	step;
 
-	step = (double)(tex->height / data->ray.line_height);
+	step = (double)(1.0 * tex->height / data->ray.line_height);
 	return (step);
 }
 

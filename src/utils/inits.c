@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 21:34:36 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/07 17:05:19 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/08 18:23:38 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ static t_bool	load_sprites(t_data *game)
 	game->tex.we = load_image(game->mlx, game->tex_path.we);
 	if (!game->tex.we.ptr)
 		return (FALSE);
+	game->door_tex = load_image(game->mlx, "assets/door.xpm");
+	game->secret_door = load_image(game->mlx, "assets/secret_door.xpm");
 	game->imagem_start = load_image(game->mlx, "assets/start.xpm");
 	game->imagem_quit = load_image(game->mlx, "assets/quit.xpm");
 	game->logo = load_image(game->mlx, "assets/cub3d_logo.xpm");
@@ -174,5 +176,6 @@ t_bool	init_game(t_data *game)
 	game->btn[1] = create_button(x - (game->imagem_quit.width / 2), y + 150,
 		&game->imagem_quit, quit_action);
 	game->screen = TITLE;
+	init_doors(game);
 	return (TRUE);
 }

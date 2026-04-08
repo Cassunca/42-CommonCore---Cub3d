@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 17:41:58 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/07 15:11:24 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/08 16:19:59 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -433,13 +433,12 @@ int game_loop(t_data *game)
 			mlx_mouse_hide(game->mlx, game->win);
 			mouse_hidden = 1;
 		}
+		update_doors(game);
 		handle_mouse(game);
 		move_player(game);
-		render_background(game);
 		execute_raycast(game);
 		mlx_put_image_to_window(game->mlx, game->win, game->frame.ptr, 0, 0);
 	}
-		// render(game, (accumulator / tick_rate));
 	fps_limiter(current, 244.0);
 	return (0);
 }

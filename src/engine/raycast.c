@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:01:24 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/07 16:30:51 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/08 18:08:08 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ static void	calculate_line_height(t_data *data)
 
 static void	perform_dda(t_data *data)
 {
+	char	tile;
+
 	data->ray.hit = 0;
 	while (data->ray.hit == 0)
 	{
@@ -74,7 +76,10 @@ static void	perform_dda(t_data *data)
 			data->ray.map_y += data->ray.step_y;
 			data->ray.side = 1;
 		}
-		if (data->map.grid[data->ray.map_y][data->ray.map_x] == '1')
+		tile = data->map.grid[data->ray.map_y][data->ray.map_x];
+		if (tile == '1')
+			data->ray.hit = 1;
+		else if (handle_door_hit(data))
 			data->ray.hit = 1;
 	}
 }
@@ -96,43 +101,12 @@ static void	init_ray_info(t_data *data, int x)
 		data->ray.delta_dist_y = fabs(1 / data->ray.ray_dir_y);
 }	
 
-static double	fps(void)
-{
-	static double	last_time = 0;
-	static double	fps = 0;
-	static int		frames = 0;
-	double			current_time;
-
-	current_time = get_time();
-	frames++;
-	if (last_time == 0)
-		last_time = current_time;
-	if (current_time - last_time >= 1.0)
-	{
-		fps = frames / (current_time - last_time);
-		last_time = current_time;
-		frames = 0;
-	}
-	return (fps);
-}
-
-static void	str_num(t_data *game, int num, char *str, int x)
-{
-	char	*moves;
-	char	*frase;
-
-	moves = ft_itoa(num);
-	frase = ft_strjoin(str, moves);
-	mlx_string_put(game->mlx, game->win, x, 10, 0xFFFFFF, frase);
-	free(moves);
-	free(frase);
-}
-
 void	execute_raycast(t_data *data)
 {
 	int	x;
 
 	x = 0;
+	update_doors(data);
 	render_background(data);
 	while (x < WIN_WIDTH)
 	{
@@ -145,5 +119,6 @@ void	execute_raycast(t_data *data)
 		draw_wall_column(data, x);
 		x++;
 	}
-	str_num(data, (int)fps(), "fps: ", 200);
+	draw_minimap(data);
+	str_num(data, (int)fps(), "fps: ", 400);
 }
