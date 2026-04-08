@@ -6,11 +6,12 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 17:41:58 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/09 13:16:21 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/09 13:16:58 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+#include <time.h>
 
 #define PANEL_COLOR 0x121826
 #define PANEL_BORDER 0x2A3142
@@ -104,6 +105,20 @@ void	draw_sprite_to_frame(t_data *game, t_img *sprite, int x, int y, int is_hove
 	}
 }
 
+void draw_border(t_img *img, int x, int y, int w, int h, int color)
+{
+	for (int i = 0; i < w; i++)
+	{
+		put_pixel(img, x + i, y, color);
+		put_pixel(img, x + i, y + h, color);
+	}
+	for (int i = 0; i < h; i++)
+	{
+		put_pixel(img, x, y + i, color);
+		put_pixel(img, x + w, y + i, color);
+	}
+}
+
 void draw_rect(t_img *img, int x, int y, int w, int h, int color)
 {
 	for (int i = y; i < y + h; i++)
@@ -111,20 +126,135 @@ void draw_rect(t_img *img, int x, int y, int w, int h, int color)
 			put_pixel(img, j, i, color);
 }
 
-void	draw_button(t_data *game, t_button *btn)
+void	draw_line(t_img *img, int x0, int y0, int x1, int y1, int color)
 {
-	int color;
+	int dx = abs(x1 - x0);
+	int dy = abs(y1 - y0);
+	int sx = (x0 < x1) ? 1 : -1;
+	int sy = (y0 < y1) ? 1 : -1;
+	int err = dx - dy;
+	int e2;
+
+	while (1)
+	{
+		put_pixel(img, x0, y0, color);
+
+		if (x0 == x1 && y0 == y1)
+			break;
+
+		e2 = 2 * err;
+
+		if (e2 > -dy)
+		{
+			err -= dy;
+			x0 += sx;
+		}
+		if (e2 < dx)
+		{
+			err += dx;
+			y0 += sy;
+		}
+	}
+}
+
+void	draw_triangle(t_img *img, int x, int y, int size, int color)
+{
+	int	i;
+	int	half;
+
+	half = size / 2;
+	i = 0;
+	while (i <= half)
+	{
+		draw_line(img,
+			x,
+			y + half - i,
+			x + i,
+			y + half,
+			color);
+
+		draw_line(img,
+			x,
+			y + half + i,
+			x + i,
+			y + half,
+			color);
+
+		i++;
+	}
+}
+
+void	draw_button(t_data *g, t_button *btn)
+{
+	int border;
 
 	if (btn->is_hover)
-		color = 0xFF4444;
+	{
+		border = 0x802820; // vermelho
+		draw_rect(&g->frame, btn->x, btn->y, btn->w, btn->h, 0x1A0D0D);
+	}
 	else
-		color = 0x2A2A3A;
-	draw_rect(&game->frame, btn->x, btn->y, btn->w, btn->h, color);
-	mlx_string_put(game->mlx, game->win,
-		btn->x + 20,
-		btn->y + btn->h / 2,
-		0x000000,
+	{
+		border = 0x444455;
+	}
+
+	// fundo transparente fake (ou bem escuro)
+
+	// borda
+	draw_border(&g->frame, btn->x, btn->y, btn->w, btn->h, border);
+
+	draw_triangle(&g->frame,
+		btn->x + 10,
+		btn->y + btn->h / 2 - 5,
+		10,
+		0x802820);
+}
+
+void	draw_text_button(t_data *g, t_button *btn)
+{
+	int		color;
+	// char	*text;
+
+	// cor do texto
+	if (btn->is_hover)
+		color = 0xFFFFFF;
+	else
+		color = 0xAAAAAA;
+
+	// // glitch simples
+	// if (btn->is_hover && rand() % 10 < 3)
+	// 	text = btn->glitch_text;
+	// else
+	// text = btn->text;
+
+	// desenha texto
+	mlx_string_put(g->mlx, g->win,
+		btn->x + 28,
+		btn->y + btn->h / 2 + 4,
+		color,
 		btn->render_text);
+}
+
+char	*get_time_str(void)
+{
+	static char	buffer[9];
+	time_t		rawtime;
+	struct tm	*timeinfo;
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+
+	buffer[0] = (timeinfo->tm_hour / 10) + '0';
+	buffer[1] = (timeinfo->tm_hour % 10) + '0';
+	buffer[2] = ':';
+	buffer[3] = (timeinfo->tm_min / 10) + '0';
+	buffer[4] = (timeinfo->tm_min % 10) + '0';
+	buffer[5] = ':';
+	buffer[6] = (timeinfo->tm_sec / 10) + '0';
+	buffer[7] = (timeinfo->tm_sec % 10) + '0';
+	buffer[8] = '\0';
+
+	return (buffer);
 }
 
 static int	get_gradient_color(int top, int bottom, float t)
@@ -171,20 +301,6 @@ void	render(t_data *game, double alpha)
 	(void)alpha;
 	draw_sky(game, game->colors.ceiling, game->colors.floor);
 	mlx_put_image_to_window(game->mlx, game->win, game->frame.ptr, 0, 0);
-}
-
-void draw_border(t_img *img, int x, int y, int w, int h, int color)
-{
-	for (int i = 0; i < w; i++)
-	{
-		put_pixel(img, x + i, y, color);
-		put_pixel(img, x + i, y + h, color);
-	}
-	for (int i = 0; i < h; i++)
-	{
-		put_pixel(img, x, y + i, color);
-		put_pixel(img, x + w, y + i, color);
-	}
 }
 
 void	draw_line_fancy(t_img *img, int x, int y, int w)
@@ -238,7 +354,7 @@ void draw_matrix(t_matrix *matrix, void *mlx, void *win)
 void	draw_panel(t_img *img)
 {
 	int w = 400;
-	int h = 400;
+	int h = 450;
 	int start_x = (img->width - w) / 2;
 	int start_y = (img->height - h) / 2;
 
@@ -265,12 +381,12 @@ void	draw_panel(t_img *img)
 
 void render_title(t_data *game, double alpha)
 {
-	int	y;
-	int	x;
+	// int	y;
+	// int	x;
 	
 	(void)alpha;
-	y = (game->frame.height / 2);
-	x = (game->frame.width / 2);
+	// y = (game->frame.height / 2);
+	// x = (game->frame.width / 2);
 	draw_sky(game, 0x0A0A12, 0x0A0A1A);
 	// render_leaves(game, alpha);
 
@@ -290,9 +406,9 @@ void render_title(t_data *game, double alpha)
 	int line_x = (game->frame.width - line_w) / 2;
 
 	draw_line_fancy(&game->frame, line_x, panel_y + 135, line_w);
-	draw_line_fancy(&game->frame, line_x, panel_y + 350, line_w);
+	draw_line_fancy(&game->frame, line_x, panel_y + 390, line_w);
 
-	// draw_sprite_to_frame(game, &game->logo, x - (game->logo.width / 2), y - 50, 0);
+	draw_sprite_to_frame(game, &game->logo, (game->frame.width / 2) - (game->logo.width / 2), (game->frame.height / 2) - (game->logo.height / 2), 0);
 	
 	draw_button(game, &game->btn[0]);
 	draw_button(game, &game->btn[1]);
@@ -301,20 +417,28 @@ void render_title(t_data *game, double alpha)
 
 	mlx_put_image_to_window(game->mlx, game->win, game->frame.ptr, 0, 0);
 	
-	mlx_string_put(game->mlx, game->win,
-		game->btn->x + 20,
-		game->btn->y + game->btn->h / 2,
-		0x000000,
-		game->btn->render_text);
+	// mlx_set_font(game->mlx, game->win, "6x13");
+	// mlx_string_put(game->mlx, game->win,
+	// 	game->btn->x + 20,
+	// 	game->btn->y + game->btn->h / 2,
+	// 	0xFFFFFF,
+	// V.0 — ENCRYPTED BUILD — [████]
+	// FILE #0047-Δ
+	// ∑ λ Δ
+	// 	game->btn->render_text);
 
-	draw_matrix(game->matrix, game->mlx, game->win);
-	
-	mlx_set_font(game->mlx, game->win, "12x24");
-	int text_width = 9 * 9; // 9 chars * ~9px
-	int x2 = (800 / 2) - (text_width / 2);
-	mlx_string_put(game->mlx, game->win, x2 - 10, panel_y + 180, 0xFFFFFF, "C U B 3 D");
+	mlx_set_font(game->mlx, game->win, "9x15");
+	draw_text_button(game, &game->btn[0]);
+	draw_text_button(game, &game->btn[1]);
 	mlx_set_font(game->mlx, game->win, "fixed");
 
+	mlx_string_put(game->mlx, game->win, panel_x + 40, panel_y + 265, 0xFF5555, "V.0 — ENCRYPTED BUILD — [████]");
+	mlx_string_put(game->mlx, game->win, panel_x + 140, panel_y + 410, 0xFF5555, get_time_str());
+	mlx_string_put(game->mlx, game->win, panel_x + 10, panel_y + 410, 0xFF5555, "FILE #0047-Δ");
+	mlx_string_put(game->mlx, game->win, panel_x + 250, panel_y + 410, 0xFF5555, "∑ λ Δ");
+
+
+	draw_matrix(game->matrix, game->mlx, game->win);
 	
 	mlx_string_put(game->mlx, game->win, panel_x + 25, panel_y + 40, 0xFF5555, "[ CONFIDENTIAL FILE ]");
 	mlx_string_put(game->mlx, game->win, panel_x + 20, panel_y + 80, 0xAAAAAA, "Project: #######");
@@ -353,6 +477,68 @@ void update_matrix(t_matrix *matrix, float dt)
 	}
 }
 
+void	update_button_text(t_button *btn, double dt)
+{
+	static char charset[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&";
+	int		i;
+
+	// detecta entrada no hover
+	if (btn->is_hover && !btn->was_hover)
+	{
+		btn->glitch_timer = 0.4; // duração do glitch
+		btn->glitch_frame_timer = 0;
+		btn->glitching = 1;
+		btn->has_glitched = 0;
+	}
+
+	btn->was_hover = btn->is_hover;
+
+	// saiu do botão → reseta tudo
+	if (!btn->is_hover)
+	{
+		btn->glitching = 0;
+		btn->has_glitched = 0;
+		ft_strlcpy(btn->render_text, btn->text, sizeof(btn->render_text));
+		return;
+	}
+
+	// se já glitchou, não faz mais nada
+	if (btn->has_glitched)
+	{
+		ft_strlcpy(btn->render_text, btn->text, sizeof(btn->render_text));
+		return;
+	}
+
+	// rodando glitch
+	btn->glitch_timer -= dt;
+
+	if (btn->glitch_timer <= 0)
+	{
+		btn->glitching = 0;
+		btn->has_glitched = 1;
+		ft_strlcpy(btn->render_text, btn->text, sizeof(btn->render_text));
+		return;
+	}
+
+	// controla velocidade do efeito
+	btn->glitch_frame_timer -= dt;
+	if (btn->glitch_frame_timer > 0)
+		return;
+
+	btn->glitch_frame_timer = 0.08;
+
+	// aplica glitch
+	ft_strlcpy(btn->render_text, btn->text, sizeof(btn->render_text));
+
+	i = 0;
+	while (btn->render_text[i])
+	{
+		if (rand() % 100 < 40)
+			btn->render_text[i] = charset[rand() % (sizeof(charset) - 1)];
+		i++;
+	}
+}
+
 int game_loop(t_data *game)
 {
 	static double	accumulator = 0.0;
@@ -373,8 +559,12 @@ int game_loop(t_data *game)
 	while (accumulator >= tick_rate)
 	{
 		update_matrix(game->matrix, tick_rate);
+
 		accumulator -= tick_rate;
 	}
+	update_button_text(&game->btn[0], frame_time);
+	update_button_text(&game->btn[1], frame_time);
+	mlx_clear_window(game->mlx, game->win);
 	if (game->screen == TITLE)
 	{
 		mlx_clear_window(game->mlx, game->win);

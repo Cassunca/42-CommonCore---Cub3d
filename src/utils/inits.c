@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 21:34:36 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/09 13:16:16 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/09 13:17:19 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,19 +157,19 @@ t_bool	init_game(t_data *game)
 	init_matrix(game->matrix);
 	
 	game->btn[0] = create_button(
-	WIN_WIDTH / 2 - 190,
-	WIN_HEIGHT / 2,
-	380,
+	WIN_WIDTH / 2 - (360 / 2),
+	WIN_HEIGHT / 2 + 85,
+	360,
 	40,
-	"START",
+	"OPEN FILE",
 	play_action);
 
 	game->btn[1] = create_button(
-	WIN_WIDTH / 2 - 190,
-	WIN_HEIGHT / 2 + 60,
-	380,
+	WIN_WIDTH / 2 - (360 / 2),
+	WIN_HEIGHT / 2 + 140,
+	360,
 	40,
-	"EXIT",
+	"TERMINATE SESSION",
 	quit_action);
 	
 	game->screen = TITLE;

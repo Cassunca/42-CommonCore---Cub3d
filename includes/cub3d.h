@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/09 13:15:59 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/09 13:16:30 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,14 @@ typedef struct s_button
 	int		w;
 	int		h;
 	int		is_hover;
+	int		was_hover;
+	int		has_glitched;
+	double	state_timer;
+	double	glitch_frame_timer;
 	int		glitching;
 	char	*text;
 	char	render_text[32];
-	int		glitch_timer;
+	double	glitch_timer;
 	void	(*on_click)(void *param);
 }	t_button;
 
@@ -137,8 +141,6 @@ typedef struct s_data
 	t_matrix	matrix[MAX_MATRIX];
 
 	t_button	btn[MAX_BTNS];
-	t_img		imagem_start;
-	t_img		imagem_quit;
 	t_img		logo_42;
 	t_img		logo;
 	t_screen	screen;
