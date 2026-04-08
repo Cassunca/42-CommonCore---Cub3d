@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 21:34:36 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/09 13:17:19 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/09 13:17:31 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ t_bool	init_game(t_data *game)
 	
 	game->btn[0] = create_button(
 	WIN_WIDTH / 2 - (360 / 2),
-	WIN_HEIGHT / 2 + 85,
+	WIN_HEIGHT / 2 + 65,
 	360,
 	40,
 	"OPEN FILE",
@@ -166,7 +166,7 @@ t_bool	init_game(t_data *game)
 
 	game->btn[1] = create_button(
 	WIN_WIDTH / 2 - (360 / 2),
-	WIN_HEIGHT / 2 + 140,
+	WIN_HEIGHT / 2 + 120,
 	360,
 	40,
 	"TERMINATE SESSION",

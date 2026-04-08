@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+         #
+#    By: kamys <kamys@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/04/08 17:32:06 by cassunca         ###   ########.fr        #
+#    Updated: 2026/04/09 13:19:57 by kamys            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,12 +57,20 @@ SRCS_PARSER		:=	parser.c			\
 					parser_map.c		\
 					read_file.c
 
-SRCS_UTILS		:=	frees.c				\
-					inits.c				\
-					utils.c				\
-					utils2.c			\
-					game_loop.c			\
-					error_msg.c
+SRCS_UTILS	:=	frees.c				\
+				inits.c				\
+				utils.c				\
+				utils2.c			\
+				game_loop.c			\
+				matrix.c			\
+				render_background.c	\
+				render_core.c		\
+				render_shaders.c	\
+				render_title.c		\
+				render_ui.c			\
+				update_button.c		\
+				utils_time.c		\
+				error_msg.c
 
 SRCS_TEXTURES	:=	texture_utils.c		\
 					draw_wall.c

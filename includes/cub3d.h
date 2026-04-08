@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/09 13:16:30 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/09 13:18:40 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ _________________
 # define WIN_HEIGHT 600
 
 # define MAX_BTNS 2
+
+# define PANEL_COLOR 0x121826
+# define PANEL_BORDER 0x2A3142
+
+# define PANEL_COLOR 0x121826
+# define PANEL_BORDER 0x2A3142
 
 # include "door.h"
 # include "types.h"
@@ -192,5 +198,44 @@ int		get_tex_x(t_data *data, t_img *tex);
 int		game_loop(t_data *game);
 
 void	draw_sprite_to_frame(t_data *game, t_img *sprite, int x, int y, int is_hover);
+
+void	update_button_text(t_button *b, double dt);
+
+
+// core
+void	put_pixel(t_img *img, int x, int y, int color);
+void	draw_sprite_to_frame(t_data *game, t_img *sprite, int x, int y);
+int		brighten(int color, float factor);
+
+// shapes
+void	draw_rect(t_img *img, int x, int y, int w, int h, int color);
+void	draw_border(t_img *img, int x, int y, int w, int h, int color);
+void	draw_line(t_img *img, int x0, int y0, int x1, int y1, int color);
+void	draw_triangle(t_img *img, int x, int y, int size, int color);
+
+// background
+void	draw_sky(t_data *game, int top_color, int bottom_color);
+
+// ui
+void	draw_button(t_data *g, t_button *btn);
+void	draw_text_button(t_data *g, t_button *btn);
+void	draw_panel(t_img *img, int w, int h);
+void	draw_header(t_data *game, int panel_x, int panel_y);
+void	draw_content(t_data *game, int panel_x, int panel_w, int panel_y);
+
+// matrix
+void	draw_matrix(t_matrix *matrix, void *mlx, void *win);
+void	update_matrix(t_matrix *matrix, float dt);
+
+// loop
+int		game_loop(t_data *game);
+
+// utils
+char	*get_time_str(void);
+void	fps_limiter(double current, double fps);
+
+void render_title(t_data *game);
+void	draw_line_fancy(t_img *img, int x, int y, int w);
+
 
 #endif
