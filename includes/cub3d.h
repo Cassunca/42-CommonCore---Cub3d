@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/09 13:41:44 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/09 14:55:32 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,12 +112,12 @@ typedef struct s_data
 	t_img		logo_42;
 	t_img		logo;
 	t_screen	screen;
-	
+
 	t_door		doors[100];
 	int			door_count;
 	t_img		door_tex;
 	t_img		secret_door;
-	
+
 	t_player	player;
 	t_img		frame;
 	t_ray		ray;
@@ -127,10 +127,10 @@ typedef struct s_data
 
 /* ========== HOOKS ========== */
 
-int	close_window(void *param);
-int	handle_key(int keycode, t_data *game);
-int	handle_key_release(int keycode, t_data *game);
-int	handle_mouse(t_data *data);
+int		close_window(void *param);
+int		handle_key(int keycode, t_data *game);
+int		handle_key_release(int keycode, t_data *game);
+int		handle_mouse(t_data *data);
 
 /* ========== RENDER ========== */
 
@@ -152,7 +152,7 @@ void	move_player(t_data *data);
 
 /* ========== TEXTURES ========== */
 
-void    draw_wall_column(t_data *data, int x);
+void	draw_wall_column(t_data *data, int x);
 t_img	*get_wall_tex(t_data *data);
 int		get_tex_pixel(t_img *tex, int x, int y);
 int		get_tex_x(t_data *data, t_img *tex);
@@ -160,7 +160,6 @@ int		get_tex_x(t_data *data, t_img *tex);
 int		game_loop(t_data *game);
 
 void	update_button_text(t_button *b, double dt);
-
 
 // core
 void	put_pixel(t_img *img, int x, int y, int color);

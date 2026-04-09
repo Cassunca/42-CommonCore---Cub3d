@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 15:28:41 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/09 13:40:20 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/09 14:55:46 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	get_tex_x(t_data *data, t_img *tex)
 	double	wall_x;
 	int		tex_x;
 
-	if(data->ray.side == 0)
+	if (data->ray.side == 0)
 		wall_x = data->player.pos_y + data->ray.wall_dist * data->ray.ray_dir_y;
 	else
 		wall_x = data->player.pos_x + data->ray.wall_dist * data->ray.ray_dir_x;
