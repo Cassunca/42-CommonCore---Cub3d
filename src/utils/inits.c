@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 21:34:36 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/09 13:20:15 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/09 13:20:30 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,40 @@ static t_bool	init_framebuffer(t_data *game)
 	return (TRUE);
 }
 
-void init_matrix(t_matrix *matrix)
+void	init_matrix(t_matrix *matrix)
 {
-	for (int i = 0; i < MAX_MATRIX; i++)
+	int	i;
+
+	i = 0;
+	while (i < MAX_MATRIX)
 	{
 		matrix[i].x = rand() % WIN_WIDTH;
 		matrix[i].y = rand() % WIN_HEIGHT;
 		matrix[i].speed = 50 + rand() % 100;
-		matrix[i].c = rand() % 94 + 33; // ASCII visível
+		matrix[i].c = rand() % 94 + 33;
 		matrix[i].char_delay = 0.1 + (rand() % 100) / 1000.0;
+		i++;
 	}
+}
+
+void	init_buttons(t_data *game)
+{
+	t_point	pos;
+	t_point	size;
+
+	size.x = 360;
+	size.y = 40;
+	pos.x = (WIN_WIDTH / 2) - (size.x / 2);
+	pos.y = WIN_HEIGHT / 2 + 65;
+	game->btn[0] = create_button(
+			pos,
+			size,
+			"OPEN FILE", play_action);
+	pos.y = WIN_HEIGHT / 2 + 120;
+	game->btn[1] = create_button(
+			pos,
+			size,
+			"TERMINATE SESSION", quit_action);
 }
 
 t_bool	init_game(t_data *game)
@@ -54,16 +78,9 @@ t_bool	init_game(t_data *game)
 		return (FALSE);
 	game->win = mlx_new_window(game->mlx, WIN_WIDTH, WIN_HEIGHT, "CUBO");
 	if (!game->win)
-		return (FALSE);;
+		return (FALSE);
 	init_matrix(game->matrix);
-	game->btn[0] = create_button(
-		WIN_WIDTH / 2 - (360 / 2), WIN_HEIGHT / 2 + 65,
-		360, 40,
-		"OPEN FILE", play_action);
-	game->btn[1] = create_button(
-		WIN_WIDTH / 2 - (360 / 2), WIN_HEIGHT / 2 + 120,
-		360, 40,
-		"TERMINATE SESSION", quit_action);
+	init_buttons(game);
 	game->screen = TITLE;
 	init_doors(game);
 	return (TRUE);

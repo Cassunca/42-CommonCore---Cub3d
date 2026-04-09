@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_core.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 19:57:19 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/08 19:58:15 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/09 00:07:54 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ void	put_pixel(t_img *img, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-int brighten(int color, float factor)
+int	brighten(int color, float factor)
 {
-	int r;
-	int g;
-	int b;
+	int	r;
+	int	g;
+	int	b;
 
 	r = (color >> 16) & 0xFF;
 	g = (color >> 8) & 0xFF;

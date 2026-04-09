@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   update_button.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 19:41:58 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/08 19:42:43 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/09 00:03:33 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
 
 static void	start_glitch(t_button *b)
 {
@@ -56,16 +55,19 @@ static void	apply_glitch(t_button *b)
 		i++;
 	}
 }
+
 static int	update_timers(t_button *b, double dt)
 {
-	if ((b->glitch_timer -= dt) <= 0)
+	b->glitch_timer -= dt;
+	if (b->glitch_timer <= 0)
 	{
 		b->glitching = 0;
 		b->has_glitched = 1;
 		ft_strlcpy(b->render_text, b->text, sizeof(b->render_text));
 		return (1);
 	}
-	if ((b->glitch_frame_timer -= dt) > 0)
+	b->glitch_frame_timer -= dt;
+	if (b->glitch_frame_timer > 0)
 		return (1);
 	b->glitch_frame_timer = 0.08;
 	return (0);

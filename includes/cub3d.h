@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/09 13:18:40 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/09 13:22:42 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ _________________
 |♟ ♟ ♟   ♟ ♟ ♟ ♟|
 |      ♟        |
 |               |
+|      ♙        |
 |               |
-|               |
-|♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙|
+|♙ ♙ ♙   ♙ ♙ ♙ ♙|
 |♖ ♘ ♗ ♔ ♕ ♗ ♘ ♖|
 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 */
@@ -42,11 +42,6 @@ _________________
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 600
 
-# define MAX_BTNS 2
-
-# define PANEL_COLOR 0x121826
-# define PANEL_BORDER 0x2A3142
-
 # define PANEL_COLOR 0x121826
 # define PANEL_BORDER 0x2A3142
 
@@ -59,24 +54,6 @@ _________________
 # include "mlx.h"
 # include <sys/time.h>
 # include <math.h>
-
-typedef struct s_button
-{
-	int		x;
-	int		y;
-	int		w;
-	int		h;
-	int		is_hover;
-	int		was_hover;
-	int		has_glitched;
-	double	state_timer;
-	double	glitch_frame_timer;
-	int		glitching;
-	char	*text;
-	char	render_text[32];
-	double	glitch_timer;
-	void	(*on_click)(void *param);
-}	t_button;
 
 typedef enum e_screen
 {
@@ -121,21 +98,6 @@ typedef struct s_ray
 	int		draw_start;
 	int		draw_end;
 }	t_ray;
-
-# define MAX_MATRIX 100
-# define TRAIL_SIZE 4
-
-typedef struct s_matrix
-{
-	int     x;        // posição horizontal
-	float   y;        // posição vertical (float pra suavizar)
-	float   speed;    // velocidade da queda
-	char    c;        // caractere atual
-	char    trail[TRAIL_SIZE];
-	float 	char_timer;
-	float 	char_delay;
-	float 	last_y;
-} t_matrix;
 
 typedef struct s_data
 {
@@ -229,13 +191,5 @@ void	update_matrix(t_matrix *matrix, float dt);
 
 // loop
 int		game_loop(t_data *game);
-
-// utils
-char	*get_time_str(void);
-void	fps_limiter(double current, double fps);
-
-void render_title(t_data *game);
-void	draw_line_fancy(t_img *img, int x, int y, int w);
-
 
 #endif

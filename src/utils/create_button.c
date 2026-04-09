@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_button.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 20:15:36 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/08 20:17:56 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/09 12:47:01 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 void	play_action(void *param)
 {
-	t_data *game = (t_data *)param;
+	t_data	*game;
+
+	game = (t_data *)param;
 	printf("play\n");
 	game->screen = GAME;
 }
@@ -26,15 +28,15 @@ void	quit_action(void *param)
 	exit(0);
 }
 
-t_button	create_button(int x, int y, int w, int h, char *text,
-	void (*on_click)(void *))
+t_button	create_button(t_point pos, t_point size, char *text,
+					void (*on_click)(void *))
 {
 	t_button	btn;
 
-	btn.x = x;
-	btn.y = y;
-	btn.w = w;
-	btn.h = h;
+	btn.x = pos.x;
+	btn.y = pos.y;
+	btn.w = size.x;
+	btn.h = size.y;
 	btn.text = text;
 	btn.on_click = on_click;
 	btn.is_hover = FALSE;
@@ -43,4 +45,3 @@ t_button	create_button(int x, int y, int w, int h, char *text,
 	ft_strlcpy(btn.render_text, text, sizeof(btn.render_text));
 	return (btn);
 }
-

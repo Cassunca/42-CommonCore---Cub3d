@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_time.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 20:06:46 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/08 20:07:27 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/09 00:27:34 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,3 @@ char	*get_time_str(void)
 	buffer[8] = '\0';
 	return (buffer);
 }
-

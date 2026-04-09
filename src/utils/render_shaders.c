@@ -3,45 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   render_shaders.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 19:58:41 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/08 20:01:13 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/09 12:21:14 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "utils.h"
+#include "types.h"
 
-void draw_border(t_img *img, int x, int y, int w, int h, int color)
+void	draw_border(t_img *img, t_point pos, t_point size, int color)
 {
 	int	i;
 
 	i = 0;
-	while (i < w)
+	while (i < size.x)
 	{
-		put_pixel(img, x + i, y, color);
-		put_pixel(img, x + i, y + h, color);
+		put_pixel(img, pos.x + i, pos.y, color);
+		put_pixel(img, pos.x + i, pos.y + size.y, color);
 		i++;
 	}
 	i = 0;
-	while (i < h)
+	while (i < size.y)
 	{
-		put_pixel(img, x, y + i, color);
-		put_pixel(img, x + w, y + i, color);
+		put_pixel(img, pos.x, pos.y + i, color);
+		put_pixel(img, pos.x + size.x, pos.y + i, color);
 		i++;
 	}
 }
 
-void draw_rect(t_img *img, int x, int y, int w, int h, int color)
+void	draw_rect(t_img *img, t_point pos, t_point size, int color)
 {
 	int	i;
 	int	j;
 
-	i = y;
-	while (i < y + h)
+	i = pos.y;
+	while (i < pos.y + size.y)
 	{
-		j = x;
-		while (j < x + w)
+		j = pos.x;
+		while (j < pos.x + size.x)
 		{
 			put_pixel(img, j, i, color);
 			j++;
@@ -50,75 +51,69 @@ void draw_rect(t_img *img, int x, int y, int w, int h, int color)
 	}
 }
 
-void	draw_line(t_img *img, int x0, int y0, int x1, int y1, int color)
+static void	init_line(t_line *l)
 {
-	int dx = abs(x1 - x0);
-	int dy = abs(y1 - y0);
-	int sx = (x0 < x1) ? 1 : -1;
-	int sy = (y0 < y1) ? 1 : -1;
-	int err = dx - dy;
-	int e2;
+	l->dx = abs(l->x1 - l->x0);
+	l->dy = abs(l->y1 - l->y0);
+	if (l->x0 < l->x1)
+		l->sx = 1;
+	else
+		l->sx = -1;
+	if (l->y0 < l->y1)
+		l->sy = 1;
+	else
+		l->sy = -1;
+	l->err = l->dx - l->dy;
+}
 
+void	draw_line(t_img *img, t_line *l, int color)
+{
+	int	e2;
+
+	init_line(l);
 	while (TRUE)
 	{
-		put_pixel(img, x0, y0, color);
-		if (x0 == x1 && y0 == y1)
+		put_pixel(img, l->x0, l->y0, color);
+		if (l->x0 == l->x1 && l->y0 == l->y1)
 			break ;
-		e2 = 2 * err;
-		if (e2 > -dy)
+		e2 = 2 * l->err;
+		if (e2 > -l->dy)
 		{
-			err -= dy;
-			x0 += sx;
+			l->err -= l->dy;
+			l->x0 += l->sx;
 		}
-		if (e2 < dx)
+		if (e2 < l->dx)
 		{
-			err += dx;
-			y0 += sy;
+			l->err += l->dx;
+			l->y0 += l->sy;
 		}
 	}
 }
 
-void	draw_triangle(t_img *img, int x, int y, int size, int color)
+void	draw_triangle(t_img *img, t_point pos, int size, int color)
 {
-	int	i;
-	int	half;
+	int		i;
+	int		half;
+	t_line	l;
 
 	half = size / 2;
 	i = 0;
 	while (i <= half)
 	{
-		draw_line(img,
-			x,
-			y + half - i,
-			x + i,
-			y + half,
-			color);
-		draw_line(img,
-			x,
-			y + half + i,
-			x + i,
-			y + half,
-			color);
+		l = (t_line){
+			.x0 = pos.x,
+			.y0 = pos.y + half - i,
+			.x1 = pos.x + i,
+			.y1 = pos.y + half
+		};
+		draw_line(img, &l, color);
+		l = (t_line){
+			.x0 = pos.x,
+			.y0 = pos.y + half + i,
+			.x1 = pos.x + i,
+			.y1 = pos.y + half
+		};
+		draw_line(img, &l, color);
 		i++;
 	}
 }
-
-void	draw_line_fancy(t_img *img, int x, int y, int w)
-{
-	int	i;
-	int color;
-
-	i = 0;
-	while (i < w)
-	{
-		if (i < 20)
-			color = 0x222a38;
-		else if (i > w - 20)
-			color = 0x222a38;
-		else
-			color = 0x445566;
-		put_pixel(img, x + i, y, color);
-		i++;
-	}
-}
-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matrix.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 20:04:07 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/08 20:04:31 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/09 00:11:51 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	draw_trail(t_matrix *m, void *mlx, void *win)
 		if (y < 0)
 		{
 			j++;
-			continue;
+			continue ;
 		}
 		str[0] = m->trail[j];
 		str[1] = '\0';
@@ -60,30 +60,31 @@ void	draw_matrix(t_matrix *matrix, void *mlx, void *win)
 	}
 }
 
-void update_matrix(t_matrix *matrix, float dt)
+void	update_matrix(t_matrix *matrix, float dt)
 {
-	for (int i = 0; i < MAX_MATRIX; i++)
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < MAX_MATRIX)
 	{
 		matrix[i].y += matrix[i].speed * dt;
-
-		// só atualiza quando andou 12 pixels (altura da letra)
 		if ((int)(matrix[i].y / 12) != (int)(matrix[i].last_y / 12))
 		{
-			// shift do rastro
-			for (int j = TRAIL_SIZE - 1; j > 0; j--)
+			j = TRAIL_SIZE - 1;
+			while (j > 0)
+			{
 				matrix[i].trail[j] = matrix[i].trail[j - 1];
-
-			// nova letra entra aqui
+				j--;
+			}
 			matrix[i].trail[0] = rand() % 94 + 33;
 		}
-
 		matrix[i].last_y = matrix[i].y;
-
 		if (matrix[i].y > WIN_HEIGHT)
 		{
 			matrix[i].y = 0;
 			matrix[i].x = rand() % WIN_WIDTH;
 		}
+		i++;
 	}
 }
-

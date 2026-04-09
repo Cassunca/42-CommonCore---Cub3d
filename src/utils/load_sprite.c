@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   load_sprite.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 20:16:26 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/08 20:19:03 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/09 00:08:04 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,7 @@ t_bool	load_sprites(t_data *game)
 	game->tex.we = load_image(game->mlx, game->tex_path.we);
 	if (!game->tex.we.ptr)
 		return (FALSE);
-	game->logo = load_image(game->mlx, "assets/cu_logo.xpm");
+	game->logo = load_image(game->mlx, "assets/cub3d_logo.xpm");
 	game->logo_42 = load_image(game->mlx, "assets/42_logo.xpm");
 	return (TRUE);
 }
-

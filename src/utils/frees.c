@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   frees.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 23:59:29 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/31 16:12:06 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/08 23:47:35 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,12 @@ void	free_matrix(char **splits)
 
 void	closer(t_data *game)
 {
+	mlx_destroy_image(game->mlx, game->logo.ptr);
+	mlx_destroy_image(game->mlx, game->logo_42.ptr);
+	mlx_destroy_image(game->mlx, game->tex.ea.ptr);
+	mlx_destroy_image(game->mlx, game->tex.no.ptr);
+	mlx_destroy_image(game->mlx, game->tex.we.ptr);
+	mlx_destroy_image(game->mlx, game->tex.so.ptr);
 	mlx_destroy_image(game->mlx, game->frame.ptr);
 	mlx_destroy_window(game->mlx, game->win);
 	mlx_destroy_display(game->mlx);
