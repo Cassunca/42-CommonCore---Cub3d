@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 15:28:41 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/08 18:19:20 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/09 13:40:20 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	get_tex_pixel(t_img *tex, int x, int y)
 {
 	char	*pixel;
 
+	if (!tex || !tex->addr)
+		return (erro_int("unloaded texture", FALSE));
 	pixel = tex->addr + (y * tex->line_len + x * (tex->bpp / 8));
 	return (*(int *)pixel);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   door.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 15:19:37 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/08 18:17:17 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/09 13:59:38 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	init_doors(t_data *game)
 	while (y < game->map.height)
 	{
 		x = 0;
-		while (x < game->map.width)
+		while (x < game->map.grid[y][x])
 		{
 			if (game->map.grid[y][x] == 'D' || game->map.grid[y][x] == 'S')
 			{

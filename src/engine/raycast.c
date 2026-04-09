@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:01:24 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/08 18:08:08 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/09 14:00:35 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ static void	init_ray_info(t_data *data, int x)
 		data->ray.delta_dist_y = 1e30;
 	else
 		data->ray.delta_dist_y = fabs(1 / data->ray.ray_dir_y);
-}	
+}
 
 void	execute_raycast(t_data *data)
 {
@@ -120,5 +120,6 @@ void	execute_raycast(t_data *data)
 		x++;
 	}
 	draw_minimap(data);
+	mlx_put_image_to_window(data->mlx, data->win, data->frame.ptr, 0, 0);
 	str_num(data, (int)fps(), "fps: ", 400);
 }

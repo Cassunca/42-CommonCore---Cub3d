@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 23:59:29 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/08 23:47:35 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/09 13:56:59 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	closer(t_data *game)
 {
 	mlx_destroy_image(game->mlx, game->logo.ptr);
 	mlx_destroy_image(game->mlx, game->logo_42.ptr);
+	mlx_destroy_image(game->mlx, game->secret_door.ptr);
+	mlx_destroy_image(game->mlx, game->door_tex.ptr);
 	mlx_destroy_image(game->mlx, game->tex.ea.ptr);
 	mlx_destroy_image(game->mlx, game->tex.no.ptr);
 	mlx_destroy_image(game->mlx, game->tex.we.ptr);

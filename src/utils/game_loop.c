@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 17:41:58 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/09 13:19:46 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/09 14:00:21 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,26 @@ static void	update(t_data *game, double frame_time,
 	update_button_text(&game->btn[1], frame_time);
 }
 
-static void	render_frame(t_data *game, double interp)
+static void	render_frame(t_data *game)
 {
-	mlx_clear_window(game->mlx, game->win);
+	static int		mouse_hidden = 0;
+
 	if (game->screen == TITLE)
+	{
+		mlx_clear_window(game->mlx, game->win);
 		render_title(game);
+	}
 	else if (game->screen == GAME)
-		render(game, interp);
+	{
+		if (!mouse_hidden)
+		{
+			mlx_mouse_hide(game->mlx, game->win);
+			mouse_hidden = 1;
+		}
+		handle_mouse(game);
+		move_player(game);
+		execute_raycast(game);
+	}
 }
 
 int	game_loop(t_data *game)
@@ -57,7 +70,7 @@ int	game_loop(t_data *game)
 		frame = 0.25;
 	acc += frame;
 	update(game, frame, &acc, tick);
-	render_frame(game, acc / tick);
+	render_frame(game);
 	fps_limiter(cur, 244.0);
 	return (0);
 }
