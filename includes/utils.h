@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 00:47:58 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/09 12:58:23 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/13 01:07:39 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,18 @@
 
 # include "cub3d.h"
 # include "types.h"
+
+# define PANEL_W 400
+# define PANEL_H 500
+
+# define INPUT_W 280
+# define INPUT_H 90
+
+# define DOT_SIZE 12
+# define DOT_SPACING 30
+# define DOT_COUNT 4
+
+# define STATUS_H 35
 
 typedef struct s_data	t_data;
 typedef struct s_parser	t_parser;
@@ -88,5 +100,6 @@ void		fps_limiter(double current, double fps);
 
 void		render_title(t_data *game);
 void		draw_lines(t_data *game, int panel_w, int panel_y);
+void		draw_shape(t_img *img, t_shape s);
 
 #endif

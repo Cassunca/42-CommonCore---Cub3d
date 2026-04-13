@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 15:43:54 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/09 13:41:18 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/13 01:40:30 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	draw_wall_column(t_data *data, int x)
 	double	step;
 	double	tex_pos;
 	int		y;
-	int		tex_y;
 
 	tex = get_wall_tex(data);
 	tex_x = get_tex_x(data, tex);
@@ -54,9 +53,9 @@ void	draw_wall_column(t_data *data, int x)
 	y = data->ray.draw_start;
 	while (y <= data->ray.draw_end)
 	{
-		tex_y = (int)tex_pos & (tex->height - 1);
 		my_mlx_pixel_put(&data->frame, x, y,
-			apply_shade(get_tex_pixel(tex, tex_x, tex_y), data->ray.side));
+			apply_shade(get_tex_pixel(tex, tex_x,
+					(int)tex_pos & (tex->height - 1)), data->ray.side));
 		tex_pos += step;
 		y++;
 	}

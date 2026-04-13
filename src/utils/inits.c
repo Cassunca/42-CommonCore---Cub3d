@@ -6,11 +6,13 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 21:34:36 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/09 13:20:30 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/13 00:40:29 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
+
+void	init_keypad(t_data *game, t_point pos, t_point size, t_point spacing);
 
 static t_bool	init_framebuffer(t_data *game)
 {
@@ -67,6 +69,28 @@ void	init_buttons(t_data *game)
 			"TERMINATE SESSION", quit_action);
 }
 
+static void	setup_keypad(t_data *game)
+{
+	t_point	size;
+	t_point	pos;
+	t_point	start;
+	t_point	btn_size;
+	t_point	spacing;
+
+	size = (t_point){400, 500};
+	pos = (t_point){
+		.x = (game->frame.width - size.x) / 2,
+		.y = (game->frame.height - size.y) / 2
+	};
+	btn_size = (t_point){84, 50};
+	spacing = (t_point){14, 15};
+	start = (t_point){
+		.x = pos.x + (size.x - ((3 * btn_size.x) + (2 * spacing.x))) / 2,
+		.y = pos.y + 220
+	};
+	init_keypad(game, start, btn_size, spacing);
+}
+
 t_bool	init_game(t_data *game)
 {
 	game->mlx = mlx_init();
@@ -83,5 +107,8 @@ t_bool	init_game(t_data *game)
 	init_buttons(game);
 	game->screen = TITLE;
 	init_doors(game);
+	setup_keypad(game);
+	game->password_len = 0;
+	game->password_input[0] = '\0';
 	return (TRUE);
 }

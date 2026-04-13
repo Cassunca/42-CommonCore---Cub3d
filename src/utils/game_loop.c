@@ -6,25 +6,25 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 17:41:58 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/09 14:00:21 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/12 23:38:20 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	render(t_data *game, double alpha)
-{
-	(void)alpha;
-	draw_sky(game, game->colors.ceiling, game->colors.floor);
-	mlx_put_image_to_window(game->mlx, game->win, game->frame.ptr, 0, 0);
-}
 
 static void	update(t_data *game, double frame_time,
 					double *acc, double tick)
 {
 	while (*acc >= tick)
 	{
-		update_matrix(game->matrix, tick);
+		if (game->screen == TITLE)
+			update_matrix(game->matrix, tick);
+		if (game->screen == GAME)
+		{
+			update_doors(game);
+			handle_mouse(game);
+			move_player(game);
+		}
 		*acc -= tick;
 	}
 	update_button_text(&game->btn[0], frame_time);
@@ -33,7 +33,7 @@ static void	update(t_data *game, double frame_time,
 
 static void	render_frame(t_data *game)
 {
-	static int		mouse_hidden = 0;
+	static int		mouse_hidden = FALSE;
 
 	if (game->screen == TITLE)
 	{
@@ -45,11 +45,14 @@ static void	render_frame(t_data *game)
 		if (!mouse_hidden)
 		{
 			mlx_mouse_hide(game->mlx, game->win);
-			mouse_hidden = 1;
+			mouse_hidden = FALSE;
 		}
-		handle_mouse(game);
-		move_player(game);
 		execute_raycast(game);
+	}
+	else if (game->screen == PASSWORD_INPUT)
+	{
+		render_door_keypad(game);
+		mouse_hidden = FALSE;
 	}
 }
 

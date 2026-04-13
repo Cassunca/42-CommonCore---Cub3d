@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 20:04:07 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/09 00:11:51 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/11 21:28:36 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	update_matrix(t_matrix *matrix, float dt)
 			matrix[i].trail[0] = rand() % 94 + 33;
 		}
 		matrix[i].last_y = matrix[i].y;
-		if (matrix[i].y > WIN_HEIGHT)
+		if (matrix[i].y > WIN_HEIGHT + 40)
 		{
 			matrix[i].y = 0;
 			matrix[i].x = rand() % WIN_WIDTH;

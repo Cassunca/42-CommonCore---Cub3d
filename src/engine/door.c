@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 15:19:37 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/09 13:59:38 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/12 23:37:41 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,24 +51,56 @@ t_door	*find_door(t_data *game, int x, int y)
 	return (NULL);
 }
 
+t_door	*get_door_in_sight(t_data *game)
+{
+	double	dist;
+	int		x;
+	int		y;
+	char	tile;
+	t_door	*door;
+
+	dist = 0;
+	while (dist < 1.5)
+	{
+		x = (int)(game->player.pos_x + game->player.dir_x * dist);
+		y = (int)(game->player.pos_y + game->player.dir_y * dist);
+		tile = game->map.grid[y][x];
+		door = find_door(game, x, y);
+		if (door)
+			return (door);
+		if (tile == '1')
+			return (NULL);
+		dist += 0.05;
+	}
+	return (NULL);
+}
+
 void	open_door(t_data *game)
 {
-	int		target_x;
-	int		target_y;
 	t_door	*door;
-	char	tile;
+	double	dx;
+	double	dy;
+	double	dist;
 
-	target_x = (int)(game->player.pos_x + game->player.dir_x);
-	target_y = (int)(game->player.pos_y + game->player.dir_y);
-	tile = game->map.grid[target_y][target_x];
-	door = find_door(game, target_x, target_y);
-	if (door && tile == 'D')
+	door = get_door_in_sight(game);
+	if (!door)
+		return ;
+	if (door->opening != 0)
+		return ;
+	dx = game->player.pos_x - (door->x + 0.5);
+	dy = game->player.pos_y - (door->y + 0.5);
+	dist = sqrt(dx * dx + dy * dy);
+	if (door->open > 0.5 && dist < 0.6)
+		return ;
+	if (door->type == DOOR_NORMAL)
 	{
-		if (door->open == 0.0)
+		if (door->open < 0.5)
 			door->opening = 1;
 		else
 			door->opening = -1;
 	}
+	else if (door->type == DOOR_SECRET)
+		handle_secret_door(game, door);
 }
 
 void	init_doors(t_data *game)
@@ -81,7 +113,7 @@ void	init_doors(t_data *game)
 	while (y < game->map.height)
 	{
 		x = 0;
-		while (x < game->map.grid[y][x])
+		while (x < game->map.width)
 		{
 			if (game->map.grid[y][x] == 'D' || game->map.grid[y][x] == 'S')
 			{
@@ -89,6 +121,9 @@ void	init_doors(t_data *game)
 				game->doors[game->door_count].y = y;
 				game->doors[game->door_count].open = 0.0;
 				game->doors[game->door_count].opening = 0;
+				game->doors[game->door_count].type = DOOR_NORMAL;
+				if (game->map.grid[y][x] == 'S')
+					game->doors[game->door_count].type = DOOR_SECRET;
 				game->door_count++;
 			}
 			x++;

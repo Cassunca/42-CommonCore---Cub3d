@@ -6,7 +6,7 @@
 #    By: kamys <kamys@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/04/09 13:22:49 by kamys            ###   ########.fr        #
+#    Updated: 2026/04/12 23:56:07 by kamys            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ SRCS_ENGINE		:=	hooks.c				\
 					raycast_utils.c		\
 					render.c			\
 					minimap.c			\
+					secret_door.c		\
 					door.c				
 
 SRCS_PARSER		:=	parser.c			\
@@ -73,6 +74,8 @@ SRCS_UTILS	:=	frees.c				\
 				create_button.c		\
 				load_sprite.c		\
 				hooks_mouse.c		\
+				draw_shape.c		\
+				init_keypad.c		\
 				error_msg.c
 
 SRCS_TEXTURES	:=	texture_utils.c		\
