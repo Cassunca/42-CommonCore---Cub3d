@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 17:11:19 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/13 00:53:49 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/13 11:32:52 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int	handle_door_hit(t_data *data)
 {
 	char	tile;
 	t_door	*door;
-	double	hit_pos;
+	double	wall_x;
+	double	door_size;
 
 	tile = data->map.grid[data->ray.map_y][data->ray.map_x];
 	if (tile != 'D' && tile != 'S')
@@ -56,16 +57,19 @@ int	handle_door_hit(t_data *data)
 	door = find_door(data, data->ray.map_x, data->ray.map_y);
 	if (!door)
 		return (0);
+	if (door->open >= 0.99)
+		return (0);
 	if (data->ray.side == 0)
-		hit_pos = data->player.pos_y + data->ray.side_dist_x
-			* data->ray.ray_dir_y;
+		wall_x = data->player.pos_y
+			+ data->ray.wall_dist * data->ray.ray_dir_y;
 	else
-		hit_pos = data->player.pos_x + data->ray.side_dist_y
-			* data->ray.ray_dir_x;
-	hit_pos = hit_pos - floor(hit_pos);
-	if (hit_pos >= door->open)
-		return (1);
-	return (0);
+		wall_x = data->player.pos_x
+			+ data->ray.wall_dist * data->ray.ray_dir_x;
+	wall_x -= floor(wall_x);
+	door_size = (1.0 - door->open) * 0.5;
+	if (wall_x > door_size && wall_x < (1.0 - door_size))
+		return (0);
+	return (1);
 }
 
 void	draw_info_door(t_data *data)
