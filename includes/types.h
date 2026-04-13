@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 12:05:52 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/09 12:06:28 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/13 01:41:20 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,12 @@
 
 # define MAX_BTNS 2
 
+# define MAX_KEYPAD 12
+
 # define PANEL_COLOR 0x121826
 # define PANEL_BORDER 0x2A3142
+
+typedef struct s_data	t_data;
 
 typedef struct s_matrix
 {
@@ -96,5 +100,54 @@ typedef struct s_line
 	int	sy;
 	int	err;
 }	t_line;
+
+typedef enum e_shape_type
+{
+	SHAPE_RECT,
+	SHAPE_CIRCLE
+}	t_shape_type;
+
+typedef struct s_shape
+{
+	int				x;
+	int				y;
+	int				w;
+	int				h;
+	int				radius;
+	int				fill_color;
+	int				border_color;
+	int				border_thickness;
+	t_shape_type	type;
+}	t_shape;
+
+typedef struct s_vec2
+{
+	float	x;
+	float	y;
+}	t_vec2;
+
+typedef struct s_rect
+{
+	t_vec2	center;
+	t_vec2	size;
+	float	radius;
+}	t_rect;
+
+typedef struct s_circle
+{
+	t_vec2	center;
+	float	radius;
+}	t_circle;
+
+typedef struct s_key
+{
+	int		x;
+	int		y;
+	int		w;
+	int		h;
+	int		value;
+	int		is_hover;
+	void	(*action)(t_data *game, int value);
+}	t_key;
 
 #endif

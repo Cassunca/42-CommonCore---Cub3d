@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   door.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 15:03:44 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/08 16:29:25 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/09 19:50:54 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,19 @@
 
 typedef struct s_data	t_data;
 
+typedef enum e_door_type
+{
+	DOOR_NORMAL,
+	DOOR_SECRET
+}	t_door_type;
+
 typedef struct s_door
 {
-	int		x;
-	int		y;
-	double	open;
-	int		opening;
+	int			x;
+	int			y;
+	double		open;
+	int			opening;
+	t_door_type	type;
 }	t_door;
 
 void	update_doors(t_data	*game);

@@ -6,11 +6,13 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:01:24 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/09 14:00:35 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/12 21:56:54 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	draw_info_door(t_data *data);
 
 static void	set_dda_step(t_data *data)
 {
@@ -106,7 +108,6 @@ void	execute_raycast(t_data *data)
 	int	x;
 
 	x = 0;
-	update_doors(data);
 	render_background(data);
 	while (x < WIN_WIDTH)
 	{
@@ -120,6 +121,9 @@ void	execute_raycast(t_data *data)
 		x++;
 	}
 	draw_minimap(data);
+	draw_crosshair(data);
+	mlx_clear_window(data->mlx, data->win);
 	mlx_put_image_to_window(data->mlx, data->win, data->frame.ptr, 0, 0);
-	str_num(data, (int)fps(), "fps: ", 400);
+	draw_info_door(data);
+	str_num(data, (int)fps(), "fps: ", 70);
 }

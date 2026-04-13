@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/09 14:55:32 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/12 22:29:04 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ _________________
 # define KEY_RIGHT 65363
 # define KEY_UP 65362
 # define KEY_ESC 65307
+# define KEY_ENTER 65293
+# define KEY_BACKSPACE 65288
 
 # define MOVE_SPEED 0.01
 # define ROT_SPEED 0.007
@@ -58,6 +60,7 @@ _________________
 typedef enum e_screen
 {
 	TITLE,
+	PASSWORD_INPUT,
 	GAME
 }	t_screen;
 
@@ -118,12 +121,19 @@ typedef struct s_data
 	t_img		door_tex;
 	t_img		secret_door;
 
+	t_key		keys[MAX_KEYPAD];
+	char		password_input[5];
+	int			password_len;
+
 	t_player	player;
 	t_img		frame;
 	t_ray		ray;
 	void		*mlx;
 	void		*win;
 }	t_data;
+
+t_door	*get_door_in_sight(t_data *game);
+void	render_door_keypad(t_data *game);
 
 /* ========== HOOKS ========== */
 
@@ -136,6 +146,7 @@ int		handle_mouse(t_data *data);
 
 void	render_background(t_data *data);
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+void	draw_crosshair(t_data *data);
 
 /* ========== RAYCAST ========== */
 
@@ -160,6 +171,7 @@ int		get_tex_x(t_data *data, t_img *tex);
 int		game_loop(t_data *game);
 
 void	update_button_text(t_button *b, double dt);
+void	handle_secret_door(t_data *game, t_door *door);
 
 // core
 void	put_pixel(t_img *img, int x, int y, int color);

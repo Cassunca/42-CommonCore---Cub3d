@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 17:11:19 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/08 18:17:52 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/13 00:53:49 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,33 @@ int	handle_door_hit(t_data *data)
 	if (hit_pos >= door->open)
 		return (1);
 	return (0);
+}
+
+void	draw_info_door(t_data *data)
+{
+	t_door	*door;
+	double	dx;
+	double	dy;
+	double	dist;
+
+	door = get_door_in_sight(data);
+	if (!door)
+		return ;
+	if (door->opening != 0)
+		return ;
+	dx = data->player.pos_x - (door->x + 0.5);
+	dy = data->player.pos_y - (door->y + 0.5);
+	dist = sqrt(dx * dx + dy * dy);
+	if (door->open > 0.5 && dist < 0.6)
+		return ;
+	if (door->open < 0.9)
+		mlx_string_put(data->mlx, data->win,
+			WIN_WIDTH / 2 - 50,
+			WIN_HEIGHT / 2 + 40,
+			0xFFFFFF, "[SPACE] Open");
+	else if (door->open > 0.1)
+		mlx_string_put(data->mlx, data->win,
+			WIN_WIDTH / 2 - 50,
+			WIN_HEIGHT / 2 + 40,
+			0xFFFFFF, "[SPACE] Close");
 }

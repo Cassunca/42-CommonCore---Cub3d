@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:02:08 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/08 15:18:50 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/13 00:53:07 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+#include <string.h>
+
+void	open_secret_door(t_data *game);
 
 int	handle_mouse(t_data *data)
 {
@@ -30,8 +33,38 @@ int	handle_mouse(t_data *data)
 	return (0);
 }
 
+int	handle_password_input(int key, t_data *data)
+{
+	if (key == KEY_ENTER)
+	{
+		data->password_input[data->password_len] = '\0';
+		if (strcmp(data->password_input, "1234") == 0)
+			open_secret_door(data);
+		data->screen = GAME;
+	}
+	else if (key == KEY_BACKSPACE)
+	{
+		data->password_len = 0;
+		data->password_input[0] = '\0';
+	}
+	else if (key == KEY_ESC)
+	{
+		data->screen = GAME;
+		return (0);
+	}
+	else if (data->password_len < 4 && ft_isdigit(key))
+	{
+		data->password_input[data->password_len++] = key;
+		data->password_input[data->password_len] = '\0';
+	}
+	return (0);
+}
+
 int	handle_key(int keycode, t_data *game)
 {
+	printf("key: %d\n", keycode);
+	if (game->screen == PASSWORD_INPUT)
+		return (handle_password_input(keycode, game));
 	if (keycode == KEY_ESC)
 	{
 		closer(game);
