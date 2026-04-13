@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 15:28:41 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/09 14:55:46 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/13 15:38:38 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ int	get_tex_x(t_data *data, t_img *tex)
 		wall_x = data->player.pos_x + data->ray.wall_dist * data->ray.ray_dir_x;
 	wall_x -= floor(wall_x);
 	tex_x = (int)(wall_x * tex->width);
-	if (data->ray.side == 0 && data->ray.ray_dir_x > 0)
+	if (data->ray.side == 0 && data->ray.ray_dir_x < 0)
 		tex_x = tex->width - tex_x - 1;
-	if (data->ray.side == 1 && data->ray.ray_dir_y < 0)
+	if (data->ray.side == 1 && data->ray.ray_dir_y > 0)
 		tex_x = tex->width - tex_x - 1;
 	return (tex_x);
 }
