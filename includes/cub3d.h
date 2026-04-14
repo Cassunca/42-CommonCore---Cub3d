@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/12 22:29:04 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/13 17:07:12 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,8 @@ typedef struct s_data
 	t_img		secret_door;
 
 	t_key		keys[MAX_KEYPAD];
-	char		password_input[5];
+	char		*pw_door;
+	char		*password_input;
 	int			password_len;
 
 	t_player	player;

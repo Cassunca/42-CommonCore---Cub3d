@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 20:50:08 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/30 12:09:10 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/13 16:46:29 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef enum e_id
 	ID_EA,
 	ID_F,
 	ID_C,
+	ID_PW,
 	ID_INVALID
 }	t_id;
 

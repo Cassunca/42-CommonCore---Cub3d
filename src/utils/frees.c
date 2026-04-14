@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   frees.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 23:59:29 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/09 13:56:59 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/13 18:53:16 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	closer(t_data *game)
 	free(game->tex_path.so);
 	free(game->tex_path.we);
 	free(game->tex_path.ea);
+	free(game->password_input);
+	free(game->pw_door);
 	if (game->map.grid)
 		free_matrix(game->map.grid);
 }
