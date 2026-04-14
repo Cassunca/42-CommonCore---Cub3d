@@ -6,7 +6,7 @@
 /*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 15:43:54 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/14 16:55:17 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/14 16:56:07 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,16 @@ int	apply_shade(int color, int side)
 	if (side == 1)
 		return ((color >> 1) & 0x7F7F7F);
 	return (color);
+}
+
+int	get_tex_pixel(t_img *tex, int x, int y)
+{
+	char	*pixel;
+
+	if (!tex || !tex->addr)
+		return (erro_int("unloaded texture", FALSE));
+	pixel = tex->addr + (y * tex->line_len + x * (tex->bpp / 8));
+	return (*(int *)pixel);
 }
 
 void	draw_wall_column(t_data *data, int x)

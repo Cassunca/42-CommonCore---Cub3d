@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:02:08 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/13 00:53:07 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/13 19:32:41 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	handle_password_input(int key, t_data *data)
 	if (key == KEY_ENTER)
 	{
 		data->password_input[data->password_len] = '\0';
-		if (strcmp(data->password_input, "1234") == 0)
+		if (strcmp(data->password_input, data->pw_door) == 0)
 			open_secret_door(data);
 		data->screen = GAME;
 	}
@@ -52,7 +52,8 @@ int	handle_password_input(int key, t_data *data)
 		data->screen = GAME;
 		return (0);
 	}
-	else if (data->password_len < 4 && ft_isdigit(key))
+	else if (data->password_len < (int)ft_strlen(data->pw_door)
+		&& ft_isdigit(key))
 	{
 		data->password_input[data->password_len++] = key;
 		data->password_input[data->password_len] = '\0';

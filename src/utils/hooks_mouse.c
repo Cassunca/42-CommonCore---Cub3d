@@ -3,24 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   hooks_mouse.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 23:49:57 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/13 00:41:54 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/13 19:41:23 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 
-static void	handle_button_click(t_data *game, t_button *btn,
-	int mouse_x, int mouse_y)
-{
-	if (mouse_x >= btn->x && mouse_x <= btn->x + btn->w
-		&& mouse_y >= btn->y && mouse_y <= btn->y + btn->h)
-	{
-		btn->on_click(game);
-	}
-}
+int		is_inside(int x, int y, t_key *key);
+void	update_buttons_hover(t_data *game, int x, int y);
+void	update_keypad_hover(t_data *game, int x, int y);
+void	handle_button_click(t_data *game, t_button *btn,
+			int mouse_x, int mouse_y);
 
 static int	handle_click_area(int mx, int my, t_click *a)
 {
@@ -48,16 +44,6 @@ static int	handle_click_area(int mx, int my, t_click *a)
 		return (1);
 	}
 	return (0);
-}
-
-int	is_inside(int x, int y, t_key *key)
-{
-	return (
-		x >= key->x
-		&& x <= key->x + key->w
-		&& y >= key->y
-		&& y <= key->y + key->h
-	);
 }
 
 static void	handle_keypad_click(t_data *game, int x, int y)
@@ -111,40 +97,6 @@ int	mouse_hook(int button, int x, int y, void *param)
 	if (game->screen == TITLE)
 		handle_title_clicks(game, x, y);
 	return (0);
-}
-
-static void	update_keypad_hover(t_data *game, int x, int y)
-{
-	int	i;
-
-	i = 0;
-	while (i < MAX_KEYPAD)
-	{
-		if (is_inside(x, y, &game->keys[i]))
-			game->keys[i].is_hover = TRUE;
-		else
-			game->keys[i].is_hover = FALSE;
-		i++;
-	}
-}
-
-static void	update_buttons_hover(t_data *game, int x, int y)
-{
-	t_button	*btn;
-	int			i;
-
-	i = 0;
-	while (i < MAX_BTNS)
-	{
-		btn = &game->btn[i];
-		btn->is_hover = (
-				x >= btn->x && x <= btn->x + btn->w
-				&& y >= btn->y && y <= btn->y + btn->h
-				);
-		if (btn->is_hover && !btn->glitching)
-			btn->glitching = 1;
-		i++;
-	}
 }
 
 int	mouse_move(int x, int y, void *param)

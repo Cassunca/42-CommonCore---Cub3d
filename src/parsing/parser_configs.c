@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser_configs.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/28 16:54:23 by kamys             #+#    #+#             */
-/*   Updated: 2026/03/28 18:03:00 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/13 19:34:14 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+t_bool	parse_pw(t_parser *p, char *line);
 
 static t_id	get_id(char *line)
 {
@@ -20,6 +22,7 @@ static t_id	get_id(char *line)
 	{"SO ", ID_SO},
 	{"WE ", ID_WE},
 	{"EA ", ID_EA},
+	{"PW ", ID_PW},
 	{"F ", ID_F},
 	{"C ", ID_C},
 	{NULL, ID_INVALID}
@@ -44,7 +47,8 @@ static t_bool	parser_identifier(t_parser *p, char *line)
 		parse_we,
 		parse_ea,
 		parse_floor,
-		parse_ceiling
+		parse_ceiling,
+		parse_pw
 	};
 
 	id = get_id(line);
@@ -106,7 +110,7 @@ t_bool	parser_configs(t_parser *p)
 		p->i++;
 		p->config_count++;
 	}
-	if (p->config_count != 6)
+	if (p->config_count != 7)
 		return (erro_int("missing configs", FALSE));
 	return (TRUE);
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kamys <kamys@student.42.fr>                +#+  +:+       +#+         #
+#    By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/04/12 23:56:07 by kamys            ###   ########.fr        #
+#    Updated: 2026/04/13 20:12:05 by amyrodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,9 @@ SRCS_ENGINE		:=	hooks.c				\
 					render.c			\
 					minimap.c			\
 					secret_door.c		\
+					draw_shaders.c		\
+					draw_dots.c			\
+					draw_keypad_utils.c	\
 					door.c				
 
 SRCS_PARSER		:=	parser.c			\
@@ -56,6 +59,7 @@ SRCS_PARSER		:=	parser.c			\
 					parser_configs.c	\
 					parser_tex.c		\
 					parser_map.c		\
+					parser_pw.c		\
 					read_file.c
 
 SRCS_UTILS	:=	frees.c				\
@@ -76,9 +80,12 @@ SRCS_UTILS	:=	frees.c				\
 				hooks_mouse.c		\
 				draw_shape.c		\
 				init_keypad.c		\
+				button_action.c		\
+				mouse_utils.c		\
 				error_msg.c
 
-SRCS_TEXTURES	:=	texture_utils.c		\
+SRCS_TEXTURES	:=	get_wall_tex.c		\
+					get_tex_x.c			\
 					draw_wall.c
 
 # Add directory prefix
@@ -153,7 +160,7 @@ fclean: clean
 re: fclean all
 
 valgrind:
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) $(ARGS)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=mlx.supp ./$(NAME) $(ARGS)
 
 -include $(DEPS)
 

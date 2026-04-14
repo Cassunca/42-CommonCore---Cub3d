@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 17:42:50 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/08 18:08:50 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/13 18:39:55 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,11 @@ static int	get_cell_color(t_data *data, int map_x, int map_y)
 	char	tile;
 	t_door	*door;
 
-	if (map_x < 0 || map_y < 0 || map_x >= data->map.width
-		|| map_y >= data->map.height)
+	if (map_x < 0 || map_y < 0 || map_y >= data->map.height)
+		return (0x000000);
+	if (!data->map.grid[map_y])
+		return (0x000000);
+	if (map_x >= (int)ft_strlen(data->map.grid[map_y]))
 		return (0x000000);
 	tile = data->map.grid[map_y][map_x];
 	if (tile == '1')
