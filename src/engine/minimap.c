@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 17:42:50 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/13 18:39:55 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/14 16:51:27 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,15 @@ static int	get_cell_color(t_data *data, int map_x, int map_y)
 	tile = data->map.grid[map_y][map_x];
 	if (tile == '1')
 		return (0xFFFFFF);
-	if (tile == 'D')
+	if (tile == 'D' || tile == 'S')
 	{
 		door = find_door(data, map_x, map_y);
 		if (door && door->open > 0.8)
 			return (0x222222);
-		return (0xAA5500);
-	}
-	if (tile == 'S')
+		if (tile == 'D')
+			return (0xAA5500);
 		return (0x8844FF);
+	}
 	return (0x444444);
 }
 
