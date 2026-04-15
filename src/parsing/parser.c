@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 20:45:45 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/08 16:36:37 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/15 19:05:39 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,40 @@ static t_bool	copy_lines(t_map *map, t_parser *p)
 	return (TRUE);
 }
 
+// int	get_effective_end(t_parser *p)
+// {
+// 	int	file_i;
+
+// 	file_i = p->i;
+// 	while (p->file[file_i])
+// 		file_i++;
+// 	while (file_i > p->i && is_empty_line(p->file[file_i - 1]))
+// 		file_i--;
+// 	return (file_i);
+// }
+
+t_bool	is_map(char *line);
+
+
 static int	get_effective_end(t_parser *p)
 {
-	int	file_i;
+	int	i;
 
-	file_i = p->i;
-	while (p->file[file_i])
-		file_i++;
-	while (file_i > p->i && is_empty_line(p->file[file_i - 1]))
-		file_i--;
-	return (file_i);
+	i = p->i;
+
+	while (p->file[i])
+	{
+		// para se encontrar linha vazia
+		if (is_empty_line(p->file[i]))
+			break ;
+
+		// para se encontrar algo que não é mapa
+		if (!is_map(p->file[i]))
+			break ;
+
+		i++;
+	}
+	return (i);
 }
 
 static int	get_max_width(char **grid, int height)
@@ -65,6 +89,7 @@ static int	get_max_width(char **grid, int height)
 
 static t_bool	copy_grid(t_map *map, t_parser *p)
 {
+	int	i;
 	int	end;
 
 	end = get_effective_end(p);
@@ -75,6 +100,14 @@ static t_bool	copy_grid(t_map *map, t_parser *p)
 	if (!copy_lines(map, p))
 		return (FALSE);
 	map->width = get_max_width(map->grid, map->height);
+	i = end;
+	while (p->file[i])
+	{
+		printf("%s\n", p->file[i]);
+		if (p->file[i][0] != '\0')
+			return (erro_int("Caracter invalid in map or after map\n", FALSE));
+		i++;
+	}
 	return (TRUE);
 }
 

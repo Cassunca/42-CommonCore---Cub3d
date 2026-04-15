@@ -6,7 +6,7 @@
 /*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/28 16:54:23 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/13 19:34:14 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/15 18:59:40 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static t_bool	parser_identifier(t_parser *p, char *line)
 	return (TRUE);
 }
 
-static t_bool	is_map(char *line)
+t_bool	is_map(char *line)
 {
 	int	i;
 	int	has_map_char;
@@ -76,7 +76,10 @@ static t_bool	is_map(char *line)
 			&& line[i] != 'N'
 			&& line[i] != 'S'
 			&& line[i] != 'E'
-			&& line[i] != 'W')
+			&& line[i] != 'W'
+			&& line[i] != 'T'
+			&& line[i] != 'D'
+			&& line[i] != 'L')
 			return (FALSE);
 		if (line[i] == '1' || line[i] == '0')
 			has_map_char = 1;
