@@ -6,7 +6,7 @@
 /*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 20:00:20 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/15 19:17:49 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/15 19:18:00 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ int	invert_texture(t_data *data, int invert)
 		is_right_half = (original_x >= 0.5);
 		if (data->ray.side == 0)
 		{
-			if (data->ray.ray_dir_x < 0)
+			if (data->ray.ray_dir_x > 0)
 				is_right_half = !is_right_half;
 		}
 		else
 		{
-			if (data->ray.ray_dir_y > 0)
+			if (data->ray.ray_dir_y < 0)
 				is_right_half = !is_right_half;
 		}
 		if (is_right_half)
@@ -87,8 +87,8 @@ int	get_tex_x(t_data *data, t_img *tex)
 		tex_x = 0;
 	else if (tex_x >= tex->width)
 		tex_x = tex->width - 1;
-	invert = ((data->ray.side == 0 && data->ray.step_x > 0)
-			|| (data->ray.side == 1 && data->ray.step_y < 0));
+	invert = ((data->ray.side == 0 && data->ray.step_x < 0)
+			|| (data->ray.side == 1 && data->ray.step_y > 0));
 	if (invert_texture(data, invert))
 		tex_x = tex->width - tex_x - 1;
 	return (tex_x);
