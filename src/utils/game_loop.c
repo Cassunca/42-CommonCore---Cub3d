@@ -6,11 +6,32 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 17:41:58 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/12 23:38:20 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/15 13:35:24 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+static void	update_sprites(t_data *g)
+{
+	t_sprite	*s;
+	int			i;
+	double		now;
+
+	now = get_time();
+	i = 0;
+	while (i < g->sprite_count)
+	{
+		s = &g->sprites[i];
+		if (now - s->last_update >= s->delay)
+		{
+			s->current_frame = (s->current_frame + 1)
+				% s->frame_count;
+			s->last_update = now;
+		}
+		i++;
+	}
+}
 
 static void	update(t_data *game, double frame_time,
 					double *acc, double tick)
@@ -27,6 +48,8 @@ static void	update(t_data *game, double frame_time,
 		}
 		*acc -= tick;
 	}
+	if (game->screen == GAME)
+		update_sprites(game);
 	update_button_text(&game->btn[0], frame_time);
 	update_button_text(&game->btn[1], frame_time);
 }

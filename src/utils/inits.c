@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inits.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 21:34:36 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/13 19:56:45 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/15 13:06:56 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,35 @@ static void	setup_keypad(t_data *game)
 	init_keypad(game, start, btn_size, spacing);
 }
 
+void	init_sprites(t_data *g)
+{
+	t_sprite	*s;
+	int			x;
+	int			y;
+
+	g->sprite_count = 0;
+	y = 0;
+	while (y < g->map.height)
+	{
+		x = 0;
+		while (x < (int)ft_strlen(g->map.grid[y]))
+		{
+			if (g->map.grid[y][x] == 'T')
+			{
+				s = &g->sprites[g->sprite_count];
+				*s = (t_sprite){
+					.x = x + 0.5, .y = y + 0.5,
+					.frames = g->sign_frames,
+					.frame_count = MAX_THAWAN, .current_frame = 0,
+					.last_update = get_time(), .delay = 0.12};
+				g->sprite_count++;
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
 t_bool	init_game(t_data *game)
 {
 	game->mlx = mlx_init();
@@ -105,9 +134,10 @@ t_bool	init_game(t_data *game)
 		return (FALSE);
 	init_matrix(game->matrix);
 	init_buttons(game);
-	game->screen = TITLE;
 	init_doors(game);
 	setup_keypad(game);
+	init_sprites(game);
+	game->screen = TITLE;
 	game->password_len = 0;
 	game->password_input[0] = '\0';
 	return (TRUE);

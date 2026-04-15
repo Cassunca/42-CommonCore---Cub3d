@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:02:08 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/13 19:32:41 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/15 12:27:37 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int	handle_password_input(int key, t_data *data)
 
 int	handle_key(int keycode, t_data *game)
 {
-	printf("key: %d\n", keycode);
 	if (game->screen == PASSWORD_INPUT)
 		return (handle_password_input(keycode, game));
 	if (keycode == KEY_ESC)

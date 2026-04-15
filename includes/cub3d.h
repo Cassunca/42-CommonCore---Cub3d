@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/13 17:07:12 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/15 12:49:28 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,23 @@ typedef struct s_ray
 	int		draw_end;
 }	t_ray;
 
+typedef struct s_sprite
+{
+	double	x;
+	double	y;
+
+	t_img	*frames;
+	int		frame_count;
+	int		current_frame;
+
+	double	last_update;
+	double	delay;
+
+	double	dist;
+}	t_sprite;
+
+# define MAX_THAWAN 4
+
 typedef struct s_data
 {
 	t_map		map;
@@ -125,6 +142,11 @@ typedef struct s_data
 	char		*pw_door;
 	char		*password_input;
 	int			password_len;
+
+	t_sprite	sprites[100];
+	t_img		sign_frames[MAX_THAWAN];
+	int			sprite_count;
+	double		zbuffer[WIN_WIDTH];
 
 	t_player	player;
 	t_img		frame;

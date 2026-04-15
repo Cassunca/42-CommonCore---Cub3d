@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:01:24 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/12 21:56:54 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/15 12:02:17 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,151 @@ static void	init_ray_info(t_data *data, int x)
 		data->ray.delta_dist_y = fabs(1 / data->ray.ray_dir_y);
 }
 
+int	get_pixel(t_img *img, int x, int y)
+{
+	char	*dst;
+
+	if (x < 0 || x >= img->width || y < 0 || y >= img->height)
+		return (0);
+
+	dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
+	return (*(unsigned int *)dst);
+}
+
+void	sort_sprites(t_data *g)
+{
+	int			i;
+	int			j;
+	t_sprite	tmp;
+
+	i = 0;
+	while (i < g->sprite_count - 1)
+	{
+		j = 0;
+		while (j < g->sprite_count - i - 1)
+		{
+			if (g->sprites[j].dist < g->sprites[j + 1].dist)
+			{
+				tmp = g->sprites[j];
+				g->sprites[j] = g->sprites[j + 1];
+				g->sprites[j + 1] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+void	draw_sprites(t_data *g)
+{
+	int			i;
+	t_sprite	*s;
+	double		sprite_x;
+	double		sprite_y;
+	double		inv_det;
+	double		transform_x;
+	double		transform_y;
+	int			screen_x;
+	int			sprite_h;
+	int			sprite_w;
+	int			draw_start_x;
+	int			draw_end_x;
+	int			draw_start_y;
+	int			draw_end_y;
+	int			stripe;
+	int			y;
+
+	i = 0;
+	while (i < g->sprite_count)
+	{
+		s = &g->sprites[i];
+		t_img *tex = &s->frames[s->current_frame];
+
+		// 🔹 posição relativa ao player
+		sprite_x = s->x - g->player.pos_x;
+		sprite_y = s->y - g->player.pos_y;
+
+		// 🔹 transformação de câmera
+		inv_det = 1.0 / (g->player.plane_x * g->player.dir_y
+				- g->player.dir_x * g->player.plane_y);
+
+		transform_x = inv_det * (g->player.dir_y * sprite_x
+				- g->player.dir_x * sprite_y);
+
+		transform_y = inv_det * (-g->player.plane_y * sprite_x
+				+ g->player.plane_x * sprite_y);
+
+		// 🚫 atrás da câmera
+		if (transform_y <= 0)
+		{
+			i++;
+			continue ;
+		}
+
+		// 🔹 posição na tela
+		screen_x = (int)((g->frame.width / 2)
+				* (1 + transform_x / transform_y));
+
+		// 🔹 tamanho (com proporção da textura)
+		sprite_h = abs((int)(g->frame.height / transform_y));
+		sprite_w = sprite_h * ((double)tex->width / tex->height);
+
+		// 🔥 deixa menor que parede
+		sprite_h *= 0.6;
+		sprite_w *= 0.6;
+
+		// 🔹 limites na tela
+		draw_start_y = -sprite_h / 2 + g->frame.height / 2;
+		draw_end_y = sprite_h / 2 + g->frame.height / 2;
+		draw_start_x = -sprite_w / 2 + screen_x;
+		draw_end_x = sprite_w / 2 + screen_x;
+
+		// 🔒 clamp (evita lixo)
+		if (draw_start_y < 0)
+			draw_start_y = 0;
+		if (draw_end_y >= g->frame.height)
+			draw_end_y = g->frame.height - 1;
+		if (draw_start_x < 0)
+			draw_start_x = 0;
+		if (draw_end_x >= g->frame.width)
+			draw_end_x = g->frame.width - 1;
+
+		// 🎨 desenhar sprite
+		stripe = draw_start_x;
+		while (stripe < draw_end_x)
+		{
+			int tex_x = (int)(256 * (stripe - (-sprite_w / 2 + screen_x))
+					* tex->width / sprite_w) / 256;
+
+			// 🧱 zbuffer (não atravessa parede)
+			if (transform_y > 0 && stripe > 0
+				&& stripe < g->frame.width
+				&& transform_y < g->zbuffer[stripe])
+			{
+				y = draw_start_y;
+				while (y < draw_end_y)
+				{
+					int d = y * 256 - g->frame.height * 128
+						+ sprite_h * 128;
+
+					int tex_y = ((d * tex->height)
+							/ sprite_h) / 256;
+
+					int color = get_pixel(tex, tex_x, tex_y);
+
+					// transparência (preto invisível)
+					if (color != 0x000000)
+						put_pixel(&g->frame, stripe, y, color);
+
+					y++;
+				}
+			}
+			stripe++;
+		}
+		i++;
+	}
+}
+
 void	execute_raycast(t_data *data)
 {
 	int	x;
@@ -118,8 +263,23 @@ void	execute_raycast(t_data *data)
 		perform_dda(data);
 		calculate_line_height(data);
 		draw_wall_column(data, x);
+		data->zbuffer[x] = data->ray.wall_dist;
 		x++;
 	}
+	// 🔥 NOVO: calcular distância
+	int i = 0;
+	while (i < data->sprite_count)
+	{
+		double dx = data->player.pos_x - data->sprites[i].x;
+		double dy = data->player.pos_y - data->sprites[i].y;
+		data->sprites[i].dist = dx * dx + dy * dy;
+		i++;
+	}
+
+	// 🔥 NOVO: ordenar
+	sort_sprites(data);
+
+	draw_sprites(data);
 	draw_minimap(data);
 	draw_crosshair(data);
 	mlx_clear_window(data->mlx, data->win);

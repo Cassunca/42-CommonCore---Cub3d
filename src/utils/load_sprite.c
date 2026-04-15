@@ -6,7 +6,7 @@
 /*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 20:16:26 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/09 13:40:50 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/15 13:02:00 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,7 @@ t_bool	load_sprites(t_data *game)
 	game->secret_door = load_image(game->mlx, "assets/secret_door.xpm");
 	game->logo = load_image(game->mlx, "assets/cub3d_logo.xpm");
 	game->logo_42 = load_image(game->mlx, "assets/42_logo.xpm");
+	load_array(game, "assets/thawan/xpm/thawan_",
+		game->sign_frames, MAX_THAWAN);
 	return (TRUE);
 }
