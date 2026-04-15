@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   door.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 15:19:37 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/13 18:41:52 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/15 19:05:32 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,14 +115,14 @@ void	init_doors(t_data *game)
 		x = 0;
 		while (x < (int)ft_strlen(game->map.grid[y]))
 		{
-			if (game->map.grid[y][x] == 'D' || game->map.grid[y][x] == 'S')
+			if (game->map.grid[y][x] == 'D' || game->map.grid[y][x] == 'L')
 			{
 				game->doors[game->door_count].x = x;
 				game->doors[game->door_count].y = y;
 				game->doors[game->door_count].open = 0.0;
 				game->doors[game->door_count].opening = 0;
 				game->doors[game->door_count].type = DOOR_NORMAL;
-				if (game->map.grid[y][x] == 'S')
+				if (game->map.grid[y][x] == 'L')
 					game->doors[game->door_count].type = DOOR_SECRET;
 				game->door_count++;
 			}

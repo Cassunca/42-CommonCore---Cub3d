@@ -6,7 +6,7 @@
 /*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 09:01:56 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/08 18:20:17 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/15 19:04:49 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	can_move_to(t_data *data, int x, int y)
 	tile = data->map.grid[y][x];
 	if (tile == '1')
 		return (0);
-	if (tile == 'D' || tile == 'S')
+	if (tile == 'D' || tile == 'L')
 	{
 		door = find_door(data, x, y);
 		if (door && door->open < 0.8)

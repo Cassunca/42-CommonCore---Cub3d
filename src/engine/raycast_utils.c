@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 17:11:19 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/13 11:32:52 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/15 19:04:42 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	handle_door_hit(t_data *data)
 	double	door_size;
 
 	tile = data->map.grid[data->ray.map_y][data->ray.map_x];
-	if (tile != 'D' && tile != 'S')
+	if (tile != 'D' && tile != 'L')
 		return (0);
 	door = find_door(data, data->ray.map_x, data->ray.map_y);
 	if (!door)

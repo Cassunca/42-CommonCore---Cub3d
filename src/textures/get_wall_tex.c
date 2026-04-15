@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   texture_utils.c                                    :+:      :+:    :+:   */
+/*   get_wall_tex.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 15:28:41 by cassunca          #+#    #+#             */
-/*   Updated: 2026/04/13 20:11:35 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/15 19:04:23 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static t_img	*get_special_tex(t_data *data, int x, int y)
 	tile = data->map.grid[y][x];
 	if (tile == 'D')
 		return (&data->door_tex);
-	if (tile == 'S')
+	if (tile == 'L')
 		return (&data->secret_door);
 	if (tile == '1')
 	{

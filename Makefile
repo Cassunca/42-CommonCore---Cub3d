@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+         #
+#    By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/04/13 20:12:05 by amyrodri         ###   ########.fr        #
+#    Updated: 2026/04/15 18:51:26 by cassunca         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,6 @@ LIBS_DIR		= libs
 SRCS			:=	main.c
 
 SRCS_ENGINE		:=	hooks.c				\
-					math_utils.c		\
 					movement.c			\
 					raycast.c			\
 					raycast_utils.c		\

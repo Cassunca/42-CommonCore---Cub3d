@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_tex_x.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 20:00:20 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/14 12:01:56 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/15 19:04:18 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	sla(t_data *data, int invert)
 
 	tile = data->map.grid[data->ray.map_y][data->ray.map_x];
 	original_x = get_wall_x(data);
-	if (tile == 'D' || tile == 'S')
+	if (tile == 'D' || tile == 'L')
 	{
 		is_right_half = (original_x >= 0.5);
 		if (data->ray.side == 0)
