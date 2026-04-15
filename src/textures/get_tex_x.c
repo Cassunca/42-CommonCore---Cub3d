@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_tex_x.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 20:00:20 by amyrodri          #+#    #+#             */
-/*   Updated: 2026/04/15 19:04:18 by cassunca         ###   ########.fr       */
+/*   Updated: 2026/04/15 19:17:49 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static double	apply_door(t_data *data, double wall_x)
 	return (wall_x);
 }
 
-int	sla(t_data *data, int invert)
+int	invert_texture(t_data *data, int invert)
 {
 	double	original_x;
 	char	tile;
@@ -89,7 +89,7 @@ int	get_tex_x(t_data *data, t_img *tex)
 		tex_x = tex->width - 1;
 	invert = ((data->ray.side == 0 && data->ray.step_x > 0)
 			|| (data->ray.side == 1 && data->ray.step_y < 0));
-	if (sla(data, invert))
+	if (invert_texture(data, invert))
 		tex_x = tex->width - tex_x - 1;
 	return (tex_x);
 }

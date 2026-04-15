@@ -6,7 +6,7 @@
 /*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 23:59:29 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/13 18:53:16 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/15 18:19:16 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,19 @@ void	free_matrix(char **splits)
 	free(splits);
 }
 
+static void	free_sprite_array(void *mlx, t_img *sprite, int num_frame)
+{
+	int	i;
+
+	i = 0;
+	while (i < num_frame)
+	{
+		if (sprite[i].ptr)
+			mlx_destroy_image(mlx, sprite[i].ptr);
+		i++;
+	}
+}
+
 void	closer(t_data *game)
 {
 	mlx_destroy_image(game->mlx, game->logo.ptr);
@@ -47,6 +60,7 @@ void	closer(t_data *game)
 	mlx_destroy_image(game->mlx, game->tex.we.ptr);
 	mlx_destroy_image(game->mlx, game->tex.so.ptr);
 	mlx_destroy_image(game->mlx, game->frame.ptr);
+	free_sprite_array(game->mlx, game->sign_frames, MAX_THAWAN);
 	mlx_destroy_window(game->mlx, game->win);
 	mlx_destroy_display(game->mlx);
 	free(game->mlx);

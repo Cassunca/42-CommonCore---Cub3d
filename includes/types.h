@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 12:05:52 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/13 01:41:20 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/15 18:16:09 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,5 +149,17 @@ typedef struct s_key
 	int		is_hover;
 	void	(*action)(t_data *game, int value);
 }	t_key;
+
+typedef struct s_context
+{
+	double		tx;
+	double		ty;
+	t_point		start;
+	t_point		end;
+	t_img		*tex;
+	int			w;
+	int			h;
+	int			screen_x;
+}	t_context;
 
 #endif

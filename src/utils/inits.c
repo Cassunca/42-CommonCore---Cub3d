@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   inits.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 21:34:36 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/15 13:06:56 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/15 17:55:03 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 
 void	init_keypad(t_data *game, t_point pos, t_point size, t_point spacing);
+void	init_sprites(t_data *g);
 
 static t_bool	init_framebuffer(t_data *game)
 {
@@ -89,35 +90,6 @@ static void	setup_keypad(t_data *game)
 		.y = pos.y + 220
 	};
 	init_keypad(game, start, btn_size, spacing);
-}
-
-void	init_sprites(t_data *g)
-{
-	t_sprite	*s;
-	int			x;
-	int			y;
-
-	g->sprite_count = 0;
-	y = 0;
-	while (y < g->map.height)
-	{
-		x = 0;
-		while (x < (int)ft_strlen(g->map.grid[y]))
-		{
-			if (g->map.grid[y][x] == 'T')
-			{
-				s = &g->sprites[g->sprite_count];
-				*s = (t_sprite){
-					.x = x + 0.5, .y = y + 0.5,
-					.frames = g->sign_frames,
-					.frame_count = MAX_THAWAN, .current_frame = 0,
-					.last_update = get_time(), .delay = 0.12};
-				g->sprite_count++;
-			}
-			x++;
-		}
-		y++;
-	}
 }
 
 t_bool	init_game(t_data *game)

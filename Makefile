@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+         #
+#    By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/04/15 18:51:26 by cassunca         ###   ########.fr        #
+#    Updated: 2026/04/15 19:17:53 by amyrodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,8 @@ SRCS_ENGINE		:=	hooks.c				\
 					draw_shaders.c		\
 					draw_dots.c			\
 					draw_keypad_utils.c	\
+					draw_sprite.c		\
+					draw_sprite_utils.c	\
 					door.c				
 
 SRCS_PARSER		:=	parser.c			\
