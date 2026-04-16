@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 20:45:45 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/15 19:05:39 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/15 23:20:42 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+t_bool	is_map(char *line);
 
 static t_bool	copy_lines(t_map *map, t_parser *p)
 {
@@ -33,37 +35,17 @@ static t_bool	copy_lines(t_map *map, t_parser *p)
 	return (TRUE);
 }
 
-// int	get_effective_end(t_parser *p)
-// {
-// 	int	file_i;
-
-// 	file_i = p->i;
-// 	while (p->file[file_i])
-// 		file_i++;
-// 	while (file_i > p->i && is_empty_line(p->file[file_i - 1]))
-// 		file_i--;
-// 	return (file_i);
-// }
-
-t_bool	is_map(char *line);
-
-
 static int	get_effective_end(t_parser *p)
 {
 	int	i;
 
 	i = p->i;
-
 	while (p->file[i])
 	{
-		// para se encontrar linha vazia
 		if (is_empty_line(p->file[i]))
 			break ;
-
-		// para se encontrar algo que não é mapa
 		if (!is_map(p->file[i]))
 			break ;
-
 		i++;
 	}
 	return (i);
@@ -103,9 +85,11 @@ static t_bool	copy_grid(t_map *map, t_parser *p)
 	i = end;
 	while (p->file[i])
 	{
-		printf("%s\n", p->file[i]);
 		if (p->file[i][0] != '\0')
+		{
+			printf("Line (%d): %s\n", i + 1, p->file[i]);
 			return (erro_int("Caracter invalid in map or after map\n", FALSE));
+		}
 		i++;
 	}
 	return (TRUE);

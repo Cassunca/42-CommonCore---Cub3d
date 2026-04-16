@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   frees.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 23:59:29 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/15 18:19:16 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/15 23:21:53 by kamys            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	destroy_game(t_data *game, t_parser *p)
 {
 	if (p && p->file)
 		free_matrix(p->file);
+	free(game->password_input);
+	free(game->pw_door);
 	free(game->tex_path.no);
 	free(game->tex_path.so);
 	free(game->tex_path.we);
