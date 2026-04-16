@@ -3,47 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kamys <kamys@student.42.fr>                +#+  +:+       +#+        */
+/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 08:51:33 by cassunca          #+#    #+#             */
-/*   Updated: 2026/03/12 19:03:24 by kamys            ###   ########.fr       */
+/*   Updated: 2026/04/15 17:05:57 by amyrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
+/* THE CHESS 🨀
+_________________
+|♜ ♞ ♝ ♚ ♛ ♝ ♞ ♜|
+|♟ ♟ ♟   ♟ ♟ ♟ ♟|
+|      ♟        |
+|               |
+|      ♙        |
+|               |
+|♙ ♙ ♙   ♙ ♙ ♙ ♙|
+|♖ ♘ ♗ ♔ ♕ ♗ ♘ ♖|
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+*/
+
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115
+# define KEY_D 100
+# define KEY_SPACE 32
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
+# define KEY_UP 65362
+# define KEY_ESC 65307
+# define KEY_ENTER 65293
+# define KEY_BACKSPACE 65288
+
+# define MOVE_SPEED 0.01
+# define ROT_SPEED 0.007
+
+# define WIN_WIDTH 800
+# define WIN_HEIGHT 600
+
+# define PANEL_COLOR 0x121826
+# define PANEL_BORDER 0x2A3142
+
+# include "door.h"
+# include "types.h"
+# include "map.h"
+# include "parser.h"
 # include "libft.h"
+# include "minimap.h"
 # include "mlx.h"
+# include <sys/time.h>
+# include <math.h>
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-
-typedef struct s_img
+typedef enum e_screen
 {
-	void	*img_ptr;
-	char	*addr;
-	int		bpp;
-	int		line_len;
-	int		endian;
-	int		width;
-	int		height;
-}	t_img;
-
-typedef struct s_map
-{
-	char	**grid;
-	char	*no_path;
-	char	*so_path;
-	char	*we_path;
-	char	*ea_path;
-	int		floor_color;
-	int		ceiling_color;
-	int		map_width;
-	int		map_height;
-	t_img	textures[4];
-}	t_map;
+	TITLE,
+	PASSWORD_INPUT,
+	GAME
+}	t_screen;
 
 typedef struct s_player
 {
@@ -53,6 +72,13 @@ typedef struct s_player
 	double	dir_y;
 	double	plane_x;
 	double	plane_y;
+	double	fov;
+	int		move_f;
+	int		move_b;
+	int		move_l;
+	int		move_r;
+	int		rot_l;
+	int		rot_r;
 }	t_player;
 
 typedef struct s_ray
@@ -76,14 +102,120 @@ typedef struct s_ray
 	int		draw_end;
 }	t_ray;
 
+typedef struct s_sprite
+{
+	double	x;
+	double	y;
+
+	t_img	*frames;
+	int		frame_count;
+	int		current_frame;
+
+	double	last_update;
+	double	delay;
+
+	double	dist;
+}	t_sprite;
+
+# define MAX_THAWAN 10
+
 typedef struct s_data
 {
+	t_map		map;
+	t_texpath	tex_path;
+	t_colors	colors;
+	t_tex		tex;
+
+	t_matrix	matrix[MAX_MATRIX];
+
+	t_button	btn[MAX_BTNS];
+	t_img		logo_42;
+	t_img		logo;
+	t_screen	screen;
+
+	t_door		doors[100];
+	int			door_count;
+	t_img		door_tex;
+	t_img		secret_door;
+
+	t_key		keys[MAX_KEYPAD];
+	char		*pw_door;
+	char		*password_input;
+	int			password_len;
+
+	t_sprite	sprites[100];
+	t_img		sign_frames[MAX_THAWAN];
+	int			sprite_count;
+	double		zbuffer[WIN_WIDTH];
+
+	t_player	player;
+	t_img		frame;
+	t_ray		ray;
 	void		*mlx;
 	void		*win;
-	t_map		map;
-	t_player	player;
-	t_img		img;
-	t_ray		ray;
 }	t_data;
+
+t_door	*get_door_in_sight(t_data *game);
+void	render_door_keypad(t_data *game);
+
+/* ========== HOOKS ========== */
+
+int		close_window(void *param);
+int		handle_key(int keycode, t_data *game);
+int		handle_key_release(int keycode, t_data *game);
+int		handle_mouse(t_data *data);
+
+/* ========== RENDER ========== */
+
+void	render_background(t_data *data);
+void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+void	draw_crosshair(t_data *data);
+
+/* ========== RAYCAST ========== */
+
+void	draw_minimap(t_data *data);
+void	execute_raycast(t_data *data);
+int		handle_door_hit(t_data *data);
+double	fps(void);
+void	str_num(t_data *game, int num, char *str, int x);
+
+/* ========== MOVEMENT ========== */
+
+void	apply_rotation(t_player *p, double speed);
+void	move_player(t_data *data);
+
+/* ========== TEXTURES ========== */
+
+void	draw_wall_column(t_data *data, int x);
+t_img	*get_wall_tex(t_data *data);
+int		get_tex_pixel(t_img *tex, int x, int y);
+int		get_tex_x(t_data *data, t_img *tex);
+
+int		game_loop(t_data *game);
+
+void	update_button_text(t_button *b, double dt);
+void	handle_secret_door(t_data *game, t_door *door);
+
+// core
+void	put_pixel(t_img *img, int x, int y, int color);
+void	draw_sprite_to_frame(t_data *game, t_img *sprite, int x, int y);
+int		brighten(int color, float factor);
+
+// background
+void	draw_sky(t_data *game, int top_color, int bottom_color);
+
+// ui
+void	draw_button(t_data *g, t_button *btn);
+void	draw_text_button(t_data *g, t_button *btn);
+void	draw_panel(t_img *img, int w, int h);
+void	draw_header(t_data *game, int panel_x, int panel_y);
+void	draw_content(t_data *game, int panel_x, int panel_w, int panel_y);
+
+// matrix
+void	draw_matrix(t_matrix *matrix, void *mlx, void *win);
+void	update_matrix(t_matrix *matrix, float dt);
+
+// loop
+int		game_loop(t_data *game);
 
 #endif

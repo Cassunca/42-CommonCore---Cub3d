@@ -1,0 +1,49 @@
+{
+   mlx_x11_noise
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XrmGetStringDatabase
+}
+
+{
+   mlx_xcursor_noise
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XcursorSupportsARGB
+}
+
+{
+   mlx_x11_base_noise
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so*
+}
+
+{
+   mlx_xcursor_lib_noise
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libXcursor.so*
+}
+
+{
+   glibc_dl_noise
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:/lib/x86_64-linux-gnu/ld-linux-x86-64.so*
+}
+
+{
+   mlx_loader
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_dl_open
+   fun:dlopen
+   fun:*_dl*
+}

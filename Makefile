@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kamys <kamys@student.42.fr>                +#+  +:+       +#+         #
+#    By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/03 08:51:15 by cassunca          #+#    #+#              #
-#    Updated: 2026/03/12 17:56:35 by kamys            ###   ########.fr        #
+#    Updated: 2026/04/15 19:17:53 by amyrodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,17 +29,77 @@ RUNLIB		= -C $(LIBS_DIR)/libft
 RUNMLX      = -C $(LIBS_DIR)/minilibx-linux
 
 # Directories
-SRCSDIR		= src
-OBJDIR		= .objs
-BINDIR		= bin
-LIBS_DIR	= libs
+SRCSDIR			= src
+PARSERDIR		= parsing
+UTILSDIR		= utils
+ENGINEDIR		= engine
+TEXTURESDIR		= textures
+OBJDIR			= .objs
+BINDIR			= bin
+LIBS_DIR		= libs
 
 # Source files
-SRCS		= main.c
+SRCS			:=	main.c
+
+SRCS_ENGINE		:=	hooks.c				\
+					movement.c			\
+					raycast.c			\
+					raycast_utils.c		\
+					render.c			\
+					minimap.c			\
+					secret_door.c		\
+					draw_shaders.c		\
+					draw_dots.c			\
+					draw_keypad_utils.c	\
+					draw_sprite.c		\
+					draw_sprite_utils.c	\
+					door.c				
+
+SRCS_PARSER		:=	parser.c			\
+					parser_color.c		\
+					parser_configs.c	\
+					parser_tex.c		\
+					parser_map.c		\
+					parser_pw.c		\
+					read_file.c
+
+SRCS_UTILS	:=	frees.c				\
+				inits.c				\
+				utils.c				\
+				utils2.c			\
+				game_loop.c			\
+				matrix.c			\
+				render_background.c	\
+				render_core.c		\
+				render_shaders.c	\
+				render_title.c		\
+				render_ui.c			\
+				update_button.c		\
+				utils_time.c		\
+				create_button.c		\
+				load_sprite.c		\
+				hooks_mouse.c		\
+				draw_shape.c		\
+				init_keypad.c		\
+				button_action.c		\
+				mouse_utils.c		\
+				error_msg.c
+
+SRCS_TEXTURES	:=	get_wall_tex.c		\
+					get_tex_x.c			\
+					draw_wall.c
 
 # Add directory prefix
 
-SRCS		:= $(addprefix $(SRCSDIR)/, $(SRCS))
+SRCS_ENGINE		:= $(addprefix $(SRCSDIR)/$(ENGINEDIR)/, $(SRCS_ENGINE))
+
+SRCS_PARSER		:= $(addprefix $(SRCSDIR)/$(PARSERDIR)/, $(SRCS_PARSER))
+
+SRCS_UTILS		:= $(addprefix $(SRCSDIR)/$(UTILSDIR)/, $(SRCS_UTILS))
+
+SRCS_TEXTURES	:= $(addprefix $(SRCSDIR)/$(TEXTURESDIR)/, $(SRCS_TEXTURES))
+
+SRCS			:= $(addprefix $(SRCSDIR)/, $(SRCS)) $(SRCS_PARSER) $(SRCS_UTILS) $(SRCS_ENGINE) $(SRCS_TEXTURES)
 
 # Object files
 OBJS		= $(SRCS:$(SRCSDIR)/%.c=$(OBJDIR)/%.o)
@@ -59,7 +119,7 @@ all: $(NAME)
 $(NAME): $(OBJS) $(LIBFT) $(MLX_LIB)
 	@mkdir -p $(BINDIR)
 	@$(CC) $(CFLAGS) $(INCLUDE) $(OBJS) $(LIBFT) $(MLX_LIB) $(MLX) -o $(NAME)
-	@printf "$(GREEN)🎉 Executable $(NAME) successfully created!$(NC)\n"
+	@printf "\n$(GREEN)🎉 Executable $(NAME) successfully created!$(NC)\n"
 
 $(OBJDIR)/%.o: $(SRCSDIR)/%.c
 	@mkdir -p $(dir $@)
@@ -98,10 +158,10 @@ fclean: clean
 	@$(MAKE) fclean $(RUNLIB) -s > /dev/null 2>&1
 	@printf "$(YELLOW)🗑️ Executable removed$(NC)\n"
 
-valgrind:
-	valgrind -q --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes ./minishell
-
 re: fclean all
+
+valgrind:
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=mlx.supp ./$(NAME) $(ARGS)
 
 -include $(DEPS)
 

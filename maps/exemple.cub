@@ -1,0 +1,17 @@
+/* NO - North wall texture
+   SO - South wall texture
+   EA - East wall texture
+   WE - West wall texture
+   PW - Password for locked door (if no locked door, set to 0)
+   
+   C  - Ceiling color
+   F  - Floor color
+   0  - Floor
+   1  - Walls
+   D  - Doors (optional)
+   L  - Locked doors (optional)
+   E  - Player start facing East
+   W  - Player start facing West
+   S  - Player start facing South
+   N  - Player start facing North
+   T  - Secret visitor (optional) */
