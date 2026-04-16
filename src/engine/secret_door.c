@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   secret_door.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amyrodri <amyrodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cassunca <cassunca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 14:58:35 by kamys             #+#    #+#             */
-/*   Updated: 2026/04/13 19:54:26 by amyrodri         ###   ########.fr       */
+/*   Updated: 2026/04/16 16:24:18 by cassunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	handle_secret_door(t_data *game, t_door *door)
 		game->screen = PASSWORD_INPUT;
 		game->password_len = 0;
 		game->password_input[0] = '\0';
-		printf("Digite a senha:\n");
+		printf("Input Password:\n");
 	}
 }
 
